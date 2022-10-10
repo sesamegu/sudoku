@@ -1,45 +1,41 @@
 package com.sesame.game;
 
 public enum SudokuPuzzleType {
-    SIXBYSIX(6, 6, 3, 2, new String[] {"1", "2", "3", "4", "5", "6"}, "6 By 6 Game"),
-    NINEBYNINE(9, 9, 3, 3, new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9"}, "9 By 9 Game"),
-    TWELVEBYTWELVE(12, 12, 4, 3, new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C"},
-        "12 By 12 Game");
+    EASY(0.55555f,"Easy"),
+    NORMAL(0.39000f,"Noraml"),
+    HARD(0.22222f,"Hard");
 
-    private final int rows;
-    private final int columns;
-    private final int boxWidth;
-    private final int boxHeight;
-    private final String[] validValues;
+    private final String[] validValues = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
     private final String desc;
+    private final float difficult;
 
-    SudokuPuzzleType(int rows, int columns, int boxWidth, int boxHeight, String[] validValues, String desc) {
-        this.rows = rows;
-        this.columns = columns;
-        this.boxWidth = boxWidth;
-        this.boxHeight = boxHeight;
-        this.validValues = validValues;
+    SudokuPuzzleType(float difficult,String desc) {
+        this.difficult = difficult;
         this.desc = desc;
     }
 
     public int getRows() {
-        return rows;
+        return 9;
     }
 
     public int getColumns() {
-        return columns;
+        return 9;
     }
 
     public int getBoxWidth() {
-        return boxWidth;
+        return 3;
     }
 
     public int getBoxHeight() {
-        return boxHeight;
+        return 3;
     }
 
     public String[] getValidValues() {
         return validValues;
+    }
+
+    public float getDifficult() {
+        return difficult;
     }
 
     public String toString() {

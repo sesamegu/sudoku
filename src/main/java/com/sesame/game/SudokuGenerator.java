@@ -24,7 +24,7 @@ public class SudokuGenerator {
         //Bottleneck here need to improve this so that way 16x16 puzzles can be generated
         backtrackSudokuSolver(0, 0, copy);
 
-        int numberOfValuesToKeep = (int)(0.22222 * (copy.getNumRows() * copy.getNumRows()));
+        int numberOfValuesToKeep = (int)(puzzleType.getDifficult() * (copy.getNumRows() * copy.getNumRows()));
 
         for (int i = 0; i < numberOfValuesToKeep; ) {
             int randomRow = randomGenerator.nextInt(puzzle.getNumRows());
