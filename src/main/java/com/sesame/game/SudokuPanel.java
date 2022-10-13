@@ -191,7 +191,6 @@ public class SudokuPanel extends JPanel {
                 repaint();
             } else {
                 sudokuFrame.setUnAvailableLabel("无可用技巧");
-                //repaint();
                 new Thread(new HideTheTextThread(sudokuFrame)).start();
             }
         }
