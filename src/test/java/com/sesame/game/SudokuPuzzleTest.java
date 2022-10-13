@@ -59,7 +59,7 @@ public class SudokuPuzzleTest {
 	
 	private class SudokuPuzzleForTesting extends SudokuPuzzle {
 		public SudokuPuzzleForTesting(String [][] board) {
-			super(9,9,3,3,new String [] {"1","2","3","4","5","6","7","8","9"});
+			super();
 			this.board = board;
 		}
 	}

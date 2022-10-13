@@ -10,10 +10,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
+
+import com.sesame.game.strategy.FillStrategy;
+import com.sesame.game.strategy.HintModel;
+import com.sesame.game.strategy.LastFreeCellStrategy;
+import com.sesame.game.strategy.Position;
+import org.springframework.util.Assert;
 
 @SuppressWarnings("serial")
 public class SudokuPanel extends JPanel {
@@ -24,6 +32,8 @@ public class SudokuPanel extends JPanel {
     private int usedWidth;
     private int usedHeight;
     private int fontSize;
+    private boolean isHintMode;
+    private HintModel hintModel;
 
     public SudokuPanel() {
         this.setPreferredSize(new Dimension(540, 450));
@@ -34,17 +44,8 @@ public class SudokuPanel extends JPanel {
         usedWidth = 0;
         usedHeight = 0;
         fontSize = 26;
-    }
-
-    public SudokuPanel(SudokuPuzzle puzzle) {
-        this.setPreferredSize(new Dimension(540, 450));
-        this.addMouseListener(new SudokuPanelMouseAdapter());
-        this.puzzle = puzzle;
-        currentlySelectedCol = -1;
-        currentlySelectedRow = -1;
-        usedWidth = 0;
-        usedHeight = 0;
-        fontSize = 26;
+        isHintMode = false;
+        hintModel = null;
     }
 
     public void newSudokuPuzzle(SudokuPuzzle puzzle) {
@@ -113,10 +114,37 @@ public class SudokuPanel extends JPanel {
                 }
             }
         }
-        if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
-            g2d.setColor(new Color(0.0f, 0.0f, 1.0f, 0.3f));
-            g2d.fillRect(currentlySelectedCol * slotWidth, currentlySelectedRow * slotHeight, slotWidth, slotHeight);
+
+        if (!isHintMode) {
+            if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
+                g2d.setColor(new Color(0.0f, 0.0f, 1.0f, 0.3f));
+                g2d.fillRect(currentlySelectedCol * slotWidth, currentlySelectedRow * slotHeight, slotWidth,
+                    slotHeight);
+            }
+            return;
         }
+
+        // 提示模式下
+        Assert.notNull(hintModel, "hintModel should not be null");
+
+        //提示数值
+        Position position = hintModel.getPosition();
+        String found = hintModel.getValue();
+        int textWidth = (int)f.getStringBounds(found, fContext).getWidth();
+        int textHeight = (int)f.getStringBounds(found, fContext).getHeight();
+        g2d.setColor(Color.PINK);
+        g2d.drawString(found, (position.getCol() * slotWidth) + ((slotWidth / 2) - (textWidth / 2)),
+            (position.getRow() * slotHeight) + ((slotHeight / 2) + (textHeight / 2)));
+        //提示背景
+        g2d.setColor(new Color(0.0f, 0.0f, 0.7f, 0.3f));
+        g2d.fillRect(position.getCol() * slotWidth, position.getRow() * slotHeight, slotWidth,
+            slotHeight);
+        //相关单元格
+        g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
+        hintModel.getRelated().stream().forEach(
+            one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
+                slotHeight));
+
     }
 
     public void messageFromNumActionListener(String buttonValue) {
@@ -146,9 +174,47 @@ public class SudokuPanel extends JPanel {
     }
 
     public class HintActionListener implements ActionListener {
+        private final SudokuFrame sudokuFrame;
+
+        public HintActionListener(SudokuFrame sudokuFrame) {
+            this.sudokuFrame = sudokuFrame;
+        }
+
         @Override
         public void actionPerformed(ActionEvent e) {
-            //todo
+            FillStrategy lastFreeCellStrategy = new LastFreeCellStrategy();
+            Optional<HintModel> result = lastFreeCellStrategy.tryStrategy(puzzle);
+            if (result.isPresent()) {
+                isHintMode = true;
+                hintModel = result.get();
+                sudokuFrame.hintModel();
+                repaint();
+            } else {
+                sudokuFrame.setUnAvailableLabel("无可用技巧");
+                //repaint();
+                new Thread(new HideTheTextThread(sudokuFrame)).start();
+            }
+        }
+    }
+
+    public class ApplyListener implements ActionListener {
+        private final SudokuFrame sudokuFrame;
+
+        public ApplyListener(SudokuFrame sudokuFrame) {
+            this.sudokuFrame = sudokuFrame;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            puzzle.makeMove(hintModel.getPosition().getRow(), hintModel.getPosition().getCol(), hintModel.getValue(),
+                true);
+            currentlySelectedRow = hintModel.getPosition().getRow();
+            currentlySelectedCol = hintModel.getPosition().getCol();
+
+            isHintMode = false;
+            hintModel = null;
+            sudokuFrame.buttonModel();
+            repaint();
         }
     }
 
@@ -162,6 +228,21 @@ public class SudokuPanel extends JPanel {
                 currentlySelectedCol = e.getX() / slotWidth;
                 e.getComponent().repaint();
             }
+        }
+    }
+
+    private class HideTheTextThread implements Runnable {
+        private final SudokuFrame sudokuFrame;
+
+        private HideTheTextThread(SudokuFrame sudokuFrame) {this.sudokuFrame = sudokuFrame;}
+
+        @Override
+        public void run() {
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+            }
+            sudokuFrame.setUnAvailableLabel("");
         }
     }
 }

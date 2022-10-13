@@ -8,13 +8,12 @@ import java.util.Random;
 public class SudokuGenerator {
 
     public SudokuPuzzle generateRandomSudoku(SudokuPuzzleType puzzleType) {
-        SudokuPuzzle puzzle = new SudokuPuzzle(puzzleType.getRows(), puzzleType.getColumns(), puzzleType.getBoxWidth(),
-            puzzleType.getBoxHeight(), puzzleType.getValidValues());
+        SudokuPuzzle puzzle = new SudokuPuzzle();
         SudokuPuzzle copy = new SudokuPuzzle(puzzle);
 
         Random randomGenerator = new Random();
 
-        List<String> notUsedValidValues = new ArrayList<String>(Arrays.asList(copy.getValidValues()));
+        List<String> notUsedValidValues = new ArrayList<>(Arrays.asList(Const.VALID_VALUES));
         for (int r = 0; r < copy.getNumRows(); r++) {
             int randomValue = randomGenerator.nextInt(notUsedValidValues.size());
             copy.makeMove(r, 0, notUsedValidValues.get(randomValue), true);
@@ -51,22 +50,20 @@ public class SudokuGenerator {
      */
     private boolean backtrackSudokuSolver(int r, int c, SudokuPuzzle puzzle) {
         //If the move is not valid return false
-        if (!puzzle.inRange(r, c)) {
-            return false;
-        }
+        puzzle.makeSureInRange(r, c);
 
         //if the current space is empty
         if (puzzle.isSlotAvailable(r, c)) {
 
             //loop to find the correct value for the space
-            for (int i = 0; i < puzzle.getValidValues().length; i++) {
+            for (int i = 0; i < Const.VALID_VALUES.length; i++) {
 
                 //if the current number works in the space
-                if (!puzzle.numInRow(r, puzzle.getValidValues()[i]) && !puzzle.numInCol(c, puzzle.getValidValues()[i])
-                    && !puzzle.numInBox(r, c, puzzle.getValidValues()[i])) {
+                if (!puzzle.numInRow(r, Const.VALID_VALUES[i]) && !puzzle.numInCol(c, Const.VALID_VALUES[i])
+                    && !puzzle.numInBox(r, c, Const.VALID_VALUES[i])) {
 
                     //make the move
-                    puzzle.makeMove(r, c, puzzle.getValidValues()[i], true);
+                    puzzle.makeMove(r, c, Const.VALID_VALUES[i], true);
 
                     //if puzzle solved return true
                     if (puzzle.boardFull()) {
@@ -75,9 +72,9 @@ public class SudokuGenerator {
 
                     //go to next move
                     if (r == puzzle.getNumRows() - 1) {
-						if (backtrackSudokuSolver(0, c + 1, puzzle)) { return true; }
+                        if (backtrackSudokuSolver(0, c + 1, puzzle)) { return true; }
                     } else {
-						if (backtrackSudokuSolver(r + 1, c, puzzle)) { return true; }
+                        if (backtrackSudokuSolver(r + 1, c, puzzle)) { return true; }
                     }
                 }
             }

@@ -7,10 +7,12 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
@@ -18,6 +20,7 @@ public class SudokuFrame extends JFrame {
 
     private final JPanel buttonSelectionPanel;
     private final SudokuPanel sPanel;
+    private JLabel unAvailableLabel;
 
     public SudokuFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,8 +75,14 @@ public class SudokuFrame extends JFrame {
         SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
         sPanel.newSudokuPuzzle(generatedPuzzle);
         sPanel.setFontSize(fontSize);
+        sPanel.repaint();
+        buttonModel();
+    }
+
+    public void buttonModel() {
         buttonSelectionPanel.removeAll();
-        for (String value : generatedPuzzle.getValidValues()) {
+
+        for (String value : Const.VALID_VALUES) {
             JButton b = new JButton(value);
             b.setPreferredSize(new Dimension(40, 40));
             b.addActionListener(sPanel.new NumActionListener());
@@ -88,10 +97,39 @@ public class SudokuFrame extends JFrame {
         //提示按钮
         JButton hint = new JButton("hint");
         hint.setPreferredSize(new Dimension(90, 40));
-        hint.addActionListener(sPanel.new HintActionListener());
+        hint.addActionListener(sPanel.new HintActionListener(this));
         buttonSelectionPanel.add(hint);
 
-        sPanel.repaint();
+        //无可用提示文案
+        unAvailableLabel = new JLabel("");
+        unAvailableLabel.setPreferredSize(new Dimension(90, 40));
+        buttonSelectionPanel.add(unAvailableLabel);
+
+        buttonSelectionPanel.revalidate();
+        buttonSelectionPanel.repaint();
+    }
+
+    public void hintModel() {
+        buttonSelectionPanel.removeAll();
+
+        //应用按钮
+        JButton apply = new JButton("Apply");
+        apply.setPreferredSize(new Dimension(90, 40));
+        apply.addActionListener(sPanel.new ApplyListener(this));
+        buttonSelectionPanel.add(apply);
+
+        //TODO 改为动态
+        JLabel jLabel = new JLabel("技巧：唯余空白格");
+        jLabel.setPreferredSize(new Dimension(90, 40));
+        buttonSelectionPanel.add(jLabel);
+        //提示按钮
+        JTextArea textArea = new JTextArea("text");
+        textArea.setPreferredSize(new Dimension(90, 300));
+        textArea.setLineWrap(true);
+        //TODO 改为动态
+        textArea.setText("一个 3×3 宫、一行或一列中只剩下一个可用单元格，那么我们必须明确缺少 1 到 9 中的哪个数字，并将它填入这个空白单元格");
+        buttonSelectionPanel.add(textArea);
+
         buttonSelectionPanel.revalidate();
         buttonSelectionPanel.repaint();
     }
@@ -111,4 +149,9 @@ public class SudokuFrame extends JFrame {
             rebuildInterface(puzzleType, fontSize);
         }
     }
+
+    public void setUnAvailableLabel(String text){
+        unAvailableLabel.setText(text);
+    }
+
 }
