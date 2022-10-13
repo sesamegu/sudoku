@@ -1,7 +1,9 @@
 package com.sesame.game;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -49,7 +51,7 @@ public class SudokuFrame extends JFrame {
         windowPanel.setPreferredSize(new Dimension(800, 600));
 
         buttonSelectionPanel = new JPanel();
-        buttonSelectionPanel.setPreferredSize(new Dimension(90, 500));
+        buttonSelectionPanel.setPreferredSize(new Dimension(150, 500));
 
         sPanel = new SudokuPanel();
 
@@ -81,6 +83,7 @@ public class SudokuFrame extends JFrame {
 
     public void buttonModel() {
         buttonSelectionPanel.removeAll();
+        buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
 
         for (String value : Const.VALID_VALUES) {
             JButton b = new JButton(value);
@@ -112,20 +115,28 @@ public class SudokuFrame extends JFrame {
     public void hintModel() {
         buttonSelectionPanel.removeAll();
 
+        buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
         //应用按钮
         JButton apply = new JButton("Apply");
-        apply.setPreferredSize(new Dimension(90, 40));
+        apply.setPreferredSize(new Dimension(110, 40));
         apply.addActionListener(sPanel.new ApplyListener(this));
         buttonSelectionPanel.add(apply);
 
-        //TODO 改为动态
-        JLabel jLabel = new JLabel("技巧：唯余空白格");
-        jLabel.setPreferredSize(new Dimension(90, 40));
+
+        JLabel jLabel = new JLabel("技巧名称:");
+        jLabel.setPreferredSize(new Dimension(110, 15));
         buttonSelectionPanel.add(jLabel);
+        //TODO 改为动态
+        JLabel jLabel2 = new JLabel("唯余空白格");
+        jLabel2.setPreferredSize(new Dimension(110, 15));
+        jLabel2.setForeground(Color.red);
+        buttonSelectionPanel.add(jLabel2);
+
         //提示按钮
         JTextArea textArea = new JTextArea("text");
-        textArea.setPreferredSize(new Dimension(90, 300));
+        textArea.setPreferredSize(new Dimension(110, 200));
         textArea.setLineWrap(true);
+        textArea.setEnabled(false);
         //TODO 改为动态
         textArea.setText("一个 3×3 宫、一行或一列中只剩下一个可用单元格，那么我们必须明确缺少 1 到 9 中的哪个数字，并将它填入这个空白单元格");
         buttonSelectionPanel.add(textArea);
