@@ -27,7 +27,7 @@ public class LastFreeCellStrategyTest {
             {"", "", "3", "6", "9", "7", "5", "", ""}
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoardForTest(board);
+        puzzle.setBoard(board);
         Optional<HintModel> result = new LastFreeCellStrategy().tryStrategy(puzzle);
         Assert.assertFalse(result.isPresent());
     }
@@ -46,7 +46,7 @@ public class LastFreeCellStrategyTest {
             {"", "", "3", "6", "9", "7", "5", "", ""}
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoardForTest(board);
+        puzzle.setBoard(board);
         Optional<HintModel> result = new LastFreeCellStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -80,7 +80,7 @@ public class LastFreeCellStrategyTest {
             {"", "", "3", "6", "9", "7", "5", "", "4"}
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoardForTest(board);
+        puzzle.setBoard(board);
         Optional<HintModel> result = new LastFreeCellStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -115,7 +115,7 @@ public class LastFreeCellStrategyTest {
             {"", "", "3", "6", "9", "7", "5", "", "4"}
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoardForTest(board);
+        puzzle.setBoard(board);
         Optional<HintModel> result = new LastFreeCellStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -149,7 +149,7 @@ public class LastFreeCellStrategyTest {
             {"", "", "3", "6", "9", "7", "5", "", "4"}
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoardForTest(board);
+        puzzle.setBoard(board);
         Optional<HintModel> result = new LastFreeCellStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -183,7 +183,7 @@ public class LastFreeCellStrategyTest {
             {"", "", "3", "6", "9", "7", "5", "2", "4"}
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoardForTest(board);
+        puzzle.setBoard(board);
         Optional<HintModel> result = new LastFreeCellStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

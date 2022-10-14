@@ -187,7 +187,7 @@ public class SudokuPanel extends JPanel {
             if (result.isPresent()) {
                 isHintMode = true;
                 hintModel = result.get();
-                sudokuFrame.hintModel();
+                sudokuFrame.hintModel(hintModel.getStrategy());
                 repaint();
             } else {
                 sudokuFrame.setUnAvailableLabel("无可用技巧");

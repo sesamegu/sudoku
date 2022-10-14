@@ -15,6 +15,8 @@ public class HintModel {
     private String value;
     // 相关的位置
     private List<Position> related;
+    // 策略名
+    private Strategy strategy;
 
     public static HintModel build() {
         return new HintModel();
@@ -35,6 +37,11 @@ public class HintModel {
         return this;
     }
 
+    public HintModel of(Strategy strategy) {
+        this.strategy = strategy;
+        return this;
+    }
+
     public Position getPosition() {
         return position;
     }
@@ -45,5 +52,9 @@ public class HintModel {
 
     public List<Position> getRelated() {
         return related;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
     }
 }

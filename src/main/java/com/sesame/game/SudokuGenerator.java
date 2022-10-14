@@ -3,6 +3,7 @@ package com.sesame.game;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public class SudokuGenerator {
@@ -36,6 +37,17 @@ public class SudokuGenerator {
         }
 
         return puzzle;
+    }
+
+    public SudokuPuzzle useSpecified(int caseType) {
+        Optional<SudokuPuzzle> byCaseType = CaseLibrary.getByCaseType(caseType);
+        if (!byCaseType.isPresent()) {
+            throw new RuntimeException("can't find the case " + caseType);
+        }
+
+
+
+        return byCaseType.get();
     }
 
     /**

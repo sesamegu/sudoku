@@ -3,7 +3,6 @@ package com.sesame.game;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -16,6 +15,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
+
+import com.sesame.game.strategy.Strategy;
 
 @SuppressWarnings("serial")
 public class SudokuFrame extends JFrame {
@@ -30,21 +31,27 @@ public class SudokuFrame extends JFrame {
         this.setMinimumSize(new Dimension(800, 600));
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu file = new JMenu("Game");
         JMenu newGame = new JMenu("New Game");
         JMenuItem sixBySixGame = new JMenuItem("Easy");
-        sixBySixGame.addActionListener(new NewGameListener(SudokuPuzzleType.EASY, 26));
+        sixBySixGame.addActionListener(new NewGameListener(SudokuPuzzleType.EASY));
         JMenuItem nineByNineGame = new JMenuItem("Normal");
-        nineByNineGame.addActionListener(new NewGameListener(SudokuPuzzleType.NORMAL, 26));
+        nineByNineGame.addActionListener(new NewGameListener(SudokuPuzzleType.NORMAL));
         JMenuItem twelveByTwelveGame = new JMenuItem("Hard");
-        twelveByTwelveGame.addActionListener(new NewGameListener(SudokuPuzzleType.HARD, 26));
+        twelveByTwelveGame.addActionListener(new NewGameListener(SudokuPuzzleType.HARD));
 
         newGame.add(sixBySixGame);
         newGame.add(nineByNineGame);
         newGame.add(twelveByTwelveGame);
-        file.add(newGame);
-        menuBar.add(file);
+        menuBar.add(newGame);
+
+        JMenu loadGame = new JMenu("Load Game");
+        JMenuItem caseOne = new JMenuItem("puzzle one");
+        caseOne.addActionListener(new LoadGameListener(1));
+        loadGame.add(caseOne);
+        menuBar.add(loadGame);
+
         this.setJMenuBar(menuBar);
+
 
         JPanel windowPanel = new JPanel();
         windowPanel.setLayout(new FlowLayout());
@@ -60,7 +67,7 @@ public class SudokuFrame extends JFrame {
 
         this.add(windowPanel);
 
-        rebuildInterface(SudokuPuzzleType.NORMAL, 26);
+        newGameRebuild(SudokuPuzzleType.NORMAL);
     }
 
     public static void main(String[] args) {
@@ -73,10 +80,19 @@ public class SudokuFrame extends JFrame {
         });
     }
 
-    public void rebuildInterface(SudokuPuzzleType puzzleType, int fontSize) {
+    public void newGameRebuild(SudokuPuzzleType puzzleType) {
         SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
+        rebuildInterface(generatedPuzzle);
+    }
+
+    public void loadGameRebuild(int caseType){
+        SudokuPuzzle generatedPuzzle = new SudokuGenerator().useSpecified(caseType);
+        rebuildInterface(generatedPuzzle);
+    }
+
+    private void rebuildInterface(SudokuPuzzle generatedPuzzle) {
         sPanel.newSudokuPuzzle(generatedPuzzle);
-        sPanel.setFontSize(fontSize);
+        sPanel.setFontSize(Const.FONT_SIZE);
         sPanel.repaint();
         buttonModel();
     }
@@ -112,57 +128,69 @@ public class SudokuFrame extends JFrame {
         buttonSelectionPanel.repaint();
     }
 
-    public void hintModel() {
+    public void hintModel(Strategy strategy) {
         buttonSelectionPanel.removeAll();
 
         buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
         //应用按钮
-        JButton apply = new JButton("Apply");
+        JButton apply = new JButton("应用");
         apply.setPreferredSize(new Dimension(110, 40));
         apply.addActionListener(sPanel.new ApplyListener(this));
         buttonSelectionPanel.add(apply);
 
-
         JLabel jLabel = new JLabel("技巧名称:");
         jLabel.setPreferredSize(new Dimension(110, 15));
         buttonSelectionPanel.add(jLabel);
-        //TODO 改为动态
-        JLabel jLabel2 = new JLabel("唯余空白格");
+
+        JLabel jLabel2 = new JLabel(strategy.getName());
         jLabel2.setPreferredSize(new Dimension(110, 15));
         jLabel2.setForeground(Color.red);
         buttonSelectionPanel.add(jLabel2);
 
         //提示按钮
-        JTextArea textArea = new JTextArea("text");
+        JTextArea textArea = new JTextArea("");
         textArea.setPreferredSize(new Dimension(110, 200));
         textArea.setLineWrap(true);
         textArea.setEnabled(false);
-        //TODO 改为动态
-        textArea.setText("一个 3×3 宫、一行或一列中只剩下一个可用单元格，那么我们必须明确缺少 1 到 9 中的哪个数字，并将它填入这个空白单元格");
+
+        textArea.setText(strategy.getDesc());
         buttonSelectionPanel.add(textArea);
 
         buttonSelectionPanel.revalidate();
         buttonSelectionPanel.repaint();
     }
 
+    public void setUnAvailableLabel(String text) {
+        unAvailableLabel.setText(text);
+    }
+
     private class NewGameListener implements ActionListener {
 
         private final SudokuPuzzleType puzzleType;
-        private final int fontSize;
 
-        public NewGameListener(SudokuPuzzleType puzzleType, int fontSize) {
+        public NewGameListener(SudokuPuzzleType puzzleType) {
             this.puzzleType = puzzleType;
-            this.fontSize = fontSize;
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            rebuildInterface(puzzleType, fontSize);
+            newGameRebuild(puzzleType);
         }
     }
 
-    public void setUnAvailableLabel(String text){
-        unAvailableLabel.setText(text);
+    private class LoadGameListener implements ActionListener {
+
+        private final int caseType;
+
+        public LoadGameListener(int caseType) {
+            this.caseType = caseType;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            loadGameRebuild(caseType);
+        }
     }
+
 
 }

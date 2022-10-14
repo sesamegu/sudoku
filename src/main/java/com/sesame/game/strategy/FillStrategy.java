@@ -23,7 +23,7 @@ public interface FillStrategy {
      *
      * @return
      */
-    String getName();
+    Strategy getStrategy();
 
     /**
      * 策略优先级

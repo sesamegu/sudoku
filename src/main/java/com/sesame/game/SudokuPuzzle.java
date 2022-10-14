@@ -51,6 +51,10 @@ public class SudokuPuzzle {
         }
     }
 
+    public void makeMutable(int row, int col, boolean isMutable) {
+        this.mutable[row][col] = isMutable;
+    }
+
     public boolean isValidMove(int row, int col, String value) {
         makeSureInRange(row, col);
         return !this.numInCol(col, value) && !this.numInRow(row, value) && !this.numInBox(row, col, value);
@@ -172,11 +176,7 @@ public class SudokuPuzzle {
         }
     }
 
-    /**
-     *  for testing purpose
-     * @param board
-     */
-    public void setBoardForTest(String[][] board) {
+    public void setBoard(String[][] board) {
         this.board = board;
     }
 

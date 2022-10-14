@@ -16,4 +16,7 @@ public interface Const {
     int BOX_HEIGHT = 3;
     String[] VALID_VALUES = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
     Set<String> SET_VALUES = new HashSet<>(Arrays.asList(VALID_VALUES));
+
+    //字体大小
+    int FONT_SIZE = 26;
 }

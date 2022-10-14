@@ -55,7 +55,7 @@ public class LastFreeCellStrategy implements FillStrategy {
 
                 //位置、值、相关点
                 HintModel result = HintModel.build().of(new Position(i, emptyColumnPosition))
-                    .of(copy.iterator().next()).of(related);
+                    .of(copy.iterator().next()).of(related).of(getStrategy());
                 return Optional.of(result);
             }
         }
@@ -84,7 +84,7 @@ public class LastFreeCellStrategy implements FillStrategy {
 
                 //位置、值、相关点
                 HintModel result = HintModel.build().of(new Position(emptyRowPosition, i))
-                    .of(copy.iterator().next()).of(related);
+                    .of(copy.iterator().next()).of(related).of(getStrategy());
                 return Optional.of(result);
             }
         }
@@ -132,7 +132,7 @@ public class LastFreeCellStrategy implements FillStrategy {
 
             //位置、值、相关点
             HintModel result = HintModel.build().of(new Position(rowPosition, columnPosition))
-                .of(copy.iterator().next()).of(related);
+                .of(copy.iterator().next()).of(related).of(getStrategy());
             return Optional.of(result);
         }
 
@@ -140,8 +140,8 @@ public class LastFreeCellStrategy implements FillStrategy {
     }
 
     @Override
-    public String getName() {
-        return "Last Free Cell";
+    public Strategy getStrategy() {
+        return Strategy.LAST_FREE_CELL;
     }
 
     @Override
