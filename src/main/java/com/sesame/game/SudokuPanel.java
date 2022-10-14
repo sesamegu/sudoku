@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +22,7 @@ import javax.swing.event.MouseInputAdapter;
 import com.sesame.game.strategy.FillStrategy;
 import com.sesame.game.strategy.HintModel;
 import com.sesame.game.strategy.LastFreeCellStrategy;
+import com.sesame.game.strategy.LastPossibleNumberStrategy;
 import com.sesame.game.strategy.Position;
 import org.springframework.util.Assert;
 
@@ -182,8 +185,7 @@ public class SudokuPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            FillStrategy lastFreeCellStrategy = new LastFreeCellStrategy();
-            Optional<HintModel> result = lastFreeCellStrategy.tryStrategy(puzzle);
+            Optional<HintModel> result = tryAllStrategy();
             if (result.isPresent()) {
                 isHintMode = true;
                 hintModel = result.get();
@@ -193,6 +195,21 @@ public class SudokuPanel extends JPanel {
                 sudokuFrame.setUnAvailableLabel("无可用技巧");
                 new Thread(new HideTheTextThread(sudokuFrame)).start();
             }
+        }
+
+        public Optional<HintModel> tryAllStrategy() {
+            List<FillStrategy> allStrategy = new ArrayList<>();
+            allStrategy.add(new LastFreeCellStrategy());
+            allStrategy.add(new LastPossibleNumberStrategy());
+
+            for (FillStrategy one : allStrategy) {
+                Optional<HintModel> hintModel = one.tryStrategy(puzzle);
+                if (hintModel.isPresent()) {
+                    return hintModel;
+                }
+            }
+
+            return Optional.empty();
         }
     }
 

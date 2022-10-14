@@ -1,12 +1,13 @@
 package com.sesame.game.strategy;
 
+import java.util.Objects;
+
 /**
  * Introduction:
  *
  * @author sesame 2022/10/13
  */
-public
-class Position {
+public class Position {
     private final int row;
     private final int col;
 
@@ -24,17 +25,19 @@ class Position {
     }
 
     @Override
-    public boolean equals(Object anObject) {
-        if (this == anObject) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (anObject instanceof Position) {
-            Position another = (Position)anObject;
-
-            return (this.row == another.row && this.col == another.col);
-
+        if (o == null || getClass() != o.getClass()) {
+            return false;
         }
-        return false;
+        Position position = (Position)o;
+        return row == position.row && col == position.col;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(row, col);
+    }
 }
