@@ -94,8 +94,8 @@ public class LastFreeCellStrategy implements FillStrategy {
 
     private Optional<HintModel> tryBox(SudokuPuzzle sudokuPuzzle) {
         //获取每个宫的起点
-        for (int rowStartPoint = 0; rowStartPoint < Const.ROWS; rowStartPoint = rowStartPoint + 3) {
-            for (int columnStartPoint = 0; columnStartPoint < Const.COLUMNS; columnStartPoint = columnStartPoint + 3) {
+        for (int rowStartPoint = 0; rowStartPoint < Const.ROWS; rowStartPoint = rowStartPoint + Const.BOX_WIDTH) {
+            for (int columnStartPoint = 0; columnStartPoint < Const.COLUMNS; columnStartPoint = columnStartPoint + Const.BOX_WIDTH) {
                 Optional<HintModel> result = checkEveryBox(sudokuPuzzle, rowStartPoint, columnStartPoint);
                 if (result.isPresent()) {
                     return result;

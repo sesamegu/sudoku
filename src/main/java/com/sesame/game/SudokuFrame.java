@@ -48,6 +48,11 @@ public class SudokuFrame extends JFrame {
         JMenuItem caseOne = new JMenuItem("puzzle one");
         caseOne.addActionListener(new LoadGameListener(1));
         loadGame.add(caseOne);
+
+        JMenuItem caseTwo = new JMenuItem("puzzle two");
+        caseTwo.addActionListener(new LoadGameListener(2));
+        loadGame.add(caseTwo);
+
         menuBar.add(loadGame);
 
         this.setJMenuBar(menuBar);

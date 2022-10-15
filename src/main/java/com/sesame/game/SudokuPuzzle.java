@@ -1,5 +1,10 @@
 package com.sesame.game;
 
+import java.util.Optional;
+
+import com.sesame.game.strategy.Position;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class SudokuPuzzle {
 
     protected String[][] board;
@@ -178,6 +183,48 @@ public class SudokuPuzzle {
 
     public void setBoard(String[][] board) {
         this.board = board;
+    }
+
+    public Optional<Position> numInRowPosition(int row, String value) {
+        if (row < Const.ROWS) {
+            for (int col = 0; col < Const.COLUMNS; col++) {
+                if (this.board[row][col].equals(value)) {
+                    return Optional.of(new Position(row, col));
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Position> numInColumnPosition(int column, String value) {
+        if (column < Const.COLUMNS) {
+            for (int row = 0; row < Const.ROWS; row++) {
+                if (this.board[row][column].equals(value)) {
+                    return Optional.of(new Position(row, column));
+                }
+            }
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Position> numInBoxPosition(int row, int col, String value) {
+        makeSureInRange(row, col);
+
+        int boxRow = row / Const.BOX_HEIGHT;
+        int boxCol = col / Const.BOX_WIDTH;
+
+        int startingRow = (boxRow * Const.BOX_HEIGHT);
+        int startingCol = (boxCol * Const.BOX_WIDTH);
+
+        for (int r = startingRow; r <= (startingRow + Const.BOX_HEIGHT) - 1; r++) {
+            for (int c = startingCol; c <= (startingCol + Const.BOX_WIDTH) - 1; c++) {
+                if (this.board[r][c].equals(value)) {
+                    return Optional.of(new Position(r, c));
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 
 }

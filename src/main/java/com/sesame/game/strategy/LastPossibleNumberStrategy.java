@@ -41,10 +41,10 @@ public class LastPossibleNumberStrategy implements FillStrategy {
                     related.add(new Position(i, column));
                 }
                 //获取这宫的所有数字
-                int rowStart = row - row % 3;
-                int columnStart = column - column % 3;
-                for (int i = rowStart; i < rowStart + 3; i++) {
-                    for (int j = columnStart; j < columnStart + 3; j++) {
+                int rowStart = row - row % Const.BOX_WIDTH;
+                int columnStart = column - column % Const.BOX_WIDTH;
+                for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
+                    for (int j = columnStart; j < columnStart + Const.BOX_WIDTH; j++) {
                         if (sudokuPuzzle.isSlotValid(i, j)) {
                             contain.add(sudokuPuzzle.getValue(i, j));
                         }

@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
 import com.sesame.game.strategy.FillStrategy;
+import com.sesame.game.strategy.HiddenSinglesStrategy;
 import com.sesame.game.strategy.HintModel;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
@@ -139,7 +140,7 @@ public class SudokuPanel extends JPanel {
         g2d.drawString(found, (position.getCol() * slotWidth) + ((slotWidth / 2) - (textWidth / 2)),
             (position.getRow() * slotHeight) + ((slotHeight / 2) + (textHeight / 2)));
         //提示背景
-        g2d.setColor(new Color(0.0f, 0.0f, 0.7f, 0.3f));
+        g2d.setColor(new Color(0.0f, 0.0f, 0.9f, 0.3f));
         g2d.fillRect(position.getCol() * slotWidth, position.getRow() * slotHeight, slotWidth,
             slotHeight);
         //相关单元格
@@ -201,6 +202,7 @@ public class SudokuPanel extends JPanel {
             List<FillStrategy> allStrategy = new ArrayList<>();
             allStrategy.add(new LastFreeCellStrategy());
             allStrategy.add(new LastPossibleNumberStrategy());
+            allStrategy.add(new HiddenSinglesStrategy());
 
             for (FillStrategy one : allStrategy) {
                 Optional<HintModel> hintModel = one.tryStrategy(puzzle);

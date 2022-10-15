@@ -29,6 +29,28 @@ public class CaseLibrary {
         puzzle.setBoard(case1);
         library.put(1, puzzle);
 
+        makeUnmutable(puzzle);
+
+        String[][] board = new String[][] {
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "8", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "8", "", ""},
+            {"", "1", "", "", "", "", "", "", ""},
+            {"9", "6", "", "", "", "", "", "", ""}
+        };
+        SudokuPuzzle puzzle2 = new SudokuPuzzle();
+        puzzle2.setBoard(board);
+        makeUnmutable(puzzle2);
+        library.put(2, puzzle2);
+
+
+    }
+
+    private static void makeUnmutable(SudokuPuzzle puzzle) {
         for (int i = 0; i < Const.ROWS; i++) {
             for (int j = 0; j < Const.COLUMNS; j++) {
                 if (puzzle.isSlotValid(i, j)) {
@@ -37,7 +59,6 @@ public class CaseLibrary {
 
             }
         }
-
     }
 
     public static Optional<SudokuPuzzle> getByCaseType(int i) {
