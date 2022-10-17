@@ -17,6 +17,12 @@ public interface Const {
     String[] VALID_VALUES = new String[] {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
     Set<String> SET_VALUES = new HashSet<>(Arrays.asList(VALID_VALUES));
 
-    //字体大小
-    int FONT_SIZE = 26;
+    /**
+     * 正常字体大小
+     */
+    int NORMAL_FONT_SIZE = 26;
+    /**
+     * 提示字体大小
+     */
+    int HINT_FONT_SIZE = 13;
 }

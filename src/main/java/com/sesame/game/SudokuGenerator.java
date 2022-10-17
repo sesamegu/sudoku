@@ -15,26 +15,28 @@ public class SudokuGenerator {
         Random randomGenerator = new Random();
 
         List<String> notUsedValidValues = new ArrayList<>(Arrays.asList(Const.VALID_VALUES));
-        for (int r = 0; r < copy.getNumRows(); r++) {
+        for (int r = 0; r < Const.ROWS; r++) {
             int randomValue = randomGenerator.nextInt(notUsedValidValues.size());
-            copy.makeMove(r, 0, notUsedValidValues.get(randomValue), true);
+            copy.makeMoveWithoutCandidate(r, 0, notUsedValidValues.get(randomValue), true);
             notUsedValidValues.remove(randomValue);
         }
 
         //Bottleneck here need to improve this so that way 16x16 puzzles can be generated
         backtrackSudokuSolver(0, 0, copy);
 
-        int numberOfValuesToKeep = (int)(puzzleType.getDifficult() * (copy.getNumRows() * copy.getNumRows()));
+        int numberOfValuesToKeep = (int)(puzzleType.getDifficult() * (Const.ROWS * Const.ROWS));
 
         for (int i = 0; i < numberOfValuesToKeep; ) {
-            int randomRow = randomGenerator.nextInt(puzzle.getNumRows());
+            int randomRow = randomGenerator.nextInt(Const.ROWS);
             int randomColumn = randomGenerator.nextInt(puzzle.getNumColumns());
 
             if (puzzle.isSlotAvailable(randomRow, randomColumn)) {
-                puzzle.makeMove(randomRow, randomColumn, copy.getValue(randomRow, randomColumn), false);
+                puzzle.makeMoveWithoutCandidate(randomRow, randomColumn, copy.getValue(randomRow, randomColumn), false);
                 i++;
             }
         }
+
+        puzzle.resetCandidate();
 
         return puzzle;
     }
@@ -44,8 +46,6 @@ public class SudokuGenerator {
         if (!byCaseType.isPresent()) {
             throw new RuntimeException("can't find the case " + caseType);
         }
-
-
 
         return byCaseType.get();
     }
@@ -75,7 +75,7 @@ public class SudokuGenerator {
                     && !puzzle.numInBox(r, c, Const.VALID_VALUES[i])) {
 
                     //make the move
-                    puzzle.makeMove(r, c, Const.VALID_VALUES[i], true);
+                    puzzle.makeMoveWithoutCandidate(r, c, Const.VALID_VALUES[i], true);
 
                     //if puzzle solved return true
                     if (puzzle.boardFull()) {
@@ -83,7 +83,7 @@ public class SudokuGenerator {
                     }
 
                     //go to next move
-                    if (r == puzzle.getNumRows() - 1) {
+                    if (r == Const.ROWS - 1) {
                         if (backtrackSudokuSolver(0, c + 1, puzzle)) { return true; }
                     } else {
                         if (backtrackSudokuSolver(r + 1, c, puzzle)) { return true; }
@@ -95,7 +95,7 @@ public class SudokuGenerator {
         //if the current space is not empty
         else {
             //got to the next move
-            if (r == puzzle.getNumRows() - 1) {
+            if (r == Const.ROWS - 1) {
                 return backtrackSudokuSolver(0, c + 1, puzzle);
             } else {
                 return backtrackSudokuSolver(r + 1, c, puzzle);
@@ -103,7 +103,7 @@ public class SudokuGenerator {
         }
 
         //undo move
-        puzzle.makeSlotEmpty(r, c);
+        puzzle.makeSlotEmptyWithoutRestCandidate(r, c);
 
         //backtrack
         return false;

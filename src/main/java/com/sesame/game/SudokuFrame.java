@@ -97,7 +97,6 @@ public class SudokuFrame extends JFrame {
 
     private void rebuildInterface(SudokuPuzzle generatedPuzzle) {
         sPanel.newSudokuPuzzle(generatedPuzzle);
-        sPanel.setFontSize(Const.FONT_SIZE);
         sPanel.repaint();
         buttonModel();
     }

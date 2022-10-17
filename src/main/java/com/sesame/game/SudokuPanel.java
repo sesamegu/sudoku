@@ -26,6 +26,7 @@ import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
 import com.sesame.game.strategy.Position;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 @SuppressWarnings("serial")
 public class SudokuPanel extends JPanel {
@@ -35,7 +36,6 @@ public class SudokuPanel extends JPanel {
     private int currentlySelectedRow;
     private int usedWidth;
     private int usedHeight;
-    private int fontSize;
     private boolean isHintMode;
     private HintModel hintModel;
 
@@ -47,7 +47,6 @@ public class SudokuPanel extends JPanel {
         currentlySelectedRow = -1;
         usedWidth = 0;
         usedHeight = 0;
-        fontSize = 26;
         isHintMode = false;
         hintModel = null;
     }
@@ -56,21 +55,17 @@ public class SudokuPanel extends JPanel {
         this.puzzle = puzzle;
     }
 
-    public void setFontSize(int fontSize) {
-        this.fontSize = fontSize;
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
 
-        int slotWidth = this.getWidth() / puzzle.getNumColumns();
-        int slotHeight = this.getHeight() / puzzle.getNumRows();
+        int slotWidth = this.getWidth() / Const.ROWS;
+        int slotHeight = this.getHeight() / Const.ROWS;
 
         usedWidth = (this.getWidth() / puzzle.getNumColumns()) * puzzle.getNumColumns();
-        usedHeight = (this.getHeight() / puzzle.getNumRows()) * puzzle.getNumRows();
+        usedHeight = (this.getHeight() / Const.ROWS) * Const.ROWS;
 
         g2d.fillRect(0, 0, usedWidth, usedHeight);
 
@@ -98,10 +93,10 @@ public class SudokuPanel extends JPanel {
         //this will draw the bottom line
         //g2d.drawLine(0, usedHeight - 1, usedWidth, usedHeight - 1);
 
-        Font f = new Font("Times New Roman", Font.PLAIN, fontSize);
+        Font f = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
         g2d.setFont(f);
         FontRenderContext fContext = g2d.getFontRenderContext();
-        for (int row = 0; row < puzzle.getNumRows(); row++) {
+        for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < puzzle.getNumColumns(); col++) {
                 if (!puzzle.isSlotAvailable(row, col)) {
                     int textWidth = (int)f.getStringBounds(puzzle.getValue(row, col), fContext).getWidth();
@@ -119,6 +114,32 @@ public class SudokuPanel extends JPanel {
             }
         }
 
+        //候选数值
+        for (int row = 0; row < Const.ROWS; row++) {
+            for (int col = 0; col < Const.COLUMNS; col++) {
+                List<String> candidate = puzzle.getCandidate(row, col);
+                if (CollectionUtils.isEmpty(candidate)) {
+                    continue;
+                }
+                //Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid");
+                Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.HINT_FONT_SIZE);
+                g2d.setFont(smallFont);
+                //
+                for (String digital : candidate) {
+                    int candidateTextWidth = (int)f.getStringBounds(digital, fContext).getWidth();
+                    int candidateTextHeight = (int)f.getStringBounds(digital, fContext).getHeight();
+                    g2d.setColor(Color.LIGHT_GRAY);
+
+                    int number = Integer.parseInt(digital);
+                    int xStart = (number - 1) % 3 * (slotWidth / 3);
+                    int yStart = (number - 1) / 3 * (slotHeight / 3);
+
+                    g2d.drawString(digital, (col * slotWidth) + (xStart + (slotWidth / 6) - (candidateTextWidth / 2)),
+                        (row * slotHeight) + (yStart + (candidateTextHeight / 2)));
+                }
+            }
+        }
+
         if (!isHintMode) {
             if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
                 g2d.setColor(new Color(0.0f, 0.0f, 1.0f, 0.3f));
@@ -130,6 +151,8 @@ public class SudokuPanel extends JPanel {
 
         // 提示模式下
         Assert.notNull(hintModel, "hintModel should not be null");
+        Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
+        g2d.setFont(smallFont);
 
         //提示数值
         Position position = hintModel.getPosition();
@@ -266,7 +289,7 @@ public class SudokuPanel extends JPanel {
         public void mouseClicked(MouseEvent e) {
             if (e.getButton() == MouseEvent.BUTTON1) {
                 int slotWidth = usedWidth / puzzle.getNumColumns();
-                int slotHeight = usedHeight / puzzle.getNumRows();
+                int slotHeight = usedHeight / Const.ROWS;
                 currentlySelectedRow = e.getY() / slotHeight;
                 currentlySelectedCol = e.getX() / slotWidth;
                 e.getComponent().repaint();

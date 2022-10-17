@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.sesame.game.strategy.Position;
+import org.springframework.util.CollectionUtils;
 
 /**
  * 底层数据结构
@@ -20,13 +21,19 @@ public class SudokuPuzzle {
 
     protected String[][] board;
     /**
-     *  Table to determine if a slot is mutable
+     * Table to determine if a slot is mutable
      */
     protected boolean[][] mutable;
+
+    /**
+     * Table to store the candidate
+     */
+    protected List<String>[][] candidate;
 
     public SudokuPuzzle() {
         this.board = new String[Const.ROWS][Const.COLUMNS];
         this.mutable = new boolean[Const.ROWS][Const.COLUMNS];
+        this.candidate = new ArrayList[Const.ROWS][Const.COLUMNS];
         initializeBoard();
         initializeMutableSlots();
     }
@@ -44,25 +51,18 @@ public class SudokuPuzzle {
                 this.mutable[r][c] = puzzle.mutable[r][c];
             }
         }
-    }
-
-    public int getNumRows() {
-        return Const.ROWS;
-    }
-
-    public int getNumColumns() {
-        return Const.COLUMNS;
-    }
-
-    public int getBoxWidth() {
-        return Const.BOX_WIDTH;
-    }
-
-    public int getBoxHeight() {
-        return Const.BOX_HEIGHT;
+        this.candidate = new ArrayList[Const.ROWS][Const.COLUMNS];
+        resetCandidate();
     }
 
     public void makeMove(int row, int col, String value, boolean isMutable) {
+        makeMoveWithoutCandidate(row, col, value, isMutable);
+        //先处理为丢弃所有手动对候选值的修改，进行初始化
+        resetCandidate();
+        //todo 标记去除的候选值如何处理。因为二份数据合并：用户的输入的数据、基本候选值
+    }
+
+    public void makeMoveWithoutCandidate(int row, int col, String value, boolean isMutable) {
         if (this.isValidValue(value) && this.isValidMove(row, col, value) && this.isSlotMutable(row, col)) {
             this.board[row][col] = value;
             this.mutable[row][col] = isMutable;
@@ -135,6 +135,11 @@ public class SudokuPuzzle {
         return this.board[row][col];
     }
 
+    public List<String> getCandidate(int row, int col) {
+        makeSureInRange(row, col);
+        return candidate[row][col];
+    }
+
     public boolean isSlotValid(int row, int col) {
         return !"".equals(getValue(row, col));
     }
@@ -162,6 +167,12 @@ public class SudokuPuzzle {
     }
 
     public void makeSlotEmpty(int row, int col) {
+        this.board[row][col] = "";
+        //初始化候选值，丢弃所有手动对候选值的修改
+        resetCandidate();
+    }
+
+    public void makeSlotEmptyWithoutRestCandidate(int row, int col) {
         this.board[row][col] = "";
     }
 
@@ -195,6 +206,7 @@ public class SudokuPuzzle {
 
     public void setBoard(String[][] board) {
         this.board = board;
+        resetCandidate();
     }
 
     public Optional<Position> numInRowPosition(int row, String value) {
@@ -239,9 +251,12 @@ public class SudokuPuzzle {
         return Optional.empty();
     }
 
-    public Map<Position, List<String>> findRemaining() {
-        Map<Position, List<String>> possibleValues = new HashMap<>(81);
-        // 找出每个空白格的候选数
+    public void resetCandidate() {
+        this.candidate = initializeCandidate();
+    }
+
+    private List[][] initializeCandidate() {
+        List[][] result = new ArrayList[Const.ROWS][Const.COLUMNS];
         for (int row = 0; row < Const.ROWS; row++) {
             for (int column = 0; column < Const.COLUMNS; column++) {
                 if (isSlotValid(row, column)) {
@@ -276,12 +291,42 @@ public class SudokuPuzzle {
                 copy.removeAll(contain);
                 List<String> remaining = new ArrayList<>(copy);
                 Collections.sort(remaining);
+                result[row][column] = remaining;
+            }
+        }
+        return result;
+    }
 
-                possibleValues.put(new Position(row, column), remaining);
+    public Map<Position, List<String>> findRemaining() {
+        Map<Position, List<String>> possibleValues = new HashMap<>(81);
+        // 找出每个空白格的候选数
+        for (int row = 0; row < Const.ROWS; row++) {
+            for (int column = 0; column < Const.COLUMNS; column++) {
+                if (isSlotValid(row, column)) {
+                    continue;
+                }
+
+                List<String> listString = candidate[row][column];
+                if (CollectionUtils.isEmpty(listString)) {
+                    continue;
+                }
+
+                possibleValues.put(new Position(row, column), listString);
             }
         }
 
         return possibleValues;
     }
 
+    public int getNumColumns() {
+        return Const.COLUMNS;
+    }
+
+    public int getBoxWidth() {
+        return Const.BOX_WIDTH;
+    }
+
+    public int getBoxHeight() {
+        return Const.BOX_HEIGHT;
+    }
 }
