@@ -113,8 +113,8 @@ public class LastFreeCellStrategy implements FillStrategy {
         Set<String> copy = new HashSet<>(Const.SET_VALUES);
         List<Position> related = new ArrayList<>(9);
 
-        for (int row = rowStartPoint; row < rowStartPoint + 3; row++) {
-            for (int column = columnStartPoint; column < columnStartPoint + 3; column++) {
+        for (int row = rowStartPoint; row < rowStartPoint + Const.BOX_WIDTH; row++) {
+            for (int column = columnStartPoint; column < columnStartPoint + Const.BOX_WIDTH; column++) {
                 if (sudokuPuzzle.isSlotValid(row, column)) {
                     count++;
                     copy.remove(sudokuPuzzle.getValue(row, column));
