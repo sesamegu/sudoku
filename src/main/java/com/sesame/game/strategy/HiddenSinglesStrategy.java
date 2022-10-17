@@ -22,8 +22,7 @@ import org.springframework.util.CollectionUtils;
 public class HiddenSinglesStrategy implements FillStrategy {
     @Override
     public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
-        Map<Position, List<String>> remaining = findRemaining(sudokuPuzzle);
-
+        Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
         // 以行、列、宫为单元找出隐形的单一数
         Optional<HintModel> byRow = findByRow(sudokuPuzzle, remaining);
         if (byRow.isPresent()) {
@@ -44,32 +43,17 @@ public class HiddenSinglesStrategy implements FillStrategy {
     }
 
     private Optional<HintModel> findByRow(SudokuPuzzle sudokuPuzzle, Map<Position, List<String>> remaining) {
-        //获取这行的所有数字
         for (int row = 0; row < Const.ROWS; row++) {
-            // key 为数字，value为出现的次数
-            Map<String, Integer> countForNumber = new HashMap<>(9);
+            // 以行为单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
+            List<Position> positionList = new ArrayList<>(9);
             for (int column = 0; column < Const.COLUMNS; column++) {
-                Position position = new Position(row, column);
-                if (remaining.containsKey(position)) {
-                    List<String> lefts = remaining.get(position);
-                    lefts.stream().forEach(one -> {
-                        if (countForNumber.containsKey(one)) {
-                            countForNumber.put(one, countForNumber.get(one) + 1);
-                        } else {
-                            countForNumber.put(one, 1);
-                        }
-                    });
-                }
+                positionList.add(new Position(row, column));
             }
-
-            // 检查是否存在 某个数只有一个
-            List<String> collect = countForNumber.entrySet().stream().filter(one -> one.getValue() == 1)
-                .map(one -> one.getKey()).collect(Collectors.toList());
+            List<String> collect = statTimesByNumber(remaining, positionList);
             if (CollectionUtils.isEmpty(collect)) {
                 continue;
             }
 
-            Collections.sort(collect);
             for (String one : collect) {
                 for (int column = 0; column < Const.COLUMNS; column++) {
                     Position position = new Position(row, column);
@@ -92,30 +76,17 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private Optional<HintModel> findByColumn(SudokuPuzzle sudokuPuzzle, Map<Position, List<String>> remaining) {
         for (int column = 0; column < Const.COLUMNS; column++) {
-            // key 为数字，value为出现的次数
-            Map<String, Integer> countForNumber = new HashMap<>(9);
-            for (int row = 0; row < Const.ROWS; row++) {
-                Position position = new Position(row, column);
-                if (remaining.containsKey(position)) {
-                    List<String> lefts = remaining.get(position);
-                    lefts.stream().forEach(one -> {
-                        if (countForNumber.containsKey(one)) {
-                            countForNumber.put(one, countForNumber.get(one) + 1);
-                        } else {
-                            countForNumber.put(one, 1);
-                        }
-                    });
-                }
-            }
 
-            // 检查是否存在 某个数只有一个
-            List<String> collect = countForNumber.entrySet().stream().filter(one -> one.getValue() == 1)
-                .map(one -> one.getKey()).collect(Collectors.toList());
+            // 以列单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
+            List<Position> positionList = new ArrayList<>(9);
+            for (int row = 0; row < Const.ROWS; row++) {
+                positionList.add(new Position(row, column));
+            }
+            List<String> collect = statTimesByNumber(remaining, positionList);
             if (CollectionUtils.isEmpty(collect)) {
                 continue;
             }
 
-            Collections.sort(collect);
             for (String one : collect) {
                 for (int row = 0; row < Const.ROWS; row++) {
                     Position position = new Position(row, column);
@@ -152,32 +123,20 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private Optional<HintModel> checkNineBox(SudokuPuzzle sudokuPuzzle, int rowStartPoint, int columnStartPoint,
         Map<Position, List<String>> remaining) {
-        Map<String, Integer> countForNumber = new HashMap<>(9);
 
+        // 以宫为单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
+        List<Position> positionList = new ArrayList<>(9);
         for (int row = rowStartPoint; row < rowStartPoint + Const.BOX_WIDTH; row++) {
             for (int column = columnStartPoint; column < columnStartPoint + Const.BOX_WIDTH; column++) {
-                Position position = new Position(row, column);
-                if (remaining.containsKey(position)) {
-                    List<String> lefts = remaining.get(position);
-                    lefts.stream().forEach(one -> {
-                        if (countForNumber.containsKey(one)) {
-                            countForNumber.put(one, countForNumber.get(one) + 1);
-                        } else {
-                            countForNumber.put(one, 1);
-                        }
-                    });
-                }
+                positionList.add(new Position(row, column));
             }
         }
 
-        // 检查是否存在 某个数只有一个
-        List<String> collect = countForNumber.entrySet().stream().filter(one -> one.getValue() == 1)
-            .map(one -> one.getKey()).collect(Collectors.toList());
+        List<String> collect = statTimesByNumber(remaining, positionList);
         if (CollectionUtils.isEmpty(collect)) {
             return Optional.empty();
         }
 
-        Collections.sort(collect);
         for (String one : collect) {
             for (int row = rowStartPoint; row < rowStartPoint + Const.BOX_WIDTH; row++) {
                 for (int column = columnStartPoint; column < columnStartPoint + Const.BOX_WIDTH; column++) {
@@ -196,10 +155,34 @@ public class HiddenSinglesStrategy implements FillStrategy {
             }
         }
 
-
         throw new RuntimeException("should not be here.sudokuPuzzle " + sudokuPuzzle);
     }
 
+    private List<String> statTimesByNumber(Map<Position, List<String>> remaining, List<Position> positionList) {
+        // key 为数字，value为出现的次数
+        Map<String, Integer> countForNumber = new HashMap<>(9);
+        for (Position onePosition : positionList) {
+            if (remaining.containsKey(onePosition)) {
+                List<String> lefts = remaining.get(onePosition);
+                lefts.stream().forEach(one -> {
+                    if (countForNumber.containsKey(one)) {
+                        countForNumber.put(one, countForNumber.get(one) + 1);
+                    } else {
+                        countForNumber.put(one, 1);
+                    }
+                });
+            }
+        }
+
+        // 检查是否存在 某个数只有一个
+        List<String> collect = countForNumber.entrySet().stream().filter(one -> one.getValue() == 1)
+            .map(one -> one.getKey()).collect(Collectors.toList());
+
+        //默认数字序
+        Collections.sort(collect);
+        return collect;
+
+    }
 
 
     private List<Position> findTheRelatedByRow(Position position, String value, SudokuPuzzle sudokuPuzzle) {
@@ -305,51 +288,6 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
         allRelated.remove(position);
         return new ArrayList<>(allRelated);
-    }
-
-    private Map<Position, List<String>> findRemaining(SudokuPuzzle sudokuPuzzle) {
-        Map<Position, List<String>> possibleValues = new HashMap<>(81);
-        // 找出每个空白格的候选数
-        for (int row = 0; row < Const.ROWS; row++) {
-            for (int column = 0; column < Const.COLUMNS; column++) {
-                if (sudokuPuzzle.isSlotValid(row, column)) {
-                    continue;
-                }
-
-                Set<String> contain = new HashSet<>(9);
-                //获取这行的所有数字
-                for (int k = 0; k < Const.ROWS; k++) {
-                    if (sudokuPuzzle.isSlotValid(row, k)) {
-                        contain.add(sudokuPuzzle.getValue(row, k));
-                    }
-                }
-                //获取这列的所有数字
-                for (int i = 0; i < Const.COLUMNS; i++) {
-                    if (sudokuPuzzle.isSlotValid(i, column)) {
-                        contain.add(sudokuPuzzle.getValue(i, column));
-                    }
-                }
-                //获取这宫的所有数字
-                int rowStart = row - row % 3;
-                int columnStart = column - column % 3;
-                for (int i = rowStart; i < rowStart + 3; i++) {
-                    for (int j = columnStart; j < columnStart + 3; j++) {
-                        if (sudokuPuzzle.isSlotValid(i, j)) {
-                            contain.add(sudokuPuzzle.getValue(i, j));
-                        }
-                    }
-                }
-
-                Set<String> copy = new HashSet<>(Const.SET_VALUES);
-                copy.removeAll(contain);
-                List<String> remaining = new ArrayList<>(copy);
-                Collections.sort(remaining);
-
-                possibleValues.put(new Position(row, column), remaining);
-            }
-        }
-
-        return possibleValues;
     }
 
     @Override

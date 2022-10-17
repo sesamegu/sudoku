@@ -1,14 +1,27 @@
 package com.sesame.game;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import com.sesame.game.strategy.Position;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
+/**
+ * 底层数据结构
+ *
+ * @author mike
+ */
 public class SudokuPuzzle {
 
     protected String[][] board;
-    // Table to determine if a slot is mutable
+    /**
+     *  Table to determine if a slot is mutable
+     */
     protected boolean[][] mutable;
 
     public SudokuPuzzle() {
@@ -110,7 +123,7 @@ public class SudokuPuzzle {
 
     public boolean isSlotAvailable(int row, int col) {
         makeSureInRange(row, col);
-        return this.board[row][col].equals("") && this.isSlotMutable(row, col);
+        return "".equals(this.board[row][col]) && this.isSlotMutable(row, col);
     }
 
     public boolean isSlotMutable(int row, int col) {
@@ -123,7 +136,7 @@ public class SudokuPuzzle {
     }
 
     public boolean isSlotValid(int row, int col) {
-        return "".equals(getValue(row, col)) ? false : true;
+        return !"".equals(getValue(row, col));
     }
 
     private boolean isValidValue(String value) {
@@ -134,8 +147,7 @@ public class SudokuPuzzle {
     }
 
     public void makeSureInRange(int row, int col) {
-        if (row < Const.ROWS && col < Const.COLUMNS && row >= 0 && col >= 0) {
-        } else {
+        if (row >= Const.ROWS || row < 0 || col >= Const.COLUMNS || col < 0) {
             throw new RuntimeException("row " + row + "\t col " + col + " is not in range");
         }
     }
@@ -143,7 +155,7 @@ public class SudokuPuzzle {
     public boolean boardFull() {
         for (int r = 0; r < Const.ROWS; r++) {
             for (int c = 0; c < Const.COLUMNS; c++) {
-                if (this.board[r][c].equals("")) { return false; }
+                if ("".equals(this.board[r][c])) { return false; }
             }
         }
         return true;
@@ -155,14 +167,14 @@ public class SudokuPuzzle {
 
     @Override
     public String toString() {
-        String str = "Game Board:\n";
+        StringBuilder str = new StringBuilder("Game Board:\n");
         for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < Const.COLUMNS; col++) {
-                str += this.board[row][col] + " ";
+                str.append(this.board[row][col]).append(" ");
             }
-            str += "\n";
+            str.append("\n");
         }
-        return str + "\n";
+        return str.append("\n").toString();
     }
 
     private void initializeBoard() {
@@ -225,6 +237,51 @@ public class SudokuPuzzle {
         }
 
         return Optional.empty();
+    }
+
+    public Map<Position, List<String>> findRemaining() {
+        Map<Position, List<String>> possibleValues = new HashMap<>(81);
+        // 找出每个空白格的候选数
+        for (int row = 0; row < Const.ROWS; row++) {
+            for (int column = 0; column < Const.COLUMNS; column++) {
+                if (isSlotValid(row, column)) {
+                    continue;
+                }
+
+                Set<String> contain = new HashSet<>(9);
+                //获取这行的所有数字
+                for (int k = 0; k < Const.ROWS; k++) {
+                    if (isSlotValid(row, k)) {
+                        contain.add(getValue(row, k));
+                    }
+                }
+                //获取这列的所有数字
+                for (int i = 0; i < Const.COLUMNS; i++) {
+                    if (isSlotValid(i, column)) {
+                        contain.add(getValue(i, column));
+                    }
+                }
+                //获取这宫的所有数字
+                int rowStart = row - row % Const.BOX_WIDTH;
+                int columnStart = column - column % Const.BOX_WIDTH;
+                for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
+                    for (int j = columnStart; j < columnStart + Const.BOX_WIDTH; j++) {
+                        if (isSlotValid(i, j)) {
+                            contain.add(getValue(i, j));
+                        }
+                    }
+                }
+
+                Set<String> copy = new HashSet<>(Const.SET_VALUES);
+                copy.removeAll(contain);
+                List<String> remaining = new ArrayList<>(copy);
+                Collections.sort(remaining);
+
+                possibleValues.put(new Position(row, column), remaining);
+            }
+        }
+
+        return possibleValues;
     }
 
 }

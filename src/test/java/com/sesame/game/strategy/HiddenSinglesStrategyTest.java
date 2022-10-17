@@ -1,13 +1,15 @@
 package com.sesame.game.strategy;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.sesame.game.SudokuPuzzle;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author mike
@@ -90,6 +92,23 @@ public class HiddenSinglesStrategyTest {
         Assert.assertEquals("8", hintModel.getValue());
         List<Position> related = hintModel.getRelated();
         Assert.assertEquals(10, related.size());
+
+    }
+
+    @Test
+    public void testMap() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("1", 1);
+        map.put("2", 1);
+        map.put("3", 1);
+
+        // 检查是否存在 某个数只有一个
+        List<String> collect = map.entrySet().stream().filter(one -> one.getValue() == 1)
+            .map(one -> one.getKey()).collect(Collectors.toList());
+
+        //默认数字序
+        Collections.sort(collect);
+        Assert.assertEquals("1", collect.get(0));
 
     }
 }

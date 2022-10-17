@@ -124,6 +124,12 @@ public class SudokuFrame extends JFrame {
         hint.addActionListener(sPanel.new HintActionListener(this));
         buttonSelectionPanel.add(hint);
 
+        //无尽提示按钮
+        JButton Unstop = new JButton("Unstop Hint");
+        Unstop.setPreferredSize(new Dimension(90, 40));
+        Unstop.addActionListener(sPanel.new UnStopHintListener(this));
+        buttonSelectionPanel.add(Unstop);
+
         //无可用提示文案
         unAvailableLabel = new JLabel("");
         unAvailableLabel.setPreferredSize(new Dimension(90, 40));
@@ -137,11 +143,7 @@ public class SudokuFrame extends JFrame {
         buttonSelectionPanel.removeAll();
 
         buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
-        //应用按钮
-        JButton apply = new JButton("应用");
-        apply.setPreferredSize(new Dimension(110, 40));
-        apply.addActionListener(sPanel.new ApplyListener(this));
-        buttonSelectionPanel.add(apply);
+
 
         JLabel jLabel = new JLabel("技巧名称:");
         jLabel.setPreferredSize(new Dimension(110, 15));
@@ -154,12 +156,18 @@ public class SudokuFrame extends JFrame {
 
         //提示按钮
         JTextArea textArea = new JTextArea("");
-        textArea.setPreferredSize(new Dimension(110, 200));
+        textArea.setPreferredSize(new Dimension(110, 220));
         textArea.setLineWrap(true);
         textArea.setEnabled(false);
 
         textArea.setText(strategy.getDesc());
         buttonSelectionPanel.add(textArea);
+
+        //应用按钮
+        JButton apply = new JButton("应用");
+        apply.setPreferredSize(new Dimension(110, 40));
+        apply.addActionListener(sPanel.new ApplyListener(this));
+        buttonSelectionPanel.add(apply);
 
         buttonSelectionPanel.revalidate();
         buttonSelectionPanel.repaint();

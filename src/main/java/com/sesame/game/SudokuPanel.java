@@ -158,6 +158,22 @@ public class SudokuPanel extends JPanel {
         }
     }
 
+    public Optional<HintModel> tryAllStrategy() {
+        List<FillStrategy> allStrategy = new ArrayList<>();
+        allStrategy.add(new LastFreeCellStrategy());
+        allStrategy.add(new LastPossibleNumberStrategy());
+        allStrategy.add(new HiddenSinglesStrategy());
+
+        for (FillStrategy one : allStrategy) {
+            Optional<HintModel> hintModel = one.tryStrategy(puzzle);
+            if (hintModel.isPresent()) {
+                return hintModel;
+            }
+        }
+
+        return Optional.empty();
+    }
+
     public class NumActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -198,20 +214,29 @@ public class SudokuPanel extends JPanel {
             }
         }
 
-        public Optional<HintModel> tryAllStrategy() {
-            List<FillStrategy> allStrategy = new ArrayList<>();
-            allStrategy.add(new LastFreeCellStrategy());
-            allStrategy.add(new LastPossibleNumberStrategy());
-            allStrategy.add(new HiddenSinglesStrategy());
+    }
 
-            for (FillStrategy one : allStrategy) {
-                Optional<HintModel> hintModel = one.tryStrategy(puzzle);
-                if (hintModel.isPresent()) {
-                    return hintModel;
-                }
+    public class UnStopHintListener implements ActionListener {
+        private final SudokuFrame sudokuFrame;
+
+        public UnStopHintListener(SudokuFrame sudokuFrame) {
+            this.sudokuFrame = sudokuFrame;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            Optional<HintModel> result = tryAllStrategy();
+            while (result.isPresent()) {
+                HintModel hm = result.get();
+                puzzle.makeMove(hm.getPosition().getRow(), hm.getPosition().getCol(), hm.getValue(), true);
+                result = tryAllStrategy();
             }
+            repaint();
 
-            return Optional.empty();
+            sudokuFrame.setUnAvailableLabel("已完成探索");
+            new Thread(new HideTheTextThread(sudokuFrame)).start();
+
         }
     }
 
