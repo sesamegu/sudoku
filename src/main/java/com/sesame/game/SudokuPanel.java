@@ -24,6 +24,7 @@ import com.sesame.game.strategy.HiddenSinglesStrategy;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
 import com.sesame.game.strategy.ObviousPairsStrategy;
+import com.sesame.game.strategy.ObviousTriplesStrategy;
 import com.sesame.game.strategy.Position;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
@@ -215,6 +216,7 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new LastPossibleNumberStrategy());
         allStrategy.add(new HiddenSinglesStrategy());
         allStrategy.add(new ObviousPairsStrategy());
+        allStrategy.add(new ObviousTriplesStrategy());
 
         for (FillStrategy one : allStrategy) {
             Optional<HintModel> hintModel = one.tryStrategy(puzzle);
