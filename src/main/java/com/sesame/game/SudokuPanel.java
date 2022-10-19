@@ -19,11 +19,13 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
+import com.sesame.game.strategy.CandidateModel;
 import com.sesame.game.strategy.FillStrategy;
 import com.sesame.game.strategy.HiddenSinglesStrategy;
 import com.sesame.game.strategy.HintModel;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
+import com.sesame.game.strategy.ObviousPairsStrategy;
 import com.sesame.game.strategy.Position;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -121,19 +123,33 @@ public class SudokuPanel extends JPanel {
                 if (CollectionUtils.isEmpty(candidate)) {
                     continue;
                 }
-                //Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid");
+                Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid");
                 Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.HINT_FONT_SIZE);
                 g2d.setFont(smallFont);
-                //
+
                 for (String digital : candidate) {
                     int candidateTextWidth = (int)f.getStringBounds(digital, fContext).getWidth();
                     int candidateTextHeight = (int)f.getStringBounds(digital, fContext).getHeight();
-                    g2d.setColor(Color.LIGHT_GRAY);
 
                     int number = Integer.parseInt(digital);
                     int xStart = (number - 1) % 3 * (slotWidth / 3);
                     int yStart = (number - 1) / 3 * (slotHeight / 3);
 
+                    //提示模式 且 是候选数模式
+                    if (isHintMode && hintModel.isCandidate()) {
+                        CandidateModel candidateModel = hintModel.getCandidateModel();
+                        Position o = new Position(row, col);
+                        List<Position> causeList = candidateModel.getCauseList();
+                        List<Position> relatedList = candidateModel.getRelatedList();
+                        List<String> digitalString = candidateModel.getDigitalString();
+                        if ((causeList.contains(o) || relatedList.contains(o)) && digitalString.contains(digital)) {
+                            g2d.setColor(Color.red);
+                        } else {
+                            g2d.setColor(Color.LIGHT_GRAY);
+                        }
+                    } else {
+                        g2d.setColor(Color.LIGHT_GRAY);
+                    }
                     g2d.drawString(digital, (col * slotWidth) + (xStart + (slotWidth / 6) - (candidateTextWidth / 2)),
                         (row * slotHeight) + (yStart + (candidateTextHeight / 2)));
                 }
@@ -151,26 +167,36 @@ public class SudokuPanel extends JPanel {
 
         // 提示模式下
         Assert.notNull(hintModel, "hintModel should not be null");
-        Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
-        g2d.setFont(smallFont);
 
-        //提示数值
-        Position position = hintModel.getPosition();
-        String found = hintModel.getValue();
-        int textWidth = (int)f.getStringBounds(found, fContext).getWidth();
-        int textHeight = (int)f.getStringBounds(found, fContext).getHeight();
-        g2d.setColor(Color.PINK);
-        g2d.drawString(found, (position.getCol() * slotWidth) + ((slotWidth / 2) - (textWidth / 2)),
-            (position.getRow() * slotHeight) + ((slotHeight / 2) + (textHeight / 2)));
-        //提示背景
-        g2d.setColor(new Color(0.0f, 0.0f, 0.9f, 0.3f));
-        g2d.fillRect(position.getCol() * slotWidth, position.getRow() * slotHeight, slotWidth,
-            slotHeight);
-        //相关单元格
-        g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
-        hintModel.getRelated().stream().forEach(
-            one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
-                slotHeight));
+        if (!hintModel.isCandidate()) {
+            Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
+            g2d.setFont(smallFont);
+
+            //提示数值
+            Position position = hintModel.getPosition();
+            String found = hintModel.getValue();
+            int textWidth = (int)f.getStringBounds(found, fContext).getWidth();
+            int textHeight = (int)f.getStringBounds(found, fContext).getHeight();
+            g2d.setColor(Color.PINK);
+            g2d.drawString(found, (position.getCol() * slotWidth) + ((slotWidth / 2) - (textWidth / 2)),
+                (position.getRow() * slotHeight) + ((slotHeight / 2) + (textHeight / 2)));
+            //提示背景
+            g2d.setColor(new Color(0.0f, 0.0f, 0.9f, 0.3f));
+            g2d.fillRect(position.getCol() * slotWidth, position.getRow() * slotHeight, slotWidth,
+                slotHeight);
+            //相关单元格
+            g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
+            hintModel.getRelated().stream().forEach(
+                one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
+                    slotHeight));
+        } else {
+            //相关单元格
+            g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
+            CandidateModel candidateModel = hintModel.getCandidateModel();
+            candidateModel.getCauseList().stream().forEach(
+                one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
+                    slotHeight));
+        }
 
     }
 
@@ -186,6 +212,7 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new LastFreeCellStrategy());
         allStrategy.add(new LastPossibleNumberStrategy());
         allStrategy.add(new HiddenSinglesStrategy());
+        allStrategy.add(new ObviousPairsStrategy());
 
         for (FillStrategy one : allStrategy) {
             Optional<HintModel> hintModel = one.tryStrategy(puzzle);
@@ -208,7 +235,8 @@ public class SudokuPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
-                if (puzzle.isSlotMutable(currentlySelectedRow, currentlySelectedCol)) {
+                if (puzzle.isSlotMutable(currentlySelectedRow, currentlySelectedCol) && puzzle.isSlotValid(
+                    currentlySelectedRow, currentlySelectedCol)) {
                     puzzle.makeSlotEmpty(currentlySelectedRow, currentlySelectedCol);
                 }
                 repaint();
@@ -251,6 +279,7 @@ public class SudokuPanel extends JPanel {
 
             Optional<HintModel> result = tryAllStrategy();
             while (result.isPresent()) {
+                // todo 候选者策略的处理
                 HintModel hm = result.get();
                 puzzle.makeMove(hm.getPosition().getRow(), hm.getPosition().getCol(), hm.getValue(), true);
                 result = tryAllStrategy();
@@ -272,10 +301,18 @@ public class SudokuPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            puzzle.makeMove(hintModel.getPosition().getRow(), hintModel.getPosition().getCol(), hintModel.getValue(),
-                true);
-            currentlySelectedRow = hintModel.getPosition().getRow();
-            currentlySelectedCol = hintModel.getPosition().getCol();
+            if (hintModel.isCandidate()) {
+                CandidateModel candidateModel = hintModel.getCandidateModel();
+                List<Position> relatedList = candidateModel.getRelatedList();
+                relatedList.forEach(
+                    one -> puzzle.deleteCandidate(one.getRow(), one.getCol(), candidateModel.getDigitalString()));
+            } else {
+                puzzle.makeMove(hintModel.getPosition().getRow(), hintModel.getPosition().getCol(),
+                    hintModel.getValue(),
+                    true);
+                currentlySelectedRow = hintModel.getPosition().getRow();
+                currentlySelectedCol = hintModel.getPosition().getCol();
+            }
 
             isHintMode = false;
             hintModel = null;

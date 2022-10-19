@@ -34,7 +34,8 @@ public abstract class PuzzleTools {
      * @return
      */
     public static List<Position> getPositionByBoxStart(int rowStartPoint, int columnStartPoint) {
-        List<Position> positionList = new ArrayList<>(9);
+        //TODO 与下面的方法getPositionByBoxAny合并
+        List<Position> positionList  = new ArrayList<>(9);
         for (int row = rowStartPoint; row < rowStartPoint + Const.BOX_WIDTH; row++) {
             for (int column = columnStartPoint; column < columnStartPoint + Const.BOX_WIDTH; column++) {
                 positionList.add(new Position(row, column));

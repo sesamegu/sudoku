@@ -62,6 +62,11 @@ public class SudokuPuzzle {
         //todo 标记去除的候选值如何处理。因为二份数据合并：用户的输入的数据、基本候选值
     }
 
+    public void deleteCandidate(int row, int col, List<String> deleteStr) {
+        List<String> strings = candidate[row][col];
+        strings.removeAll(deleteStr);
+    }
+
     public void makeMoveWithoutCandidate(int row, int col, String value, boolean isMutable) {
         if (this.isValidValue(value) && this.isValidMove(row, col, value) && this.isSlotMutable(row, col)) {
             this.board[row][col] = value;
