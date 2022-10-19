@@ -19,14 +19,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
-import com.sesame.game.strategy.CandidateModel;
 import com.sesame.game.strategy.FillStrategy;
 import com.sesame.game.strategy.HiddenSinglesStrategy;
-import com.sesame.game.strategy.HintModel;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
 import com.sesame.game.strategy.ObviousPairsStrategy;
 import com.sesame.game.strategy.Position;
+import com.sesame.game.strategy.model.CandidateModel;
+import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.SolutionModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -173,8 +174,9 @@ public class SudokuPanel extends JPanel {
             g2d.setFont(smallFont);
 
             //提示数值
-            Position position = hintModel.getPosition();
-            String found = hintModel.getValue();
+            SolutionModel solutionModel = hintModel.getSolutionModel();
+            Position position = solutionModel.getPosition();
+            String found = solutionModel.getValue();
             int textWidth = (int)f.getStringBounds(found, fContext).getWidth();
             int textHeight = (int)f.getStringBounds(found, fContext).getHeight();
             g2d.setColor(Color.PINK);
@@ -186,7 +188,7 @@ public class SudokuPanel extends JPanel {
                 slotHeight);
             //相关单元格
             g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
-            hintModel.getRelated().stream().forEach(
+            solutionModel.getRelated().stream().forEach(
                 one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
                     slotHeight));
         } else {
@@ -279,10 +281,17 @@ public class SudokuPanel extends JPanel {
 
             Optional<HintModel> result = tryAllStrategy();
             while (result.isPresent()) {
-                // todo 候选者策略的处理
                 HintModel hm = result.get();
-                puzzle.makeMove(hm.getPosition().getRow(), hm.getPosition().getCol(), hm.getValue(), true);
+                if (hm.isCandidate()) {
+                    // todo 候选者策略的处理
+                    break;
+                }
+
+                SolutionModel solutionModel = hm.getSolutionModel();
+                puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
+                    solutionModel.getValue(), true);
                 result = tryAllStrategy();
+
             }
             repaint();
 
@@ -307,11 +316,12 @@ public class SudokuPanel extends JPanel {
                 relatedList.forEach(
                     one -> puzzle.deleteCandidate(one.getRow(), one.getCol(), candidateModel.getDigitalString()));
             } else {
-                puzzle.makeMove(hintModel.getPosition().getRow(), hintModel.getPosition().getCol(),
-                    hintModel.getValue(),
+                SolutionModel solutionModel = hintModel.getSolutionModel();
+                puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
+                    solutionModel.getValue(),
                     true);
-                currentlySelectedRow = hintModel.getPosition().getRow();
-                currentlySelectedCol = hintModel.getPosition().getCol();
+                currentlySelectedRow = solutionModel.getPosition().getRow();
+                currentlySelectedCol = solutionModel.getPosition().getCol();
             }
 
             isHintMode = false;

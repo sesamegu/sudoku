@@ -7,6 +7,8 @@ import java.util.Set;
 
 import com.sesame.game.Const;
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.SolutionModel;
 
 /**
  * Introduction: 唯一候选数
@@ -59,8 +61,9 @@ public class LastPossibleNumberStrategy implements FillStrategy {
                     related.remove(new Position(row, column));
 
                     //位置、值、相关点
-                    HintModel result = HintModel.build().of(new Position(row, column))
-                        .of(copy.iterator().next()).of(new ArrayList<>(related)).of(getStrategy());
+                    SolutionModel solutionModel = new SolutionModel(new Position(row, column), copy.iterator().next(), new ArrayList<>(related));
+
+                    HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
                     return Optional.of(result);
                 }
             }

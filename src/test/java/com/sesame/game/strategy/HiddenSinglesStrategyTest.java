@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.SolutionModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -35,10 +37,11 @@ public class HiddenSinglesStrategyTest {
         Optional<HintModel> result = new HiddenSinglesStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
+        SolutionModel solutionModel = hintModel.getSolutionModel();
 
-        Assert.assertTrue(new Position(6, 3).equals(hintModel.getPosition()));
-        Assert.assertEquals("8", hintModel.getValue());
-        List<Position> related = hintModel.getRelated();
+        Assert.assertTrue(new Position(6, 3).equals(solutionModel.getPosition()));
+        Assert.assertEquals("8", solutionModel.getValue());
+        List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(10, related.size());
 
     }
@@ -61,10 +64,11 @@ public class HiddenSinglesStrategyTest {
         Optional<HintModel> result = new HiddenSinglesStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
+        SolutionModel solutionModel = hintModel.getSolutionModel();
 
-        Assert.assertTrue(new Position(5, 4).equals(hintModel.getPosition()));
-        Assert.assertEquals("8", hintModel.getValue());
-        List<Position> related = hintModel.getRelated();
+        Assert.assertTrue(new Position(5, 4).equals(solutionModel.getPosition()));
+        Assert.assertEquals("8", solutionModel.getValue());
+        List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(10, related.size());
 
     }
@@ -87,10 +91,11 @@ public class HiddenSinglesStrategyTest {
         Optional<HintModel> result = new HiddenSinglesStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
+        SolutionModel solutionModel = hintModel.getSolutionModel();
 
-        Assert.assertTrue(new Position(7, 0).equals(hintModel.getPosition()));
-        Assert.assertEquals("8", hintModel.getValue());
-        List<Position> related = hintModel.getRelated();
+        Assert.assertTrue(new Position(7, 0).equals(solutionModel.getPosition()));
+        Assert.assertEquals("8", solutionModel.getValue());
+        List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(10, related.size());
 
     }

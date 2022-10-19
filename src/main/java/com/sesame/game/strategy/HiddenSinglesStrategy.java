@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 import com.sesame.game.Const;
 import com.sesame.game.PuzzleTools;
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.SolutionModel;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -58,8 +60,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
                         List<Position> related = findTheRelatedByRow(position, one, sudokuPuzzle);
 
                         //位置、值、相关点
-                        HintModel result = HintModel.build().of(position)
-                            .of(one).of(related).of(getStrategy());
+                        SolutionModel solutionModel = new SolutionModel(position, one, related);
+                        HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
 
                         return Optional.of(result);
                     }
@@ -86,8 +88,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
                         List<Position> related = findTheRelatedByColumn(position, one, sudokuPuzzle);
 
                         //位置、值、相关点
-                        HintModel result = HintModel.build().of(position)
-                            .of(one).of(related).of(getStrategy());
+                        SolutionModel solutionModel = new SolutionModel(position, one, related);
+                        HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
 
                         return Optional.of(result);
                     }
@@ -129,8 +131,9 @@ public class HiddenSinglesStrategy implements FillStrategy {
                 if (remaining.containsKey(position) && remaining.get(position).contains(one)) {
                     List<Position> related = findTheRelatedByBox(position, one, sudokuPuzzle);
                     //位置、值、相关点
-                    HintModel result = HintModel.build().of(position)
-                        .of(one).of(related).of(getStrategy());
+
+                    SolutionModel solutionModel = new SolutionModel(position, one, related);
+                    HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
 
                     return Optional.of(result);
                 }

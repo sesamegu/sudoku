@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.CandidateModel;
+import com.sesame.game.strategy.model.HintModel;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author mike

@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Optional;
 
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.SolutionModel;
 import org.junit.Assert;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 /**
  * @author mike
@@ -33,10 +33,11 @@ public class LastPossibleNumberStrategyTest {
         Optional<HintModel> result = new LastPossibleNumberStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
+        SolutionModel solutionModel = hintModel.getSolutionModel();
 
-        Assert.assertTrue(new Position(7, 7).equals(hintModel.getPosition()));
-        Assert.assertEquals("9", hintModel.getValue());
-        List<Position> related = hintModel.getRelated();
+        Assert.assertTrue(new Position(7, 7).equals(solutionModel.getPosition()));
+        Assert.assertEquals("9", solutionModel.getValue());
+        List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(20, related.size());
     }
 }

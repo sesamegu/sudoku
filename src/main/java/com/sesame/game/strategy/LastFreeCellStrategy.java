@@ -8,6 +8,8 @@ import java.util.Set;
 
 import com.sesame.game.Const;
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.SolutionModel;
 import org.springframework.util.Assert;
 
 /**
@@ -54,8 +56,10 @@ public class LastFreeCellStrategy implements FillStrategy {
                 Assert.isTrue(related.size() == 8, "should be eight");
 
                 //位置、值、相关点
-                HintModel result = HintModel.build().of(new Position(i, emptyColumnPosition))
-                    .of(copy.iterator().next()).of(related).of(getStrategy());
+                SolutionModel solutionModel = new SolutionModel(new Position(i, emptyColumnPosition),
+                    copy.iterator().next(), related);
+
+                HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
                 return Optional.of(result);
             }
         }
@@ -83,8 +87,9 @@ public class LastFreeCellStrategy implements FillStrategy {
                 Assert.isTrue(related.size() == 8, "should be eight");
 
                 //位置、值、相关点
-                HintModel result = HintModel.build().of(new Position(emptyRowPosition, i))
-                    .of(copy.iterator().next()).of(related).of(getStrategy());
+                SolutionModel solutionModel = new SolutionModel(new Position(emptyRowPosition, i),
+                    copy.iterator().next(), related);
+                HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
                 return Optional.of(result);
             }
         }
@@ -95,7 +100,8 @@ public class LastFreeCellStrategy implements FillStrategy {
     private Optional<HintModel> tryBox(SudokuPuzzle sudokuPuzzle) {
         //获取每个宫的起点
         for (int rowStartPoint = 0; rowStartPoint < Const.ROWS; rowStartPoint = rowStartPoint + Const.BOX_WIDTH) {
-            for (int columnStartPoint = 0; columnStartPoint < Const.COLUMNS; columnStartPoint = columnStartPoint + Const.BOX_WIDTH) {
+            for (int columnStartPoint = 0; columnStartPoint < Const.COLUMNS;
+                columnStartPoint = columnStartPoint + Const.BOX_WIDTH) {
                 Optional<HintModel> result = checkEveryBox(sudokuPuzzle, rowStartPoint, columnStartPoint);
                 if (result.isPresent()) {
                     return result;
@@ -131,8 +137,10 @@ public class LastFreeCellStrategy implements FillStrategy {
             Assert.isTrue(related.size() == 8, "should be eight");
 
             //位置、值、相关点
-            HintModel result = HintModel.build().of(new Position(rowPosition, columnPosition))
-                .of(copy.iterator().next()).of(related).of(getStrategy());
+            SolutionModel solutionModel = new SolutionModel(new Position(rowPosition, columnPosition),
+                copy.iterator().next(), related);
+
+            HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
             return Optional.of(result);
         }
 

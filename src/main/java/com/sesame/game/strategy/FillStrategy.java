@@ -3,6 +3,7 @@ package com.sesame.game.strategy;
 import java.util.Optional;
 
 import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.strategy.model.HintModel;
 
 /**
  * Introduction: 策略接口
