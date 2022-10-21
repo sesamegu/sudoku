@@ -38,13 +38,13 @@ public class ObviousTriplesStrategyTest {
         Assert.assertTrue(hintModel.isCandidate());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
-        List<Position> causeList = candidateModel.getCauseList();
-        Assert.assertEquals(3, causeList.size());
-        Assert.assertTrue(new Position(0, 0).equals(causeList.get(0)));
-        Assert.assertTrue(new Position(0, 1).equals(causeList.get(1)));
-        Assert.assertTrue(new Position(0, 8).equals(causeList.get(2)));
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.assertEquals(3, causeMap.size());
+        Assert.assertTrue(causeMap.containsKey(new Position(0, 0)));
+        Assert.assertTrue(causeMap.containsKey(new Position(0, 1)));
+        Assert.assertTrue(causeMap.containsKey(new Position(0, 8)));
 
-        List<String> digitalString = candidateModel.getCauseDigital();
+        List<String> digitalString = causeMap.values().iterator().next();
         Assert.assertEquals(3, digitalString.size());
         Assert.assertTrue("1".equals(digitalString.get(0)));
         Assert.assertTrue("2".equals(digitalString.get(1)));

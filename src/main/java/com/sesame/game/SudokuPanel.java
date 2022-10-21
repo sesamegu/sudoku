@@ -21,8 +21,9 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
 import com.sesame.game.strategy.FillStrategy;
-import com.sesame.game.strategy.HiddenPairs;
+import com.sesame.game.strategy.HiddenPairsStrategy;
 import com.sesame.game.strategy.HiddenSinglesStrategy;
+import com.sesame.game.strategy.HiddenTriplesStrategy;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
 import com.sesame.game.strategy.ObviousPairsStrategy;
@@ -142,15 +143,14 @@ public class SudokuPanel extends JPanel {
                     //提示模式 且 是候选数模式
                     if (isHintMode && hintModel.isCandidate()) {
                         CandidateModel candidateModel = hintModel.getCandidateModel();
-                        Position o = new Position(row, col);
-                        List<Position> causeList = candidateModel.getCauseList();
-                        List<String> causeDigital = candidateModel.getCauseDigital();
-                        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+                        Position onePosition = new Position(row, col);
+                        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
 
-                        if (causeList.contains(o) && causeDigital.contains(digital)) {
-                            g2d.setColor(Color.red);
-                        } else if ((deleteMap.containsKey(o)) && (!CollectionUtils.isEmpty(deleteMap.get(o)))
-                            && deleteMap.get(o).contains(digital)) {
+                        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+                        if (causeMap.containsKey(onePosition) && causeMap.get(onePosition).contains(digital)) {
+                            g2d.setColor(Color.RED);
+                        } else if ((deleteMap.containsKey(onePosition)) && (!CollectionUtils.isEmpty(deleteMap.get(onePosition)))
+                            && deleteMap.get(onePosition).contains(digital)) {
                             g2d.setColor(Color.BLUE);
                         } else {
                             g2d.setColor(Color.LIGHT_GRAY);
@@ -202,7 +202,7 @@ public class SudokuPanel extends JPanel {
             //相关单元格
             g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
             CandidateModel candidateModel = hintModel.getCandidateModel();
-            candidateModel.getCauseList().stream().forEach(
+            candidateModel.getCauseMap().keySet().stream().forEach(
                 one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
                     slotHeight));
         }
@@ -223,7 +223,8 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new HiddenSinglesStrategy());
         allStrategy.add(new ObviousPairsStrategy());
         allStrategy.add(new ObviousTriplesStrategy());
-        allStrategy.add(new HiddenPairs());
+        allStrategy.add(new HiddenPairsStrategy());
+        allStrategy.add(new HiddenTriplesStrategy());
 
         for (FillStrategy one : allStrategy) {
             Optional<HintModel> hintModel = one.tryStrategy(puzzle);

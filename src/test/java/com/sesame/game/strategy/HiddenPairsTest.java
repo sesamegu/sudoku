@@ -31,18 +31,18 @@ public class HiddenPairsTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new HiddenPairs().tryStrategy(puzzle);
+        Optional<HintModel> result = new HiddenPairsStrategy().tryStrategy(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
         Assert.assertTrue(hintModel.isCandidate());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
-        List<Position> causeList = candidateModel.getCauseList();
-        Assert.assertEquals(2, causeList.size());
-        Assert.assertTrue(new Position(4, 0).equals(causeList.get(0)));
-        Assert.assertTrue(new Position(5, 0).equals(causeList.get(1)));
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.assertEquals(2, causeMap.size());
+        Assert.assertTrue(causeMap.containsKey(new Position(4, 0)));
+        Assert.assertTrue(causeMap.containsKey(new Position(5, 0)));
 
-        List<String> digitalString = candidateModel.getCauseDigital();
+        List<String> digitalString = causeMap.values().iterator().next();
         Assert.assertEquals(2, digitalString.size());
         Assert.assertTrue("2".equals(digitalString.get(0)));
         Assert.assertTrue("6".equals(digitalString.get(1)));

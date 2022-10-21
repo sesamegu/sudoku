@@ -14,11 +14,11 @@ import com.sesame.game.strategy.model.HintModel;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:隐形数对
+ * Introduction:隐性数对
  *
  * @author sesame 2022/10/19
  */
-public class HiddenPairs extends AbstractUnitStrategy {
+public class HiddenPairsStrategy extends AbstractUnitStrategy {
 
     @Override
     public Strategy getStrategy() {

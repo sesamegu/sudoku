@@ -63,6 +63,7 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                         });
                     }
 
+                    // 满足3个位置总共三个数字，每个数字出现2次
                     int count = (int)countForDigital.values().stream().filter(one -> one == 2).count();
                     if (count != 3) {
                         continue;
