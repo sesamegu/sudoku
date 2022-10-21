@@ -1,6 +1,7 @@
 package com.sesame.game.strategy.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.sesame.game.strategy.Position;
 import lombok.Getter;
@@ -18,18 +19,18 @@ public class CandidateModel {
      */
     private List<Position> causeList;
     /**
-     * 候选数字
+     * 规则数字
      */
-    private List<String> digitalString;
+    private List<String> causeDigital;
     /**
-     * 相关的位置
+     * 删除的位置及对应的值：key为，value为对应的值
      */
-    private List<Position> relatedList;
+    private Map<Position, List<String>> deleteMap;
 
-    public CandidateModel(List<Position> causeList, List<String> digitalString,
-        List<Position> relatedList) {
+    public CandidateModel(List<Position> causeList, List<String> causeDigital,
+        Map<Position, List<String>> deleteMap) {
         this.causeList = causeList;
-        this.digitalString = digitalString;
-        this.relatedList = relatedList;
+        this.causeDigital = causeDigital;
+        this.deleteMap = deleteMap;
     }
 }

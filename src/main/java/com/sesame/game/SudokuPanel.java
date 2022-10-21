@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.font.FontRenderContext;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.event.MouseInputAdapter;
 
 import com.sesame.game.strategy.FillStrategy;
+import com.sesame.game.strategy.HiddenPairs;
 import com.sesame.game.strategy.HiddenSinglesStrategy;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
@@ -142,10 +144,14 @@ public class SudokuPanel extends JPanel {
                         CandidateModel candidateModel = hintModel.getCandidateModel();
                         Position o = new Position(row, col);
                         List<Position> causeList = candidateModel.getCauseList();
-                        List<Position> relatedList = candidateModel.getRelatedList();
-                        List<String> digitalString = candidateModel.getDigitalString();
-                        if ((causeList.contains(o) || relatedList.contains(o)) && digitalString.contains(digital)) {
+                        List<String> causeDigital = candidateModel.getCauseDigital();
+                        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+
+                        if (causeList.contains(o) && causeDigital.contains(digital)) {
                             g2d.setColor(Color.red);
+                        } else if ((deleteMap.containsKey(o)) && (!CollectionUtils.isEmpty(deleteMap.get(o)))
+                            && deleteMap.get(o).contains(digital)) {
+                            g2d.setColor(Color.BLUE);
                         } else {
                             g2d.setColor(Color.LIGHT_GRAY);
                         }
@@ -217,6 +223,7 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new HiddenSinglesStrategy());
         allStrategy.add(new ObviousPairsStrategy());
         allStrategy.add(new ObviousTriplesStrategy());
+        allStrategy.add(new HiddenPairs());
 
         for (FillStrategy one : allStrategy) {
             Optional<HintModel> hintModel = one.tryStrategy(puzzle);
@@ -314,9 +321,10 @@ public class SudokuPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (hintModel.isCandidate()) {
                 CandidateModel candidateModel = hintModel.getCandidateModel();
-                List<Position> relatedList = candidateModel.getRelatedList();
-                relatedList.forEach(
-                    one -> puzzle.deleteCandidate(one.getRow(), one.getCol(), candidateModel.getDigitalString()));
+                Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+                deleteMap.entrySet().forEach(
+                    one -> puzzle.deleteCandidate(one.getKey().getRow(), one.getKey().getCol(), one.getValue())
+                );
             } else {
                 SolutionModel solutionModel = hintModel.getSolutionModel();
                 puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),

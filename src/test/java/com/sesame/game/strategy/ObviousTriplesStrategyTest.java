@@ -1,6 +1,7 @@
 package com.sesame.game.strategy;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.sesame.game.SudokuPuzzle;
@@ -43,26 +44,25 @@ public class ObviousTriplesStrategyTest {
         Assert.assertTrue(new Position(0, 1).equals(causeList.get(1)));
         Assert.assertTrue(new Position(0, 8).equals(causeList.get(2)));
 
-        List<String> digitalString = candidateModel.getDigitalString();
+        List<String> digitalString = candidateModel.getCauseDigital();
         Assert.assertEquals(3, digitalString.size());
         Assert.assertTrue("1".equals(digitalString.get(0)));
         Assert.assertTrue("2".equals(digitalString.get(1)));
         Assert.assertTrue("7".equals(digitalString.get(2)));
 
-        List<Position> relatedList = candidateModel.getRelatedList();
-        Assert.assertEquals(2, relatedList.size());
-        Assert.assertTrue(new Position(0, 5).equals(relatedList.get(0)));
-        Assert.assertTrue(new Position(0, 6).equals(relatedList.get(1)));
+        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+        Assert.assertEquals(2, deleteMap.size());
+        List<String> delDigital = deleteMap.get(new Position(0, 5));
+        Assert.assertEquals(3, delDigital.size());
+        Assert.assertEquals("1", delDigital.get(0));
+        Assert.assertEquals("2", delDigital.get(1));
+        Assert.assertEquals("7", delDigital.get(2));
 
-    }
+        delDigital = deleteMap.get(new Position(0, 6));
+        Assert.assertEquals(3, delDigital.size());
+        Assert.assertEquals("1", delDigital.get(0));
+        Assert.assertEquals("2", delDigital.get(1));
+        Assert.assertEquals("7", delDigital.get(2));
 
-    @Test
-    public void column_test() {
-        //先不测试了，当前看是等价的
-    }
-
-    @Test
-    public void box_test() {
-        //先不测试了，当前看是等价的
     }
 }

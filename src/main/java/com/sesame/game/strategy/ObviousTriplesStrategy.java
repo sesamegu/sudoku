@@ -8,9 +8,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.sesame.game.Const;
-import com.sesame.game.PuzzleTools;
-import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import org.springframework.util.Assert;
@@ -21,67 +18,7 @@ import org.springframework.util.CollectionUtils;
  *
  * @author sesame 2022/10/19
  */
-public class ObviousTriplesStrategy implements FillStrategy {
-
-    @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
-        Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
-        // 以行、列、宫为单元找出 显性数对
-        Optional<HintModel> byRow = findByRow(remaining);
-        if (byRow.isPresent()) {
-            return byRow;
-        }
-
-        Optional<HintModel> byColumn = findByColumn(remaining);
-        if (byColumn.isPresent()) {
-            return byColumn;
-        }
-
-        Optional<HintModel> byBox = findByBox(remaining);
-        if (byBox.isPresent()) {
-            return byBox;
-        }
-
-        return Optional.empty();
-    }
-
-    private Optional<HintModel> findByRow(Map<Position, List<String>> remaining) {
-        for (int row = 0; row < Const.ROWS; row++) {
-
-            List<Position> positionList = PuzzleTools.getPositionByRow(row);
-            Optional<HintModel> result = getHintModel(remaining, positionList);
-            if (result.isPresent()) {
-                return result;
-            }
-        }
-        return Optional.empty();
-    }
-
-    private Optional<HintModel> findByColumn(Map<Position, List<String>> remaining) {
-        for (int column = 0; column < Const.COLUMNS; column++) {
-            List<Position> positionList = PuzzleTools.getPositionByColumn(column);
-            Optional<HintModel> result = getHintModel(remaining, positionList);
-            if (result.isPresent()) {
-                return result;
-            }
-
-        }
-        return Optional.empty();
-    }
-
-    private Optional<HintModel> findByBox(Map<Position, List<String>> remaining) {
-        for (int row = 0; row < Const.ROWS; row = row + Const.BOX_WIDTH) {
-            for (int column = 0; column < Const.COLUMNS; column = column + Const.BOX_WIDTH) {
-                List<Position> positionList = PuzzleTools.getPositionByBoxStart(row, column);
-                Optional<HintModel> result = getHintModel(remaining, positionList);
-                if (result.isPresent()) {
-                    return result;
-                }
-            }
-        }
-
-        return Optional.empty();
-    }
+public class ObviousTriplesStrategy extends AbstractUnitStrategy {
 
     /**
      * 否存在显性三数对
@@ -90,7 +27,8 @@ public class ObviousTriplesStrategy implements FillStrategy {
      * @param positionList
      * @return
      */
-    private Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
+    @Override
+    public Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
         //key 为位置，value为对应的数字
 
         List<Position> collect = positionList.stream().filter(
@@ -134,21 +72,26 @@ public class ObviousTriplesStrategy implements FillStrategy {
                     Collections.sort(threeDigital);
                     Assert.isTrue(threeDigital.size() == 3, "should be three.");
                     //检查其它位置是否包含任意这三个任一值
-                    List<Position> related = new ArrayList<>();
+                    Map<Position, List<String>> deleteMap = new HashMap<>();
                     for (Position innerPosition : positionList) {
                         if ((!causeList.contains(innerPosition)) && (!CollectionUtils.isEmpty(
                             remaining.get(innerPosition)))) {
                             List<String> innerDigital = remaining.get(innerPosition);
+                            List<String> deleteString = new ArrayList<>();
+                            threeDigital.forEach(one -> {
+                                if (innerDigital.contains(one)){
+                                    deleteString.add(one);
+                                }
+                            });
 
-                            if (innerDigital.contains(threeDigital.get(0)) || innerDigital.contains(threeDigital.get(1))
-                                || innerDigital.contains(threeDigital.get(2))) {
-                                related.add(innerPosition);
+                            if (!CollectionUtils.isEmpty(deleteString)) {
+                                deleteMap.put(innerPosition, deleteString);
                             }
                         }
                     }
 
-                    if (!CollectionUtils.isEmpty(related)) {
-                        CandidateModel candidateModel = new CandidateModel(causeList, threeDigital, related);
+                    if (!CollectionUtils.isEmpty(deleteMap)) {
+                        CandidateModel candidateModel = new CandidateModel(causeList, threeDigital, deleteMap);
                         HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
                         return Optional.of(result);
                     }
