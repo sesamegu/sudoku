@@ -11,7 +11,7 @@ import java.util.Optional;
  */
 public class CaseLibrary {
 
-    private static Map<Integer, SudokuPuzzle> library = new HashMap<>(10);
+    private static Map<Integer,String[][] > library = new HashMap<>(10);
 
     static {
         String[][] case1 = new String[][] {
@@ -25,11 +25,7 @@ public class CaseLibrary {
             {"", "", "", "", "", "", "", "", ""},
             {"", "", "", "", "", "", "", "", ""}
         };
-        SudokuPuzzle puzzle = new SudokuPuzzle();
-        puzzle.setBoard(case1);
-        library.put(1, puzzle);
-
-        makeUnmutable(puzzle);
+        library.put(1, case1);
 
         //String[][] board = new String[][] {
         //    {"", "", "", "", "", "", "", "", ""},
@@ -78,21 +74,30 @@ public class CaseLibrary {
         //    {"", "", "", "", "", "", "", "", ""}
         //};
 
+        //String[][] board = new String[][] {
+        //    {"", "4", "", "", "5", "", "", "", ""},
+        //    {"", "", "", "", "", "", "", "", ""},
+        //    {"", "", "", "", "", "", "", "", "1"},
+        //    {"", "", "3", "", "", "", "", "", "2"},
+        //    {"", "", "", "2", "", "3", "", "", ""},
+        //    {"", "", "", "", "", "", "", "3", ""},
+        //    {"3", "", "1", "", "", "2", "", "", ""},
+        //    {"", "", "", "", "", "1", "", "2", "3"},
+        //    {"", "", "2", "", "", "", "", "", ""}
+        //};
+
         String[][] board = new String[][] {
-            {"", "4", "", "", "5", "", "", "", ""},
             {"", "", "", "", "", "", "", "", ""},
-            {"", "", "", "", "", "", "", "", "1"},
-            {"", "", "3", "", "", "", "", "", "2"},
-            {"", "", "", "2", "", "3", "", "", ""},
-            {"", "", "", "", "", "", "", "3", ""},
-            {"3", "", "1", "", "", "2", "", "", ""},
-            {"", "", "", "", "", "1", "", "2", "3"},
-            {"", "", "2", "", "", "", "", "", ""}
+            {"", "", "", "3", "", "", "", "", ""},
+            {"8", "7", "6", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""}
         };
-        SudokuPuzzle puzzle2 = new SudokuPuzzle();
-        puzzle2.setBoard(board);
-        makeUnmutable(puzzle2);
-        library.put(2, puzzle2);
+        library.put(2, board);
 
 
     }
@@ -109,8 +114,11 @@ public class CaseLibrary {
     }
 
     public static Optional<SudokuPuzzle> getByCaseType(int i) {
-        SudokuPuzzle sudokuPuzzle = library.get(i);
-        return Optional.of(sudokuPuzzle);
+        String[][] strings = library.get(i);
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        puzzle.setBoard(strings);
+        makeUnmutable(puzzle);
+        return Optional.of(puzzle);
     }
 
 }
