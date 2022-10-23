@@ -7,7 +7,7 @@ import java.util.Objects;
  *
  * @author sesame 2022/10/13
  */
-public class Position {
+public class Position implements Comparable<Position> {
     private final int row;
     private final int col;
 
@@ -39,5 +39,22 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(row, col);
+    }
+
+    @Override
+    public int compareTo(Position o) {
+        if (row > o.row) {
+            return 1;
+        } else if (row < o.row) {
+            return -1;
+        } else {
+            if (col > o.col) {
+                return 1;
+            }else if (col<o.col){
+                return -1;
+            }else {
+                return 0;
+            }
+        }
     }
 }

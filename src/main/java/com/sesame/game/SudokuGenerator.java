@@ -42,7 +42,7 @@ public class SudokuGenerator {
     }
 
     public SudokuPuzzle useSpecified(int caseType) {
-        Optional<SudokuPuzzle> byCaseType = CaseLibrary.getByCaseType(caseType);
+        Optional<SudokuPuzzle> byCaseType = new CaseLibrary().getByCaseType(caseType);
         if (!byCaseType.isPresent()) {
             throw new RuntimeException("can't find the case " + caseType);
         }
