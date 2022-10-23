@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import com.sesame.game.strategy.Position;
+import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -19,6 +20,7 @@ import org.springframework.util.CollectionUtils;
  */
 public class SudokuPuzzle {
 
+    @Getter
     protected String[][] board;
     /**
      * Table to determine if a slot is mutable

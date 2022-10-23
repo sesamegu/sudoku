@@ -26,6 +26,7 @@ public class SudokuFrame extends JFrame {
     private JLabel unAvailableLabel;
 
     public SudokuFrame() {
+        sPanel = new SudokuPanel();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("Sudoku");
         this.setMinimumSize(new Dimension(800, 600));
@@ -44,19 +45,22 @@ public class SudokuFrame extends JFrame {
         newGame.add(twelveByTwelveGame);
         menuBar.add(newGame);
 
-        JMenu loadGame = new JMenu("Load Game");
+        JMenu loadGame = new JMenu("Develop");
         JMenuItem caseOne = new JMenuItem("自由练习场");
         caseOne.addActionListener(new LoadGameListener(1));
         loadGame.add(caseOne);
 
-        JMenuItem caseTwo = new JMenuItem("puzzle two");
+        JMenuItem caseTwo = new JMenuItem("测试局");
         caseTwo.addActionListener(new LoadGameListener(2));
         loadGame.add(caseTwo);
+
+        JMenuItem copy = new JMenuItem("复制到剪切板");
+        copy.addActionListener(sPanel.new CopyListener());
+        loadGame.add(copy);
 
         menuBar.add(loadGame);
 
         this.setJMenuBar(menuBar);
-
 
         JPanel windowPanel = new JPanel();
         windowPanel.setLayout(new FlowLayout());
@@ -65,7 +69,7 @@ public class SudokuFrame extends JFrame {
         buttonSelectionPanel = new JPanel();
         buttonSelectionPanel.setPreferredSize(new Dimension(150, 500));
 
-        sPanel = new SudokuPanel();
+
 
         windowPanel.add(sPanel);
         windowPanel.add(buttonSelectionPanel);

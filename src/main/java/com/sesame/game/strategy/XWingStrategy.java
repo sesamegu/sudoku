@@ -27,7 +27,7 @@ public class XWingStrategy implements FillStrategy {
     public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
 
-        // 基于每行，找出候选个数为2的数字及对应位置
+        // 基于每行，找出空余数量为2的数字及对应位置
         List<Map<String, List<Position>>> allList = new ArrayList<>();
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> rowList = PuzzleTools.getPositionByRow(i);
@@ -44,7 +44,7 @@ public class XWingStrategy implements FillStrategy {
             }
         }
 
-        // 基于每列，找出候选个数为2的数字及对应位置
+        // 基于每列，找出空余数量为2的数字及对应位置
         allList = new ArrayList<>();
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> columnList = PuzzleTools.getPositionByColumn(i);

@@ -6,6 +6,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -31,6 +35,7 @@ import com.sesame.game.strategy.ObviousTriplesStrategy;
 import com.sesame.game.strategy.PointingStrategy;
 import com.sesame.game.strategy.Position;
 import com.sesame.game.strategy.XWingStrategy;
+import com.sesame.game.strategy.YWingStrategy;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.SolutionModel;
@@ -151,7 +156,8 @@ public class SudokuPanel extends JPanel {
                         Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
                         if (causeMap.containsKey(onePosition) && causeMap.get(onePosition).contains(digital)) {
                             g2d.setColor(Color.RED);
-                        } else if ((deleteMap.containsKey(onePosition)) && (!CollectionUtils.isEmpty(deleteMap.get(onePosition)))
+                        } else if ((deleteMap.containsKey(onePosition)) && (!CollectionUtils.isEmpty(
+                            deleteMap.get(onePosition)))
                             && deleteMap.get(onePosition).contains(digital)) {
                             g2d.setColor(Color.BLUE);
                         } else {
@@ -229,7 +235,7 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new HiddenTriplesStrategy());
         allStrategy.add(new PointingStrategy());
         allStrategy.add(new XWingStrategy());
-
+        allStrategy.add(new YWingStrategy());
 
         for (FillStrategy one : allStrategy) {
             Optional<HintModel> hintModel = one.tryStrategy(puzzle);
@@ -374,4 +380,33 @@ public class SudokuPanel extends JPanel {
             sudokuFrame.setUnAvailableLabel("");
         }
     }
+
+    public class CopyListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String[][] board = puzzle.getBoard();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < Const.ROWS; i++) {
+                sb.append("{");
+                for (int j = 0; j < Const.COLUMNS; j++) {
+                    sb.append("\"");
+                    sb.append(board[i][j]);
+                    sb.append("\"");
+                    if (j != Const.COLUMNS - 1) {
+                        sb.append(",");
+                    }
+                }
+
+                if (i != Const.ROWS - 1) {
+                    sb.append("},\n");
+                } else {
+                    sb.append("}");
+                }
+            }
+            Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            Transferable stringSelection = new StringSelection(sb.toString());
+            systemClipboard.setContents(stringSelection, null);
+        }
+    }
+
 }
