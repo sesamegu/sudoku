@@ -58,10 +58,38 @@ public class SudokuPuzzle {
     }
 
     public void makeMove(int row, int col, String value, boolean isMutable) {
-        makeMoveWithoutCandidate(row, col, value, isMutable);
-        //先处理为丢弃所有手动对候选值的修改，进行初始化
-        resetCandidate();
-        //todo 标记去除的候选值如何处理。因为二份数据合并：用户的输入的数据、基本候选值
+        if (this.isValidValue(value) && this.isValidMove(row, col, value) && this.isSlotMutable(row, col)) {
+            this.board[row][col] = value;
+            this.mutable[row][col] = isMutable;
+
+            //删除本位置的所有候选数
+            candidate[row][col] = null;
+            //删除对应的行的候选数中包含本数值的数
+            for (int i = 0; i < Const.ROWS; i++) {
+                if (CollectionUtils.isEmpty(candidate[i][col])) {
+                    continue;
+                }
+                candidate[i][col].remove(value);
+            }
+            //删除对应的列的候选数中包含本数值的数
+            for (int i = 0; i < Const.COLUMNS; i++) {
+                if (CollectionUtils.isEmpty(candidate[row][i])) {
+                    continue;
+                }
+                candidate[row][i].remove(value);
+            }
+            //删除对应的宫的候选数中包含本数值的数
+            int rowStart = row - row % Const.BOX_WIDTH;
+            int columnStart = col - col % Const.BOX_WIDTH;
+            for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
+                for (int j = columnStart; j < columnStart + Const.BOX_WIDTH; j++) {
+                    if (CollectionUtils.isEmpty(candidate[i][j])) {
+                        continue;
+                    }
+                    candidate[i][j].remove(value);
+                }
+            }
+        }
     }
 
     public void deleteCandidate(int row, int col, List<String> deleteStr) {
