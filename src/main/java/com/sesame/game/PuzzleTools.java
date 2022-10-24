@@ -32,30 +32,21 @@ public abstract class PuzzleTools {
     }
 
     /**
-     * @param rowStartPoint 行的开始位置，为0，3或者6
-     * @param columnStartPoint 列的开始位置，为0，3或者6
-     * @return
-     */
-    public static List<Position> getPositionByBoxStart(int rowStartPoint, int columnStartPoint) {
-        //TODO 与下面的方法getPositionByBoxAny合并
-        List<Position> positionList  = new ArrayList<>(9);
-        for (int row = rowStartPoint; row < rowStartPoint + Const.BOX_WIDTH; row++) {
-            for (int column = columnStartPoint; column < columnStartPoint + Const.BOX_WIDTH; column++) {
-                positionList.add(new Position(row, column));
-            }
-        }
-        return positionList;
-    }
-
-    /**
      * @param row 行的位置，任意位置
      * @param column 列的位置，任意位置
      * @return
      */
-    public static List<Position> getPositionByBoxAny(int row, int column) {
+    public static List<Position> getPositionByBox(int row, int column) {
         int rowStart = row - row % Const.BOX_WIDTH;
         int columnStart = column - column % Const.BOX_WIDTH;
-        return getPositionByBoxStart(rowStart, columnStart);
+
+        List<Position> positionList  = new ArrayList<>(9);
+        for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
+            for (int j = columnStart; j < columnStart + Const.BOX_WIDTH; j++) {
+                positionList.add(new Position(i, j));
+            }
+        }
+        return positionList;
     }
 
     /**

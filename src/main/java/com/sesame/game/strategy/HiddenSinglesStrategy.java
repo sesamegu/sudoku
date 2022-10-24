@@ -119,7 +119,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
         Map<Position, List<String>> remaining) {
 
         // 以宫为单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
-        List<Position> positionList = PuzzleTools.getPositionByBoxStart(rowStartPoint, columnStartPoint);
+        List<Position> positionList = PuzzleTools.getPositionByBox(rowStartPoint, columnStartPoint);
 
         List<String> collect = statTimesByNumber(remaining, positionList);
         if (CollectionUtils.isEmpty(collect)) {
@@ -230,7 +230,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private List<Position> findTheRelatedByBox(Position position, String value, SudokuPuzzle sudokuPuzzle) {
         // 找出本宫所有空的单元格
-        List<Position> positions = PuzzleTools.getPositionByBoxAny(position.getRow(), position.getCol());
+        List<Position> positions = PuzzleTools.getPositionByBox(position.getRow(), position.getCol());
         Set<Position> allRelated = new HashSet<>(positions);
         List<Position> allEmpty = positions.stream().filter(
             one -> !sudokuPuzzle.isSlotValid(one.getRow(), one.getCol()))

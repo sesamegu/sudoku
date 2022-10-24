@@ -65,7 +65,7 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
     private Optional<HintModel> findByBox(Map<Position, List<String>> remaining) {
         for (int row = 0; row < Const.ROWS; row = row + Const.BOX_WIDTH) {
             for (int column = 0; column < Const.COLUMNS; column = column + Const.BOX_WIDTH) {
-                List<Position> positionList = PuzzleTools.getPositionByBoxStart(row, column);
+                List<Position> positionList = PuzzleTools.getPositionByBox(row, column);
                 Optional<HintModel> result = getHintModel(remaining, positionList);
                 if (result.isPresent()) {
                     return result;

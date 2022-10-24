@@ -26,7 +26,7 @@ public class PointingStrategy implements FillStrategy {
         for (int rowPoint = 0; rowPoint < Const.ROWS; rowPoint = rowPoint + Const.BOX_WIDTH) {
             for (int columnPoint = 0; columnPoint < Const.COLUMNS; columnPoint = columnPoint + Const.BOX_WIDTH) {
 
-                List<Position> boxList = PuzzleTools.getPositionByBoxStart(rowPoint, columnPoint);
+                List<Position> boxList = PuzzleTools.getPositionByBox(rowPoint, columnPoint);
                 //对每个宫内的3行处理
                 for (int row = rowPoint; row < rowPoint + 3; row++) {
                     List<Position> threePosition = new ArrayList<>(3);
