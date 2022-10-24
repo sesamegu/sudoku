@@ -27,6 +27,7 @@ import javax.swing.event.MouseInputAdapter;
 import com.sesame.game.strategy.FillStrategy;
 import com.sesame.game.strategy.HiddenPairsStrategy;
 import com.sesame.game.strategy.HiddenSinglesStrategy;
+import com.sesame.game.strategy.HiddenThreeStrategy;
 import com.sesame.game.strategy.HiddenTriplesStrategy;
 import com.sesame.game.strategy.LastFreeCellStrategy;
 import com.sesame.game.strategy.LastPossibleNumberStrategy;
@@ -234,6 +235,7 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new ObviousTriplesStrategy());
         allStrategy.add(new HiddenPairsStrategy());
         allStrategy.add(new HiddenTriplesStrategy());
+        allStrategy.add(new HiddenThreeStrategy());
         allStrategy.add(new PointingStrategy());
         allStrategy.add(new XWingStrategy());
         allStrategy.add(new YWingStrategy());

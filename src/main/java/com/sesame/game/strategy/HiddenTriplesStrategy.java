@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.sesame.game.PuzzleTools;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import org.springframework.util.CollectionUtils;
@@ -32,20 +33,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         }
 
         //找出只出现过两次的数字
-        Map<String, Integer> countForDigital = new HashMap<>(9);
-        for (Position onePosition : positionList) {
-            List<String> digital = remaining.get(onePosition);
-            if (CollectionUtils.isEmpty(digital)) {
-                continue;
-            }
-            digital.forEach(oneDigital -> {
-                if (countForDigital.containsKey(oneDigital)) {
-                    countForDigital.put(oneDigital, countForDigital.get(oneDigital) + 1);
-                } else {
-                    countForDigital.put(oneDigital, 1);
-                }
-            });
-        }
+        Map<String, Integer> countForDigital = PuzzleTools.buildDigitalCountMap(remaining, positionList);
         List<String> targetDigital = countForDigital.entrySet().stream().filter(entry -> entry.getValue() == 2).map(
             Entry::getKey).collect(Collectors.toList());
         if (targetDigital.size() < 3) {
