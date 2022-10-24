@@ -38,7 +38,7 @@ public class XWingStrategy implements FillStrategy {
         }
 
         if (allList.size() >= 2) {
-            Optional<HintModel> result = buildHintModel(remaining, allList, 1);
+            Optional<HintModel> result = buildHintModel(remaining, allList, Direction.ROW);
             if (result.isPresent()) {
                 return result;
             }
@@ -55,7 +55,7 @@ public class XWingStrategy implements FillStrategy {
         }
 
         if (allList.size() >= 2) {
-            Optional<HintModel> result = buildHintModel(remaining, allList, 2);
+            Optional<HintModel> result = buildHintModel(remaining, allList, Direction.COLUMN);
             if (result.isPresent()) {
                 return result;
             }
@@ -65,7 +65,7 @@ public class XWingStrategy implements FillStrategy {
     }
 
     private Optional<HintModel> buildHintModel(Map<Position, List<String>> remaining,
-        List<Map<String, List<Position>>> allList, int direction) {
+        List<Map<String, List<Position>>> allList, Direction direction) {
         //对行或列进行双循环，找出两行或者两列都包含的同一数字且位置相同
         for (int i = 0; i < allList.size() - 1; i++) {
             Map<String, List<Position>> outter = allList.get(i);
@@ -85,7 +85,7 @@ public class XWingStrategy implements FillStrategy {
 
                     //X Wing
                     boolean isXWing;
-                    if (direction == 1) {
+                    if (direction == Direction.ROW) {
                         isXWing = innerList.get(0).getCol() == outList.get(0).getCol() &&
                             innerList.get(1).getCol() == outList.get(1).getCol();
                     } else {
@@ -96,7 +96,7 @@ public class XWingStrategy implements FillStrategy {
                         Map<Position, List<String>> deleteMap = new HashMap<>();
 
                         List<Position> relatedList;
-                        if (direction == 1) {
+                        if (direction == Direction.ROW) {
                             //对应的两列上的找出 候选数有这个数的位置
                             relatedList = PuzzleTools.getPositionByColumn(innerList.get(0).getCol());
                             relatedList.addAll(PuzzleTools.getPositionByColumn(innerList.get(1).getCol()));
@@ -124,6 +124,7 @@ public class XWingStrategy implements FillStrategy {
                             }
                         }
 
+                        //构造结果
                         if (!CollectionUtils.isEmpty(deleteMap)) {
                             Map<Position, List<String>> causeMap = new HashMap<>();
                             List<String> digital = new ArrayList<>();

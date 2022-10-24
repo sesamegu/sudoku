@@ -34,6 +34,7 @@ import com.sesame.game.strategy.ObviousPairsStrategy;
 import com.sesame.game.strategy.ObviousTriplesStrategy;
 import com.sesame.game.strategy.PointingStrategy;
 import com.sesame.game.strategy.Position;
+import com.sesame.game.strategy.SwordFishStrategy;
 import com.sesame.game.strategy.XWingStrategy;
 import com.sesame.game.strategy.YWingStrategy;
 import com.sesame.game.strategy.model.CandidateModel;
@@ -236,6 +237,7 @@ public class SudokuPanel extends JPanel {
         allStrategy.add(new PointingStrategy());
         allStrategy.add(new XWingStrategy());
         allStrategy.add(new YWingStrategy());
+        allStrategy.add(new SwordFishStrategy());
 
         for (FillStrategy one : allStrategy) {
             Optional<HintModel> hintModel = one.tryStrategy(puzzle);
