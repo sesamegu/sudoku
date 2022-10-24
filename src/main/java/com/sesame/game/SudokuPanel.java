@@ -285,6 +285,15 @@ public class SudokuPanel extends JPanel {
                 isHintMode = true;
                 hintModel = result.get();
                 sudokuFrame.hintModel(hintModel.getStrategy());
+
+                // 命中解决方案后，直接删除候选数
+                if (!hintModel.isCandidate()) {
+                    SolutionModel solutionModel = hintModel.getSolutionModel();
+                    Position position = solutionModel.getPosition();
+                    puzzle.deleteCandidate(position.getRow(), position.getCol(),
+                        puzzle.getCandidate(position.getRow(), position.getCol()));
+
+                }
                 repaint();
             } else {
                 sudokuFrame.setUnAvailableLabel("无可用技巧");
@@ -308,13 +317,16 @@ public class SudokuPanel extends JPanel {
             while (result.isPresent()) {
                 HintModel hm = result.get();
                 if (hm.isCandidate()) {
-                    // todo 候选者策略的处理
-                    break;
+                    CandidateModel candidateModel = hm.getCandidateModel();
+                    Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+                    deleteMap.entrySet().forEach(
+                        one -> puzzle.deleteCandidate(one.getKey().getRow(), one.getKey().getCol(), one.getValue())
+                    );
+                } else {
+                    SolutionModel solutionModel = hm.getSolutionModel();
+                    puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
+                        solutionModel.getValue(), true);
                 }
-
-                SolutionModel solutionModel = hm.getSolutionModel();
-                puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
-                    solutionModel.getValue(), true);
                 result = tryAllStrategy();
 
             }
