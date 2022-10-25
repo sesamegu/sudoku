@@ -97,6 +97,10 @@ public class SudokuPuzzle {
         strings.removeAll(deleteStr);
     }
 
+    public void setCandidate(int row, int col, List<String> digital) {
+        candidate[row][col] = digital;
+    }
+
     public void makeMoveWithoutCandidate(int row, int col, String value, boolean isMutable) {
         if (this.isValidValue(value) && this.isValidMove(row, col, value) && this.isSlotMutable(row, col)) {
             this.board[row][col] = value;

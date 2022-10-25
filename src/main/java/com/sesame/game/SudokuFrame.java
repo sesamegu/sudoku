@@ -14,8 +14,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
+import com.sesame.game.SudokuPanel.CandidateActionListener;
 import com.sesame.game.strategy.Strategy;
 
 @SuppressWarnings("serial")
@@ -116,13 +118,18 @@ public class SudokuFrame extends JFrame {
             buttonSelectionPanel.add(b);
         }
         //删除按钮
-        JButton delete = new JButton("delete");
+        JButton delete = new JButton("Delete");
         delete.setPreferredSize(new Dimension(90, 40));
         delete.addActionListener(sPanel.new DeleteActionListener());
         buttonSelectionPanel.add(delete);
 
+        JToggleButton candidateButton = new JToggleButton("Note Off");
+        candidateButton.setPreferredSize(new Dimension(90, 40));
+        candidateButton.addChangeListener(sPanel.new CandidateActionListener(candidateButton));
+        buttonSelectionPanel.add(candidateButton);
+
         //提示按钮
-        JButton hint = new JButton("hint");
+        JButton hint = new JButton("Hint");
         hint.setPreferredSize(new Dimension(90, 40));
         hint.addActionListener(sPanel.new HintActionListener(this));
         buttonSelectionPanel.add(hint);

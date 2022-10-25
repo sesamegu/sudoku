@@ -22,6 +22,9 @@ import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 
 import com.sesame.game.strategy.FillStrategy;
@@ -55,6 +58,16 @@ public class SudokuPanel extends JPanel {
     private boolean isHintMode;
     private HintModel hintModel;
 
+    /**
+     * 是否笔记模式
+     */
+    private boolean isNoteMode;
+
+    /**
+     * 用户是否做过标记，如果做过标记，那么在Hint时，需要重置标志，因为用户的标志不可信
+     */
+    private boolean isUserNoted;
+
     public SudokuPanel() {
         this.setPreferredSize(new Dimension(540, 450));
         this.addMouseListener(new SudokuPanelMouseAdapter());
@@ -65,6 +78,8 @@ public class SudokuPanel extends JPanel {
         usedHeight = 0;
         isHintMode = false;
         hintModel = null;
+        isNoteMode = false;
+        isUserNoted = false;
     }
 
     public void newSudokuPuzzle(SudokuPuzzle puzzle) {
@@ -219,13 +234,6 @@ public class SudokuPanel extends JPanel {
 
     }
 
-    public void messageFromNumActionListener(String buttonValue) {
-        if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
-            puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, buttonValue, true);
-            repaint();
-        }
-    }
-
     public Optional<HintModel> tryAllStrategy() {
         List<FillStrategy> allStrategy = new ArrayList<>();
         allStrategy.add(new LastFreeCellStrategy());
@@ -254,7 +262,37 @@ public class SudokuPanel extends JPanel {
     public class NumActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            messageFromNumActionListener(((JButton)e.getSource()).getText());
+            if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
+                String digital = ((JButton)e.getSource()).getText();
+
+                if (isNoteMode) {
+                    //已填充数字，则无响应
+                    if (puzzle.isSlotValid(currentlySelectedRow, currentlySelectedCol)) {
+                        return;
+                    }
+
+                    List<String> candidate = puzzle.getCandidate(currentlySelectedRow, currentlySelectedCol);
+                    //为空直接添加
+                    if (CollectionUtils.isEmpty(candidate)) {
+                        List<String> canList = new ArrayList<>();
+                        canList.add(digital);
+                        puzzle.setCandidate(currentlySelectedRow, currentlySelectedCol, canList);
+                    } else {
+                        //取反
+                        if (candidate.contains(digital)) {
+                            candidate.remove(digital);
+                        } else {
+                            candidate.add(digital);
+                        }
+                    }
+                    isUserNoted = true;
+                } else {
+                    puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, digital,
+                        true);
+                }
+
+                repaint();
+            }
         }
     }
 
@@ -271,6 +309,26 @@ public class SudokuPanel extends JPanel {
         }
     }
 
+    public class CandidateActionListener implements ChangeListener {
+        private JToggleButton candidateButton;
+
+        public CandidateActionListener(JToggleButton candidateButton) {
+            this.candidateButton = candidateButton;
+        }
+
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            if (candidateButton.isSelected()) {
+                isNoteMode = true;
+                candidateButton.setText("Note ON");
+                candidateButton.repaint();
+            } else {
+                isNoteMode = false;
+                candidateButton.setText("Note Off");
+            }
+        }
+    }
+
     public class HintActionListener implements ActionListener {
         private final SudokuFrame sudokuFrame;
 
@@ -280,6 +338,13 @@ public class SudokuPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            //如果用户做过标志，需要重置候选数
+            if (isUserNoted){
+                puzzle.resetCandidate();
+                isUserNoted = false;
+            }
+
+            // 执行策略
             Optional<HintModel> result = tryAllStrategy();
             if (result.isPresent()) {
                 isHintMode = true;
@@ -312,7 +377,13 @@ public class SudokuPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            //如果用户做过标志，需要重置候选数
+            if (isUserNoted){
+                puzzle.resetCandidate();
+                isUserNoted = false;
+            }
 
+            // 执行策略
             Optional<HintModel> result = tryAllStrategy();
             while (result.isPresent()) {
                 HintModel hm = result.get();
