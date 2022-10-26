@@ -393,6 +393,95 @@ public class YWingStrategyTest {
 
     @Test
     public void test_box_left_up_second() {
+        String[][] board = new String[][] {
+            {"7", "8", "", "", "", "", "", "9", "3"},
+            {"6", "", "", "", "", "", "2", "", ""},
+            {"5", "4", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"8", "", "", "", "", "", "1", "5", "9"},
+            {"", "5", "6", "", "", "", "", "", ""},
+            {"", "9", "7", "", "", "", "", "", ""}
+        };
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        puzzle.setBoard(board);
+
+        Optional<HintModel> result = new YWingStrategy().tryStrategy(puzzle);
+        Assert.assertTrue(result.isPresent());
+        HintModel hintModel = result.get();
+        Assert.assertTrue(hintModel.isCandidate());
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.assertEquals(3, causeMap.size());
+        List<String> strings = causeMap.get(new Position(0, 2));
+        Assert.assertEquals(2, strings.size());
+        Assert.assertEquals("1", strings.get(0));
+        Assert.assertEquals("2", strings.get(1));
+
+        strings = causeMap.get(new Position(1, 1));
+        Assert.assertEquals(2, strings.size());
+        Assert.assertEquals("1", strings.get(0));
+        Assert.assertEquals("3", strings.get(1));
+
+        strings = causeMap.get(new Position(6, 1));
+        Assert.assertEquals(2, strings.size());
+        Assert.assertEquals("2", strings.get(0));
+        Assert.assertEquals("3", strings.get(1));
+
+        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+        Assert.assertEquals(1, deleteMap.size());
+        List<String> delDigital = deleteMap.get(new Position(6, 2));
+        Assert.assertEquals(1, delDigital.size());
+        Assert.assertEquals("2", delDigital.get(0));
+    }
+
+    @Test
+    public void test_box_left_up_second_row() {
+        String[][] board = new String[][] {
+            {"4", "1", "", "", "", "9", "", "", ""},
+            {"5", "", "", "", "", "", "", "", ""},
+            {"6", "", "", "", "", "2", "", "", ""},
+            {"", "", "", "7", "8", "", "", "", "5"},
+            {"", "", "5", "6", "", "", "", "4", ""},
+            {"9", "", "8", "", "4", "", "", "", ""},
+            {"", "7", "", "", "", "", "", "", ""},
+            {"", "5", "", "", "3", "", "", "", ""},
+            {"", "6", "", "", "9", "", "", "", ""}
+        };
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        puzzle.setBoard(board);
+
+        Optional<HintModel> result = new YWingStrategy().tryStrategy(puzzle);
+        Assert.assertTrue(result.isPresent());
+        HintModel hintModel = result.get();
+        Assert.assertTrue(hintModel.isCandidate());
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.assertEquals(3, causeMap.size());
+        List<String> strings = causeMap.get(new Position(3, 5));
+        Assert.assertEquals(2, strings.size());
+        Assert.assertEquals("1", strings.get(0));
+        Assert.assertEquals("3", strings.get(1));
+
+        strings = causeMap.get(new Position(4, 4));
+        Assert.assertEquals(2, strings.size());
+        Assert.assertEquals("1", strings.get(0));
+        Assert.assertEquals("2", strings.get(1));
+
+        strings = causeMap.get(new Position(4, 1));
+        Assert.assertEquals(2, strings.size());
+        Assert.assertEquals("2", strings.get(0));
+        Assert.assertEquals("3", strings.get(1));
+
+        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+        Assert.assertEquals(1, deleteMap.size());
+        List<String> delDigital = deleteMap.get(new Position(3, 1));
+        Assert.assertEquals(1, delDigital.size());
+        Assert.assertEquals("2", delDigital.get(0));
+
         //todo 测试box 第二列
         //todo 测试box 横向
     }
