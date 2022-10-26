@@ -178,27 +178,54 @@ public class YWingStrategy implements FillStrategy {
                 continue;
             }
 
-            //找到第四位置的候选数中包含 删除数
-            Position forth;
+            //尝试Y翼的位置
+            List<Position> possiblePosition = new ArrayList<>();
             if (direction == Direction.COLUMN) {
-                forth = new Position(third.getRow(), forthColumn);
-            } else {
-                forth = new Position(forthRow, third.getCol());
-            }
-            if (!CollectionUtils.isEmpty(remaining.get(forth)) && remaining.get(forth).contains(
-                deleteDigital)) {
-                Map<Position, List<String>> causeMap = new HashMap<>();
-                causeMap.put(first, new ArrayList<>(remaining.get(first)));
-                causeMap.put(second, new ArrayList<>(remaining.get(second)));
-                causeMap.put(third, new ArrayList<>(remaining.get(third)));
+                // 第四个位置有多重可能性：除了Y翼的位置，还有两个位置：在这个宫且列和第三个数的列 相同的两个位置
+                possiblePosition.add(new Position(third.getRow(), forthColumn));
 
-                Map<Position, List<String>> deleteMap = new HashMap<>();
-                List<String> forthDigital = new ArrayList<>();
-                forthDigital.add(deleteDigital);
-                deleteMap.put(forth, forthDigital);
-                CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
-                HintModel tt = HintModel.build().of(getStrategy()).of(candidateModel);
-                return Optional.of(tt);
+                List<Position> threeColumnInBox = new ArrayList<>(3);
+                threeColumnInBox.add(new Position(row, third.getCol()));
+                threeColumnInBox.add(new Position(row + 1, third.getCol()));
+                threeColumnInBox.add(new Position(row + 2, third.getCol()));
+
+                //排除原来的数
+                threeColumnInBox.remove(first);
+                threeColumnInBox.remove(second);
+                Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
+                possiblePosition.addAll(threeColumnInBox);
+            } else {
+                // 第四个位置有多重可能性：除了Y翼的位置，还有两个位置：在这个宫且列和第三个数的行 相同的两个位置
+                possiblePosition.add(new Position(forthRow, third.getCol()));
+
+                List<Position> threeColumnInBox = new ArrayList<>(3);
+                threeColumnInBox.add(new Position(third.getRow(), column));
+                threeColumnInBox.add(new Position(third.getRow(), column + 1));
+                threeColumnInBox.add(new Position(third.getRow(), column + 2));
+
+                //排除原来的数
+                threeColumnInBox.remove(first);
+                threeColumnInBox.remove(second);
+                Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
+                possiblePosition.addAll(threeColumnInBox);
+            }
+
+            for (Position forth : possiblePosition) {
+                if (!CollectionUtils.isEmpty(remaining.get(forth)) && remaining.get(forth).contains(
+                    deleteDigital)) {
+                    Map<Position, List<String>> causeMap = new HashMap<>();
+                    causeMap.put(first, new ArrayList<>(remaining.get(first)));
+                    causeMap.put(second, new ArrayList<>(remaining.get(second)));
+                    causeMap.put(third, new ArrayList<>(remaining.get(third)));
+
+                    Map<Position, List<String>> deleteMap = new HashMap<>();
+                    List<String> forthDigital = new ArrayList<>();
+                    forthDigital.add(deleteDigital);
+                    deleteMap.put(forth, forthDigital);
+                    CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
+                    HintModel tt = HintModel.build().of(getStrategy()).of(candidateModel);
+                    return Optional.of(tt);
+                }
             }
 
         }
