@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sesame.game.strategy.Position;
 import lombok.Getter;
 import org.springframework.util.Assert;
 

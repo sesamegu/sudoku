@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**

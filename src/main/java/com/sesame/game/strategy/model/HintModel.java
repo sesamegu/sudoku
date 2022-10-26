@@ -1,8 +1,5 @@
 package com.sesame.game.strategy.model;
 
-import java.util.List;
-
-import com.sesame.game.strategy.Position;
 import com.sesame.game.strategy.Strategy;
 import lombok.Getter;
 

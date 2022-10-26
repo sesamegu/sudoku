@@ -1,4 +1,4 @@
-package com.sesame.game.strategy;
+package com.sesame.game.strategy.model;
 
 /**
  * Introduction: 方向

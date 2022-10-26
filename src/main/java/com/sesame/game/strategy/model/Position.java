@@ -1,4 +1,4 @@
-package com.sesame.game.strategy;
+package com.sesame.game.strategy.model;
 
 import java.util.Objects;
 

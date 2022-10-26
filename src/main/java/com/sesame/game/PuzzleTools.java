@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sesame.game.strategy.Position;
+import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**

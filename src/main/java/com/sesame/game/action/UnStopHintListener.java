@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.sesame.game.SudokuFrame;
 import com.sesame.game.SudokuPanel;
-import com.sesame.game.strategy.Position;
+import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;

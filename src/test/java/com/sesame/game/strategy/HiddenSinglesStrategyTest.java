@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import org.junit.Assert;
 import org.junit.Test;

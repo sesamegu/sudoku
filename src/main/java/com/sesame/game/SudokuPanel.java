@@ -13,7 +13,7 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import com.sesame.game.action.SudokuPanelMouseAdapter;
-import com.sesame.game.strategy.Position;
+import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.SolutionModel;

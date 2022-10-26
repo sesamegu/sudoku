@@ -3,6 +3,7 @@ package com.sesame.game.strategy;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.sesame.game.strategy.model.Position;
 import org.junit.Assert;
 import org.junit.Test;
 

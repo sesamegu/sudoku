@@ -8,6 +8,7 @@ import com.sesame.game.Const;
 import com.sesame.game.PuzzleTools;
 import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.Position;
 
 /**
  * Introduction:以Unit（行、列、公）为单元处理策略的 抽象基类

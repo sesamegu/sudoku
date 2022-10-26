@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import com.sesame.game.strategy.Position;
+import com.sesame.game.strategy.model.Position;
 import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
