@@ -17,7 +17,8 @@ import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import com.sesame.game.SudokuPanel.CandidateActionListener;
+import com.sesame.game.action.CandidateActionListener;
+import com.sesame.game.action.CopyListener;
 import com.sesame.game.strategy.Strategy;
 
 @SuppressWarnings("serial")
@@ -57,7 +58,7 @@ public class SudokuFrame extends JFrame {
         loadGame.add(caseTwo);
 
         JMenuItem copy = new JMenuItem("复制到剪切板");
-        copy.addActionListener(sPanel.new CopyListener());
+        copy.addActionListener(new CopyListener(sPanel));
         loadGame.add(copy);
 
         menuBar.add(loadGame);
@@ -70,8 +71,6 @@ public class SudokuFrame extends JFrame {
 
         buttonSelectionPanel = new JPanel();
         buttonSelectionPanel.setPreferredSize(new Dimension(150, 500));
-
-
 
         windowPanel.add(sPanel);
         windowPanel.add(buttonSelectionPanel);
@@ -96,7 +95,7 @@ public class SudokuFrame extends JFrame {
         rebuildInterface(generatedPuzzle);
     }
 
-    public void loadGameRebuild(int caseType){
+    public void loadGameRebuild(int caseType) {
         SudokuPuzzle generatedPuzzle = new SudokuGenerator().useSpecified(caseType);
         rebuildInterface(generatedPuzzle);
     }
@@ -125,7 +124,7 @@ public class SudokuFrame extends JFrame {
 
         JToggleButton candidateButton = new JToggleButton("Note Off");
         candidateButton.setPreferredSize(new Dimension(90, 40));
-        candidateButton.addChangeListener(sPanel.new CandidateActionListener(candidateButton));
+        candidateButton.addChangeListener(new CandidateActionListener(sPanel, candidateButton));
         buttonSelectionPanel.add(candidateButton);
 
         //提示按钮
@@ -153,7 +152,6 @@ public class SudokuFrame extends JFrame {
         buttonSelectionPanel.removeAll();
 
         buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
-
 
         JLabel jLabel = new JLabel("技巧名称:");
         jLabel.setPreferredSize(new Dimension(110, 15));
@@ -214,6 +212,5 @@ public class SudokuFrame extends JFrame {
             loadGameRebuild(caseType);
         }
     }
-
 
 }

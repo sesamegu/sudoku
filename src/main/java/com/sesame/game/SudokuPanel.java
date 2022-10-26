@@ -6,10 +6,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.datatransfer.Transferable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -18,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -27,6 +22,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputAdapter;
 
+import com.sesame.game.action.HideTheTextThread;
 import com.sesame.game.strategy.FillStrategy;
 import com.sesame.game.strategy.HiddenPairsStrategy;
 import com.sesame.game.strategy.HiddenSinglesStrategy;
@@ -44,12 +40,15 @@ import com.sesame.game.strategy.YWingStrategy;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.SolutionModel;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 @SuppressWarnings("serial")
 public class SudokuPanel extends JPanel {
 
+    @Getter
     private SudokuPuzzle puzzle;
     private int currentlySelectedCol;
     private int currentlySelectedRow;
@@ -61,6 +60,8 @@ public class SudokuPanel extends JPanel {
     /**
      * 是否笔记模式
      */
+    @Getter
+    @Setter
     private boolean isNoteMode;
 
     /**
@@ -309,26 +310,6 @@ public class SudokuPanel extends JPanel {
         }
     }
 
-    public class CandidateActionListener implements ChangeListener {
-        private JToggleButton candidateButton;
-
-        public CandidateActionListener(JToggleButton candidateButton) {
-            this.candidateButton = candidateButton;
-        }
-
-        @Override
-        public void stateChanged(ChangeEvent e) {
-            if (candidateButton.isSelected()) {
-                isNoteMode = true;
-                candidateButton.setText("Note ON");
-                candidateButton.repaint();
-            } else {
-                isNoteMode = false;
-                candidateButton.setText("Note Off");
-            }
-        }
-    }
-
     public class HintActionListener implements ActionListener {
         private final SudokuFrame sudokuFrame;
 
@@ -339,7 +320,7 @@ public class SudokuPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             //如果用户做过标志，需要重置候选数
-            if (isUserNoted){
+            if (isUserNoted) {
                 puzzle.resetCandidate();
                 isUserNoted = false;
             }
@@ -378,7 +359,7 @@ public class SudokuPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             //如果用户做过标志，需要重置候选数
-            if (isUserNoted){
+            if (isUserNoted) {
                 puzzle.resetCandidate();
                 isUserNoted = false;
             }
@@ -450,49 +431,6 @@ public class SudokuPanel extends JPanel {
                 currentlySelectedCol = e.getX() / slotWidth;
                 e.getComponent().repaint();
             }
-        }
-    }
-
-    private class HideTheTextThread implements Runnable {
-        private final SudokuFrame sudokuFrame;
-
-        private HideTheTextThread(SudokuFrame sudokuFrame) {this.sudokuFrame = sudokuFrame;}
-
-        @Override
-        public void run() {
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-            }
-            sudokuFrame.setUnAvailableLabel("");
-        }
-    }
-
-    public class CopyListener implements ActionListener {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String[][] board = puzzle.getBoard();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < Const.ROWS; i++) {
-                sb.append("{");
-                for (int j = 0; j < Const.COLUMNS; j++) {
-                    sb.append("\"");
-                    sb.append(board[i][j]);
-                    sb.append("\"");
-                    if (j != Const.COLUMNS - 1) {
-                        sb.append(",");
-                    }
-                }
-
-                if (i != Const.ROWS - 1) {
-                    sb.append("},\n");
-                } else {
-                    sb.append("}");
-                }
-            }
-            Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            Transferable stringSelection = new StringSelection(sb.toString());
-            systemClipboard.setContents(stringSelection, null);
         }
     }
 
