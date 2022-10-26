@@ -17,8 +17,13 @@ import javax.swing.JTextArea;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
+import com.sesame.game.action.ApplyListener;
 import com.sesame.game.action.CandidateActionListener;
 import com.sesame.game.action.CopyListener;
+import com.sesame.game.action.DeleteActionListener;
+import com.sesame.game.action.HintActionListener;
+import com.sesame.game.action.NumActionListener;
+import com.sesame.game.action.UnStopHintListener;
 import com.sesame.game.strategy.Strategy;
 
 @SuppressWarnings("serial")
@@ -113,13 +118,13 @@ public class SudokuFrame extends JFrame {
         for (String value : Const.VALID_VALUES) {
             JButton b = new JButton(value);
             b.setPreferredSize(new Dimension(40, 40));
-            b.addActionListener(sPanel.new NumActionListener());
+            b.addActionListener(new NumActionListener(sPanel));
             buttonSelectionPanel.add(b);
         }
         //删除按钮
         JButton delete = new JButton("Delete");
         delete.setPreferredSize(new Dimension(90, 40));
-        delete.addActionListener(sPanel.new DeleteActionListener());
+        delete.addActionListener(new DeleteActionListener(sPanel));
         buttonSelectionPanel.add(delete);
 
         JToggleButton candidateButton = new JToggleButton("Note Off");
@@ -130,13 +135,13 @@ public class SudokuFrame extends JFrame {
         //提示按钮
         JButton hint = new JButton("Hint");
         hint.setPreferredSize(new Dimension(90, 40));
-        hint.addActionListener(sPanel.new HintActionListener(this));
+        hint.addActionListener(new HintActionListener(this, sPanel));
         buttonSelectionPanel.add(hint);
 
         //无尽提示按钮
         JButton Unstop = new JButton("Unstop Hint");
         Unstop.setPreferredSize(new Dimension(90, 40));
-        Unstop.addActionListener(sPanel.new UnStopHintListener(this));
+        Unstop.addActionListener(new UnStopHintListener(this, sPanel));
         buttonSelectionPanel.add(Unstop);
 
         //无可用提示文案
@@ -174,7 +179,7 @@ public class SudokuFrame extends JFrame {
         //应用按钮
         JButton apply = new JButton("应用");
         apply.setPreferredSize(new Dimension(110, 40));
-        apply.addActionListener(sPanel.new ApplyListener(this));
+        apply.addActionListener(new ApplyListener(this, sPanel));
         buttonSelectionPanel.add(apply);
 
         buttonSelectionPanel.revalidate();
