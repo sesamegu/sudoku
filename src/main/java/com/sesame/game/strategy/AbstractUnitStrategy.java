@@ -1,5 +1,6 @@
 package com.sesame.game.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import com.sesame.game.PuzzleTools;
 import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.UnitModel;
 
 /**
  * Introduction:以Unit（行、列、公）为单元处理策略的 抽象基类
@@ -45,6 +47,10 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
             List<Position> positionList = PuzzleTools.getPositionByRow(row);
             Optional<HintModel> result = getHintModel(remaining, positionList);
             if (result.isPresent()) {
+                List<UnitModel> unitModelList = new ArrayList<>();
+                unitModelList.add(UnitModel.buildFromRow(row));
+                result.get().of(unitModelList);
+
                 return result;
             }
         }
@@ -56,6 +62,10 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
             List<Position> positionList = PuzzleTools.getPositionByColumn(column);
             Optional<HintModel> result = getHintModel(remaining, positionList);
             if (result.isPresent()) {
+                List<UnitModel> unitModelList = new ArrayList<>();
+                unitModelList.add(UnitModel.buildFromColumn(column));
+                result.get().of(unitModelList);
+
                 return result;
             }
 
@@ -69,6 +79,10 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
                 List<Position> positionList = PuzzleTools.getPositionByBox(row, column);
                 Optional<HintModel> result = getHintModel(remaining, positionList);
                 if (result.isPresent()) {
+                    List<UnitModel> unitModelList = new ArrayList<>();
+                    unitModelList.add(UnitModel.buildFromBox(row, column));
+                    result.get().of(unitModelList);
+
                     return result;
                 }
             }
@@ -79,6 +93,7 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
 
     /**
      * 以Unit（行、列、公）为单元处理
+     *
      * @param remaining
      * @param positionList
      * @return

@@ -8,6 +8,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -73,6 +75,11 @@ public class HiddenThreeStrategyTest {
         Assert.assertEquals("2", delDigital.get(1));
         Assert.assertEquals("3", delDigital.get(2));
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
     }
 
 }

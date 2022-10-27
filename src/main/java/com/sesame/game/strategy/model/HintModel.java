@@ -1,5 +1,7 @@
 package com.sesame.game.strategy.model;
 
+import java.util.List;
+
 import com.sesame.game.strategy.Strategy;
 import lombok.Getter;
 
@@ -30,6 +32,11 @@ public class HintModel {
      */
     private CandidateModel candidateModel;
 
+    /**
+     * 关联的单元
+     */
+    private List<UnitModel> unitModelList;
+
     public static HintModel build() {
         return new HintModel();
     }
@@ -39,14 +46,20 @@ public class HintModel {
         return this;
     }
 
-    public HintModel of (SolutionModel solutionModel ){
+    public HintModel of(SolutionModel solutionModel) {
         this.isCandidate = false;
         this.solutionModel = solutionModel;
         return this;
     }
+
     public HintModel of(CandidateModel candidateModel) {
         this.isCandidate = true;
         this.candidateModel = candidateModel;
+        return this;
+    }
+
+    public HintModel of(List<UnitModel> unitModelList) {
+        this.unitModelList = unitModelList;
         return this;
     }
 

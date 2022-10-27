@@ -11,6 +11,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -45,6 +47,11 @@ public class HiddenSinglesStrategyTest {
         List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(10, related.size());
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(6, actual.getRow());
     }
 
     @Test
@@ -72,6 +79,11 @@ public class HiddenSinglesStrategyTest {
         List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(10, related.size());
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(4, actual.getColumn());
     }
 
     @Test
@@ -98,6 +110,14 @@ public class HiddenSinglesStrategyTest {
         Assert.assertEquals("8", solutionModel.getValue());
         List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(10, related.size());
+
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(6, actual.getRow());
+        Assert.assertEquals(0, actual.getColumn());
 
     }
 

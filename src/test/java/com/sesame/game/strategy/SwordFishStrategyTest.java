@@ -8,6 +8,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -110,6 +112,18 @@ public class SwordFishStrategyTest {
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("6", delDigital.get(0));
 
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(3, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(5, actual.getRow());
+        actual = unitModelList.get(2);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(8, actual.getRow());
     }
 
     @Test
@@ -204,6 +218,18 @@ public class SwordFishStrategyTest {
         delDigital = deleteMap.get(new Position(8, 4));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("6", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(3, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(0, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(5, actual.getColumn());
+        actual = unitModelList.get(2);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(8, actual.getColumn());
 
     }
 }

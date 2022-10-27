@@ -15,6 +15,7 @@ import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -72,6 +73,8 @@ public class YWingStrategy implements FillStrategy {
 
                 Optional<HintModel> hintModel = processBoxHintModel(remaining, filterList, row, column);
                 if (hintModel.isPresent()) {
+                    Assert.notNull(hintModel.get().getUnitModelList(), "should not be null");
+                    hintModel.get().getUnitModelList().add(UnitModel.buildFromBox(row, column));
                     return hintModel;
                 }
 
@@ -118,6 +121,9 @@ public class YWingStrategy implements FillStrategy {
                 Optional<HintModel> hintModel = boxBuildHintModel(remaining, row, column, first, second,
                     thirdDigital, positionByColumn, firstDeleteDigital, Direction.COLUMN, second.getCol(), -1);
                 if (hintModel.isPresent()) {
+                    List<UnitModel> unitModelList = new ArrayList<>();
+                    unitModelList.add(UnitModel.buildFromColumn(first.getCol()));
+                    hintModel.get().of(unitModelList);
                     return hintModel;
                 }
 
@@ -130,6 +136,9 @@ public class YWingStrategy implements FillStrategy {
                 hintModel = boxBuildHintModel(remaining, row, column, first, second,
                     thirdDigital, positionByColumn, secondDeleteDigital, Direction.COLUMN, first.getCol(), -1);
                 if (hintModel.isPresent()) {
+                    List<UnitModel> unitModelList = new ArrayList<>();
+                    unitModelList.add(UnitModel.buildFromColumn(second.getCol()));
+                    hintModel.get().of(unitModelList);
                     return hintModel;
                 }
 
@@ -138,6 +147,9 @@ public class YWingStrategy implements FillStrategy {
                 hintModel = boxBuildHintModel(remaining, row, column, first, second,
                     thirdDigital, positionByRow, firstDeleteDigital, Direction.ROW, -1, second.getRow());
                 if (hintModel.isPresent()) {
+                    List<UnitModel> unitModelList = new ArrayList<>();
+                    unitModelList.add(UnitModel.buildFromRow(first.getRow()));
+                    hintModel.get().of(unitModelList);
                     return hintModel;
                 }
 
@@ -146,6 +158,9 @@ public class YWingStrategy implements FillStrategy {
                 hintModel = boxBuildHintModel(remaining, row, column, first, second,
                     thirdDigital, positionByRow, firstDeleteDigital, Direction.ROW, -1, first.getRow());
                 if (hintModel.isPresent()) {
+                    List<UnitModel> unitModelList = new ArrayList<>();
+                    unitModelList.add(UnitModel.buildFromRow(second.getRow()));
+                    hintModel.get().of(unitModelList);
                     return hintModel;
                 }
             }
@@ -196,6 +211,7 @@ public class YWingStrategy implements FillStrategy {
                 threeColumnInBox.remove(second);
                 Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
                 possiblePosition.addAll(threeColumnInBox);
+
             } else {
                 // 第四个位置有多重可能性：除了Y翼的位置，还有两个位置：在这个宫且列和第三个数的行 相同的两个位置
                 possiblePosition.add(new Position(forthRow, third.getCol()));
@@ -229,6 +245,7 @@ public class YWingStrategy implements FillStrategy {
                     return Optional.of(tt);
                 }
             }
+
 
         }
         return Optional.empty();
@@ -274,6 +291,10 @@ public class YWingStrategy implements FillStrategy {
                     Optional<HintModel> result = buildHintModel(remaining, first, second,
                         thirdDigital, deleteDigital, first.getCol(), second.getCol());
                     if (result.isPresent()) {
+                        List<UnitModel> unitModelList = new ArrayList<>();
+                        unitModelList.add(UnitModel.buildFromRow(first.getRow()));
+                        unitModelList.add(UnitModel.buildFromColumn(first.getCol()));
+                        result.get().of(unitModelList);
                         return result;
                     }
 
@@ -286,6 +307,10 @@ public class YWingStrategy implements FillStrategy {
                     result = buildHintModel(remaining, first, second,
                         thirdDigital, deleteDigital, second.getCol(), first.getCol());
                     if (result.isPresent()) {
+                        List<UnitModel> unitModelList = new ArrayList<>();
+                        unitModelList.add(UnitModel.buildFromRow(second.getRow()));
+                        unitModelList.add(UnitModel.buildFromColumn(second.getCol()));
+                        result.get().of(unitModelList);
                         return result;
                     }
 

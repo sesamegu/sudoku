@@ -16,6 +16,7 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -48,7 +49,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private Optional<HintModel> findByRow(SudokuPuzzle sudokuPuzzle, Map<Position, List<String>> remaining) {
         for (int row = 0; row < Const.ROWS; row++) {
-            // 以行为单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
+            // 以行为单位，统计每个数字出现的次数，过滤出只出现一次的数字。Map key 为数字，value为出现的次数
             List<Position> positionList = PuzzleTools.getPositionByRow(row);
             List<String> collect = statTimesByNumber(remaining, positionList);
             if (CollectionUtils.isEmpty(collect)) {
@@ -63,6 +64,11 @@ public class HiddenSinglesStrategy implements FillStrategy {
                         //位置、值、相关点
                         SolutionModel solutionModel = new SolutionModel(position, one, related);
                         HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
+
+                        List<UnitModel> unitModelList = new ArrayList<>();
+                        unitModelList.add(UnitModel.buildFromRow(row));
+                        result.of(unitModelList);
+
 
                         return Optional.of(result);
                     }
@@ -91,6 +97,10 @@ public class HiddenSinglesStrategy implements FillStrategy {
                         //位置、值、相关点
                         SolutionModel solutionModel = new SolutionModel(position, one, related);
                         HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
+
+                        List<UnitModel> unitModelList = new ArrayList<>();
+                        unitModelList.add(UnitModel.buildFromColumn(column));
+                        result.of(unitModelList);
 
                         return Optional.of(result);
                     }
@@ -135,6 +145,10 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
                     SolutionModel solutionModel = new SolutionModel(position, one, related);
                     HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
+
+                    List<UnitModel> unitModelList = new ArrayList<>();
+                    unitModelList.add(UnitModel.buildFromBox(rowStartPoint, columnStartPoint));
+                    result.of(unitModelList);
 
                     return Optional.of(result);
                 }

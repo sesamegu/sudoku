@@ -8,6 +8,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -57,6 +59,14 @@ public class ObviousPairsStrategyTest {
         Assert.assertEquals("1", delDigital.get(0));
         Assert.assertEquals("2", delDigital.get(1));
 
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+
+
     }
 
     @Test
@@ -99,6 +109,11 @@ public class ObviousPairsStrategyTest {
         Assert.assertEquals(2, delDigital.size());
         Assert.assertEquals("1", delDigital.get(0));
         Assert.assertEquals("2", delDigital.get(1));
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(4, actual.getColumn());
     }
 
     @Test
@@ -141,6 +156,14 @@ public class ObviousPairsStrategyTest {
         Assert.assertEquals(2, delDigital.size());
         Assert.assertEquals("8", delDigital.get(0));
         Assert.assertEquals("9", delDigital.get(1));
+
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getColumn());
+        Assert.assertEquals(0, actual.getColumn());
 
     }
 }

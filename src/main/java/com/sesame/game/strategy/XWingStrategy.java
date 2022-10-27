@@ -16,6 +16,7 @@ import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -147,6 +148,19 @@ public class XWingStrategy implements FillStrategy {
 
                             CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                             HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
+
+                            if (direction == Direction.ROW) {
+                                List<UnitModel> unitModelList = new ArrayList<>();
+                                unitModelList.add(UnitModel.buildFromRow(outList.get(0).getRow()));
+                                unitModelList.add(UnitModel.buildFromRow(innerList.get(0).getRow()));
+                                result.of(unitModelList);
+                            } else {
+                                List<UnitModel> unitModelList = new ArrayList<>();
+                                unitModelList.add(UnitModel.buildFromColumn(outList.get(0).getCol()));
+                                unitModelList.add(UnitModel.buildFromColumn(innerList.get(0).getCol()));
+                                result.of(unitModelList);
+                            }
+
                             return Optional.of(result);
                         }
                     }

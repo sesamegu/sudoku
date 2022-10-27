@@ -9,6 +9,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -61,6 +63,15 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(8, 5));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("4", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(1, actual.getColumn());
     }
 
     @Test
@@ -106,6 +117,15 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(8, 1));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("3", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(5, actual.getColumn());
     }
 
     @Test
@@ -151,6 +171,16 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(0, 1));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("8", delDigital.get(0));
+
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(8, actual.getRow());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(5, actual.getColumn());
     }
 
     @Test
@@ -196,6 +226,15 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(0, 5));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("4", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(8, actual.getRow());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(1, actual.getColumn());
     }
 
     @Test
@@ -241,6 +280,17 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(0, 4));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("7", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(5, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(3, actual.getRow());
+        Assert.assertEquals(3, actual.getColumn());
+
     }
 
     @Test
@@ -286,6 +336,16 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(6, 4));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("7", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(5, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(3, actual.getRow());
+        Assert.assertEquals(3, actual.getColumn());
     }
 
     @Test
@@ -338,6 +398,17 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(5, 5));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("6", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(4, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(6, actual.getRow());
+        Assert.assertEquals(3, actual.getColumn());
+
     }
 
     @Test
@@ -390,6 +461,16 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(5, 5));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("6", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(4, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        Assert.assertEquals(3, actual.getColumn());
     }
 
     @Test
@@ -436,6 +517,16 @@ public class YWingStrategyTest {
         List<String> delDigital = deleteMap.get(new Position(6, 2));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("2", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(1, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        Assert.assertEquals(0, actual.getColumn());
     }
 
     @Test
@@ -483,8 +574,16 @@ public class YWingStrategyTest {
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("2", delDigital.get(0));
 
-        //todo 测试box 第二列
-        //todo 测试box 横向
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(4, actual.getRow());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(3, actual.getRow());
+        Assert.assertEquals(3, actual.getColumn());
+
     }
 
 }

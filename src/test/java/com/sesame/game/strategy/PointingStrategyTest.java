@@ -8,6 +8,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -63,10 +65,17 @@ public class PointingStrategyTest {
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("3", delDigital.get(0));
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        Assert.assertEquals(0, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
 
     }
-
-
 
     @Test
     public void box_column_test() {
@@ -113,6 +122,15 @@ public class PointingStrategyTest {
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("3", delDigital.get(0));
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(2, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        Assert.assertEquals(0, actual.getColumn());
+        actual = unitModelList.get(1);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(2, actual.getColumn());
 
     }
 }

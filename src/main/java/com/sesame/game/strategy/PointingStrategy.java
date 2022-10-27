@@ -13,6 +13,7 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -39,6 +40,11 @@ public class PointingStrategy implements FillStrategy {
                     Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
                     Optional<HintModel> result = checkBox(remaining, boxList, rowList, threePosition);
                     if (result.isPresent()) {
+                        List<UnitModel> unitModelList = new ArrayList<>();
+                        unitModelList.add(UnitModel.buildFromBox(rowPoint, columnPoint));
+                        unitModelList.add(UnitModel.buildFromRow(row));
+                        result.get().of(unitModelList);
+
                         return result;
                     }
                 }
@@ -53,6 +59,10 @@ public class PointingStrategy implements FillStrategy {
                     Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
                     Optional<HintModel> result = checkBox(remaining, boxList, columnList, threePosition);
                     if (result.isPresent()) {
+                        List<UnitModel> unitModelList = new ArrayList<>();
+                        unitModelList.add(UnitModel.buildFromBox(rowPoint, columnPoint));
+                        unitModelList.add(UnitModel.buildFromColumn(column));
+                        result.get().of(unitModelList);
                         return result;
                     }
                 }

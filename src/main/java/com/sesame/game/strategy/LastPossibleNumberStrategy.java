@@ -16,7 +16,7 @@ import com.sesame.game.strategy.model.SolutionModel;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: 唯一候选数，需要升级为
+ * Introduction: 最后一个可能数，基于候选数
  *
  * @author sesame 2022/10/14
  */

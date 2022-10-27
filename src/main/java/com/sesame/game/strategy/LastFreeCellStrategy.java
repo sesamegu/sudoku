@@ -11,6 +11,7 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 
 /**
@@ -59,8 +60,12 @@ public class LastFreeCellStrategy implements FillStrategy {
                 //位置、值、相关点
                 SolutionModel solutionModel = new SolutionModel(new Position(i, emptyColumnPosition),
                     copy.iterator().next(), related);
-
                 HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
+
+                List<UnitModel> unitModelList = new ArrayList<>();
+                unitModelList.add(UnitModel.buildFromRow(i));
+                result.of(unitModelList);
+
                 return Optional.of(result);
             }
         }
@@ -91,6 +96,11 @@ public class LastFreeCellStrategy implements FillStrategy {
                 SolutionModel solutionModel = new SolutionModel(new Position(emptyRowPosition, i),
                     copy.iterator().next(), related);
                 HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
+
+                List<UnitModel> unitModelList = new ArrayList<>();
+                unitModelList.add(UnitModel.buildFromColumn(i));
+                result.of(unitModelList);
+
                 return Optional.of(result);
             }
         }
@@ -142,6 +152,11 @@ public class LastFreeCellStrategy implements FillStrategy {
                 copy.iterator().next(), related);
 
             HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
+
+            List<UnitModel> unitModelList = new ArrayList<>();
+            unitModelList.add(UnitModel.buildFromBox(rowStartPoint, columnStartPoint));
+            result.of(unitModelList);
+
             return Optional.of(result);
         }
 

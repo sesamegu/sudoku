@@ -7,6 +7,8 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -67,8 +69,14 @@ public class LastFreeCellStrategyTest {
         Assert.assertTrue(new Position(0, 5).equals(related.get(5)));
         Assert.assertTrue(new Position(0, 6).equals(related.get(6)));
         Assert.assertTrue(new Position(0, 8).equals(related.get(7)));
-    }
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.ROW, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+
+    }
 
     @Test
     public void column_hit_case() {
@@ -90,7 +98,6 @@ public class LastFreeCellStrategyTest {
         HintModel hintModel = result.get();
         SolutionModel solutionModel = hintModel.getSolutionModel();
 
-
         Assert.assertTrue(new Position(5, 8).equals(solutionModel.getPosition()));
         Assert.assertEquals("7", solutionModel.getValue());
         List<Position> related = solutionModel.getRelated();
@@ -103,9 +110,13 @@ public class LastFreeCellStrategyTest {
         Assert.assertTrue(new Position(6, 8).equals(related.get(5)));
         Assert.assertTrue(new Position(7, 8).equals(related.get(6)));
         Assert.assertTrue(new Position(8, 8).equals(related.get(7)));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.COLUMN, actual.getUnit());
+        Assert.assertEquals(8, actual.getColumn());
     }
-
-
 
     @Test
     public void box_hit_case_1() {
@@ -127,7 +138,6 @@ public class LastFreeCellStrategyTest {
         HintModel hintModel = result.get();
         SolutionModel solutionModel = hintModel.getSolutionModel();
 
-
         Assert.assertTrue(new Position(1, 0).equals(solutionModel.getPosition()));
         Assert.assertEquals("3", solutionModel.getValue());
         List<Position> related = solutionModel.getRelated();
@@ -140,8 +150,15 @@ public class LastFreeCellStrategyTest {
         Assert.assertTrue(new Position(2, 0).equals(related.get(5)));
         Assert.assertTrue(new Position(2, 1).equals(related.get(6)));
         Assert.assertTrue(new Position(2, 2).equals(related.get(7)));
-    }
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        Assert.assertEquals(0, actual.getColumn());
+
+    }
 
     @Test
     public void box_hit_case_2() {
@@ -175,8 +192,16 @@ public class LastFreeCellStrategyTest {
         Assert.assertTrue(new Position(5, 3).equals(related.get(5)));
         Assert.assertTrue(new Position(5, 4).equals(related.get(6)));
         Assert.assertTrue(new Position(5, 5).equals(related.get(7)));
-    }
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(3, actual.getRow());
+        Assert.assertEquals(3, actual.getColumn());
+
+
+    }
 
     @Test
     public void box_hit_case_3() {
@@ -210,7 +235,14 @@ public class LastFreeCellStrategyTest {
         Assert.assertTrue(new Position(8, 6).equals(related.get(5)));
         Assert.assertTrue(new Position(8, 7).equals(related.get(6)));
         Assert.assertTrue(new Position(8, 8).equals(related.get(7)));
-    }
 
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(6, actual.getRow());
+        Assert.assertEquals(6, actual.getColumn());
+
+    }
 
 }
