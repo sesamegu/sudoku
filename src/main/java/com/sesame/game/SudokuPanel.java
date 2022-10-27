@@ -52,6 +52,7 @@ public class SudokuPanel extends JPanel {
      * 用户是否做过标记，如果做过标记，那么在Hint时，需要重置标志，因为用户的标志不可信
      */
     public boolean isUserNoted;
+    private Font f = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
 
     public SudokuPanel() {
         this.setPreferredSize(new Dimension(540, 450));
@@ -75,8 +76,8 @@ public class SudokuPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
 
+        g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
         int slotWidth = this.getWidth() / Const.ROWS;
         int slotHeight = this.getHeight() / Const.ROWS;
 
@@ -108,13 +109,11 @@ public class SudokuPanel extends JPanel {
         }
         //this will draw the bottom line
         //g2d.drawLine(0, usedHeight - 1, usedWidth, usedHeight - 1);
-
-        Font f = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
         g2d.setFont(f);
         FontRenderContext fContext = g2d.getFontRenderContext();
 
-        drawDigital(g2d, slotWidth, slotHeight, f, fContext);
-        drawCandidate(g2d, slotWidth, slotHeight, f, fContext);
+        drawDigital(g2d, slotWidth, slotHeight, fContext);
+        drawCandidate(g2d, slotWidth, slotHeight, fContext);
 
         // draw selected cell
         if (!isHintMode) {
@@ -130,7 +129,7 @@ public class SudokuPanel extends JPanel {
 
     }
 
-    private void drawDigital(Graphics2D g2d, int slotWidth, int slotHeight, Font f, FontRenderContext fContext) {
+    private void drawDigital(Graphics2D g2d, int slotWidth, int slotHeight, FontRenderContext fContext) {
         for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < puzzle.getNumColumns(); col++) {
                 if (!puzzle.isSlotAvailable(row, col)) {
@@ -150,7 +149,7 @@ public class SudokuPanel extends JPanel {
         }
     }
 
-    private void drawCandidate(Graphics2D g2d, int slotWidth, int slotHeight, Font f, FontRenderContext fContext) {
+    private void drawCandidate(Graphics2D g2d, int slotWidth, int slotHeight, FontRenderContext fContext) {
         //候选数值
         for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < Const.COLUMNS; col++) {
@@ -184,10 +183,10 @@ public class SudokuPanel extends JPanel {
                             && deleteMap.get(onePosition).contains(digital)) {
                             g2d.setColor(Color.BLUE);
                         } else {
-                            g2d.setColor(Color.LIGHT_GRAY);
+                            g2d.setColor(Color.gray);
                         }
                     } else {
-                        g2d.setColor(Color.LIGHT_GRAY);
+                        g2d.setColor(Color.gray);
                     }
                     g2d.drawString(digital, (col * slotWidth) + (xStart + (slotWidth / 6) - (candidateTextWidth / 2)),
                         (row * slotHeight) + (yStart + (candidateTextHeight / 2)));
@@ -210,21 +209,23 @@ public class SudokuPanel extends JPanel {
             String found = solutionModel.getValue();
             int textWidth = (int)f.getStringBounds(found, fContext).getWidth();
             int textHeight = (int)f.getStringBounds(found, fContext).getHeight();
-            g2d.setColor(Color.PINK);
+            g2d.setColor(Color.MAGENTA);
             g2d.drawString(found, (position.getCol() * slotWidth) + ((slotWidth / 2) - (textWidth / 2)),
                 (position.getRow() * slotHeight) + ((slotHeight / 2) + (textHeight / 2)));
             //提示背景
-            g2d.setColor(new Color(0.0f, 0.0f, 0.9f, 0.3f));
+            g2d.setColor(new Color(0.117f, 0.562f, 1.0f, 0.6f));
+
             g2d.fillRect(position.getCol() * slotWidth, position.getRow() * slotHeight, slotWidth,
                 slotHeight);
             //相关单元格
-            g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
+            g2d.setColor(new Color(0.527f, 0.804f, 0.976f, 0.6f));
             solutionModel.getRelated().stream().forEach(
                 one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
                     slotHeight));
         } else {
             //相关单元格
-            g2d.setColor(new Color(0.0f, 0.0f, 0.5f, 0.3f));
+            g2d.setColor(new Color(0.527f, 0.804f, 0.976f, 0.45f));
+
             CandidateModel candidateModel = hintModel.getCandidateModel();
             candidateModel.getCauseMap().keySet().stream().forEach(
                 one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
