@@ -28,7 +28,7 @@ public class NumActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        SudokuPuzzle puzzle = panel.getPuzzle();
+        SudokuPuzzle puzzle = panel.puzzle;
         if (panel.currentlySelectedCol != -1 && panel.currentlySelectedRow != -1) {
             String digital = ((JButton)e.getSource()).getText();
 

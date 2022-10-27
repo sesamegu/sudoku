@@ -13,19 +13,16 @@ import java.util.Map;
 import javax.swing.JPanel;
 
 import com.sesame.game.action.SudokuPanelMouseAdapter;
-import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 @SuppressWarnings("serial")
 public class SudokuPanel extends JPanel {
 
-    @Getter
     public SudokuPuzzle puzzle;
     /**
      * 当前选择列
@@ -37,14 +34,18 @@ public class SudokuPanel extends JPanel {
     public int currentlySelectedRow;
     public int usedWidth;
     public int usedHeight;
+    /**
+     * 是否提示模式
+     */
     public boolean isHintMode;
+    /**
+     * 提示模型
+     */
     public HintModel hintModel;
 
     /**
      * 是否笔记模式
      */
-    @Getter
-    @Setter
     public boolean isNoteMode;
 
     /**
@@ -111,6 +112,25 @@ public class SudokuPanel extends JPanel {
         Font f = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
         g2d.setFont(f);
         FontRenderContext fContext = g2d.getFontRenderContext();
+
+        drawDigital(g2d, slotWidth, slotHeight, f, fContext);
+        drawCandidate(g2d, slotWidth, slotHeight, f, fContext);
+
+        // draw selected cell
+        if (!isHintMode) {
+            if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
+                g2d.setColor(new Color(0.0f, 0.0f, 1.0f, 0.3f));
+                g2d.fillRect(currentlySelectedCol * slotWidth, currentlySelectedRow * slotHeight, slotWidth,
+                    slotHeight);
+            }
+            return;
+        }
+
+        drawHint(g2d, slotWidth, slotHeight, f, fContext);
+
+    }
+
+    private void drawDigital(Graphics2D g2d, int slotWidth, int slotHeight, Font f, FontRenderContext fContext) {
         for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < puzzle.getNumColumns(); col++) {
                 if (!puzzle.isSlotAvailable(row, col)) {
@@ -128,7 +148,9 @@ public class SudokuPanel extends JPanel {
                 }
             }
         }
+    }
 
+    private void drawCandidate(Graphics2D g2d, int slotWidth, int slotHeight, Font f, FontRenderContext fContext) {
         //候选数值
         for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < Const.COLUMNS; col++) {
@@ -172,16 +194,9 @@ public class SudokuPanel extends JPanel {
                 }
             }
         }
+    }
 
-        if (!isHintMode) {
-            if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {
-                g2d.setColor(new Color(0.0f, 0.0f, 1.0f, 0.3f));
-                g2d.fillRect(currentlySelectedCol * slotWidth, currentlySelectedRow * slotHeight, slotWidth,
-                    slotHeight);
-            }
-            return;
-        }
-
+    private void drawHint(Graphics2D g2d, int slotWidth, int slotHeight, Font f, FontRenderContext fContext) {
         // 提示模式下
         Assert.notNull(hintModel, "hintModel should not be null");
 
@@ -215,7 +230,6 @@ public class SudokuPanel extends JPanel {
                 one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
                     slotHeight));
         }
-
     }
 
 }

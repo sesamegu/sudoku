@@ -23,11 +23,11 @@ public class CandidateActionListener implements ChangeListener {
     @Override
     public void stateChanged(ChangeEvent e) {
         if (candidateButton.isSelected()) {
-            sudokuPanel.setNoteMode(true);
+            sudokuPanel.isNoteMode = true;
             candidateButton.setText("Note ON");
             candidateButton.repaint();
         } else {
-            sudokuPanel.setNoteMode(false);
+            sudokuPanel.isNoteMode = false;
             candidateButton.setText("Note Off");
         }
     }

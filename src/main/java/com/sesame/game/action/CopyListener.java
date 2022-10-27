@@ -25,7 +25,7 @@ public class CopyListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        String[][] board = sudokuPanel.getPuzzle().getBoard();
+        String[][] board = sudokuPanel.puzzle.getBoard();
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < Const.ROWS; i++) {
             sb.append("{");
