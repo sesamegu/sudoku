@@ -99,32 +99,33 @@ public class SudokuPanel extends JPanel {
         g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
         g2d.fillRect(0, 0, usedWidth, usedHeight);
 
-        g2d.setColor(new Color(0.0f, 0.0f, 0.0f));
+        g2d.setColor(Color.DARK_GRAY);
+
         for (int x = 0; x <= usedWidth; x += slotWidth) {
             if ((x / slotWidth) % Const.BOX_WIDTH == 0) {
-                g2d.setStroke(new BasicStroke(2));
+                g2d.setStroke(new BasicStroke(1.5f));
                 g2d.drawLine(x, 0, x, usedHeight);
             } else {
                 g2d.setStroke(new BasicStroke(1));
                 g2d.drawLine(x, 0, x, usedHeight);
             }
         }
-        //this will draw the right most line
-        g2d.drawLine(usedWidth - 1, 0, usedWidth - 1, usedHeight);
-        g2d.drawLine(1, 0, 1, usedHeight);
+        ////this will draw the right most line
+        //g2d.drawLine(usedWidth - 1, 0, usedWidth - 1, usedHeight);
+        //g2d.drawLine(1, 0, 1, usedHeight);
 
         for (int y = 0; y <= usedHeight; y += slotHeight) {
             if ((y / slotHeight) % Const.BOX_HEIGHT == 0) {
-                g2d.setStroke(new BasicStroke(2));
+                g2d.setStroke(new BasicStroke(1.5f));
                 g2d.drawLine(0, y, usedWidth, y);
             } else {
                 g2d.setStroke(new BasicStroke(1));
                 g2d.drawLine(0, y, usedWidth, y);
             }
         }
-        //this will draw the bottom line
-        g2d.drawLine(0, usedHeight - 1, usedWidth, usedHeight - 1);
-        g2d.drawLine(0, 1, usedWidth, 1);
+        ////this will draw the bottom line
+        //g2d.drawLine(0, usedHeight - 1, usedWidth, usedHeight - 1);
+        //g2d.drawLine(0, 1, usedWidth, 1);
         g2d.setFont(f);
         FontRenderContext fContext = g2d.getFontRenderContext();
 
