@@ -110,7 +110,9 @@ public class SudokuPanel extends JPanel {
             }
         }
         //this will draw the right most line
-        //g2d.drawLine(usedWidth - 1, 0, usedWidth - 1,usedHeight);
+        g2d.drawLine(usedWidth - 1, 0, usedWidth - 1, usedHeight);
+        g2d.drawLine(1, 0, 1, usedHeight);
+
         for (int y = 0; y <= usedHeight; y += slotHeight) {
             if ((y / slotHeight) % Const.BOX_HEIGHT == 0) {
                 g2d.setStroke(new BasicStroke(2));
@@ -121,7 +123,8 @@ public class SudokuPanel extends JPanel {
             }
         }
         //this will draw the bottom line
-        //g2d.drawLine(0, usedHeight - 1, usedWidth, usedHeight - 1);
+        g2d.drawLine(0, usedHeight - 1, usedWidth, usedHeight - 1);
+        g2d.drawLine(0, 1, usedWidth, 1);
         g2d.setFont(f);
         FontRenderContext fContext = g2d.getFontRenderContext();
 
@@ -269,7 +272,7 @@ public class SudokuPanel extends JPanel {
 
     public void drawRowLine(int row, Graphics2D g2d) {
         g2d.setColor(new Color(0.0f, 0.804f, 0.816f));
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(2));
 
         g2d.drawLine(0, row * slotHeight, Const.ROWS * slotWidth, row * slotHeight);
         g2d.drawLine(0, (row + 1) * slotHeight, Const.ROWS * slotWidth, (row + 1) * slotHeight);
@@ -280,7 +283,7 @@ public class SudokuPanel extends JPanel {
 
     public void drawColumnLine(int column, Graphics2D g2d) {
         g2d.setColor(new Color(0.0f, 0.804f, 0.816f));
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(2));
 
         g2d.drawLine(column * slotWidth, 0, (column + 1) * slotWidth, 0);
         g2d.drawLine((column + 1) * slotWidth, 0, (column + 1) * slotWidth, Const.COLUMNS * slotHeight);
@@ -291,7 +294,7 @@ public class SudokuPanel extends JPanel {
 
     public void drawBoxLine(int inputRow, int inputColumn, Graphics2D g2d) {
         g2d.setColor(new Color(0.0f, 0.804f, 0.816f));
-        g2d.setStroke(new BasicStroke(3));
+        g2d.setStroke(new BasicStroke(2));
 
         int row = inputRow - inputRow % Const.BOX_WIDTH;
         int column = inputColumn - inputColumn % Const.BOX_WIDTH;
