@@ -17,6 +17,8 @@ import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -52,6 +54,10 @@ public class SudokuPanel extends JPanel {
      * 用户是否做过标记，如果做过标记，那么在Hint时，需要重置标志，因为用户的标志不可信
      */
     public boolean isUserNoted;
+
+    private int slotWidth;
+    private int slotHeight;
+
     private Font f = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
 
     public SudokuPanel() {
@@ -70,6 +76,14 @@ public class SudokuPanel extends JPanel {
 
     public void newSudokuPuzzle(SudokuPuzzle puzzle) {
         this.puzzle = puzzle;
+        currentlySelectedCol = -1;
+        currentlySelectedRow = -1;
+        usedWidth = 0;
+        usedHeight = 0;
+        isHintMode = false;
+        hintModel = null;
+        isNoteMode = false;
+        isUserNoted = false;
     }
 
     @Override
@@ -77,18 +91,17 @@ public class SudokuPanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
 
-        g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
-        int slotWidth = this.getWidth() / Const.ROWS;
-        int slotHeight = this.getHeight() / Const.ROWS;
-
+        slotWidth = this.getWidth() / Const.ROWS;
+        slotHeight = this.getHeight() / Const.ROWS;
         usedWidth = (this.getWidth() / puzzle.getNumColumns()) * puzzle.getNumColumns();
         usedHeight = (this.getHeight() / Const.ROWS) * Const.ROWS;
 
+        g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
         g2d.fillRect(0, 0, usedWidth, usedHeight);
 
         g2d.setColor(new Color(0.0f, 0.0f, 0.0f));
         for (int x = 0; x <= usedWidth; x += slotWidth) {
-            if ((x / slotWidth) % puzzle.getBoxWidth() == 0) {
+            if ((x / slotWidth) % Const.BOX_WIDTH == 0) {
                 g2d.setStroke(new BasicStroke(2));
                 g2d.drawLine(x, 0, x, usedHeight);
             } else {
@@ -99,7 +112,7 @@ public class SudokuPanel extends JPanel {
         //this will draw the right most line
         //g2d.drawLine(usedWidth - 1, 0, usedWidth - 1,usedHeight);
         for (int y = 0; y <= usedHeight; y += slotHeight) {
-            if ((y / slotHeight) % puzzle.getBoxHeight() == 0) {
+            if ((y / slotHeight) % Const.BOX_HEIGHT == 0) {
                 g2d.setStroke(new BasicStroke(2));
                 g2d.drawLine(0, y, usedWidth, y);
             } else {
@@ -231,6 +244,66 @@ public class SudokuPanel extends JPanel {
                 one -> g2d.fillRect(one.getCol() * slotWidth, one.getRow() * slotHeight, slotWidth,
                     slotHeight));
         }
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        if (CollectionUtils.isEmpty(unitModelList)) {
+            return;
+        }
+
+        unitModelList.stream().forEach(
+
+            one -> {
+                if (one.getUnit() == Unit.ROW) {
+                    drawRowLine(one.getRow(), g2d);
+                } else if (one.getUnit() == Unit.COLUMN) {
+                    drawColumnLine(one.getColumn(), g2d);
+                } else if (one.getUnit() == Unit.BOX) {
+                    drawBoxLine(one.getRow(), one.getColumn(), g2d);
+                } else {
+                    throw new RuntimeException("should be here");
+                }
+            }
+
+        );
+    }
+
+    public void drawRowLine(int row, Graphics2D g2d) {
+        g2d.setColor(new Color(0.0f, 0.804f, 0.816f));
+        g2d.setStroke(new BasicStroke(3));
+
+        g2d.drawLine(0, row * slotHeight, Const.ROWS * slotWidth, row * slotHeight);
+        g2d.drawLine(0, (row + 1) * slotHeight, Const.ROWS * slotWidth, (row + 1) * slotHeight);
+
+        g2d.drawLine(0, row * slotHeight, 0, (row + 1) * slotHeight);
+        g2d.drawLine(Const.ROWS * slotWidth, row * slotHeight, Const.ROWS * slotWidth, (row + 1) * slotHeight);
+    }
+
+    public void drawColumnLine(int column, Graphics2D g2d) {
+        g2d.setColor(new Color(0.0f, 0.804f, 0.816f));
+        g2d.setStroke(new BasicStroke(3));
+
+        g2d.drawLine(column * slotWidth, 0, (column + 1) * slotWidth, 0);
+        g2d.drawLine((column + 1) * slotWidth, 0, (column + 1) * slotWidth, Const.COLUMNS * slotHeight);
+
+        g2d.drawLine(column * slotWidth, 0, column * slotWidth, Const.COLUMNS * slotHeight);
+        g2d.drawLine((column + 1) * slotWidth, 0, (column + 1) * slotWidth, Const.COLUMNS * slotHeight);
+    }
+
+    public void drawBoxLine(int inputRow, int inputColumn, Graphics2D g2d) {
+        g2d.setColor(new Color(0.0f, 0.804f, 0.816f));
+        g2d.setStroke(new BasicStroke(3));
+
+        int row = inputRow - inputRow % Const.BOX_WIDTH;
+        int column = inputColumn - inputColumn % Const.BOX_WIDTH;
+
+        int x = column * slotWidth;
+        int y = row * slotHeight;
+
+        g2d.drawLine(x, y, x + 3 * slotWidth, y);
+        g2d.drawLine(x, y + 3 * slotHeight, x + 3 * slotWidth, y + 3 * slotHeight);
+        g2d.drawLine(x, y, x, y + 3 * slotHeight);
+        g2d.drawLine(x + 3 * slotWidth, y, x + 3 * slotWidth, y + 3 * slotHeight);
+
     }
 
 }

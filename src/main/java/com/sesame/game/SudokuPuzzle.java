@@ -361,11 +361,4 @@ public class SudokuPuzzle {
         return Const.COLUMNS;
     }
 
-    public int getBoxWidth() {
-        return Const.BOX_WIDTH;
-    }
-
-    public int getBoxHeight() {
-        return Const.BOX_HEIGHT;
-    }
 }
