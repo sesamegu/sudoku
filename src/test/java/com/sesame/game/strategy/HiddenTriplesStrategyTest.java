@@ -1,5 +1,6 @@
 package com.sesame.game.strategy;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -90,6 +91,68 @@ public class HiddenTriplesStrategyTest {
         UnitModel actual = unitModelList.get(0);
         Assert.assertEquals(Unit.ROW, actual.getUnit());
         Assert.assertEquals(0, actual.getRow());
+
+    }
+
+    @Test
+    public void row_test_not_the_case() {
+        String[][] board = new String[][] {
+            {"", "", "", "", "", "6", "5", "", ""},
+            {"4", "", "8", "", "5", "", "2", "", ""},
+            {"5", "", "9", "2", "", "", "1", "", ""},
+            {"", "", "1", "", "", "", "6", "9", "5"},
+            {"3", "4", "5", "6", "9", "1", "8", "2", "7"},
+            {"9", "7", "6", "5", "8", "2", "4", "1", "3"},
+            {"1", "", "2", "", "6", "", "9", "4", "8"},
+            {"", "", "", "", "1", "4", "", "", "2"},
+            {"", "", "4", "", "2", "", "", "", "1"},
+        };
+        SudokuPuzzle puzzle = new SudokuPuzzle();
+        puzzle.setBoard(board);
+
+        List<String> digital = new ArrayList<>();
+        digital.add("2");
+        digital.add("7");
+        puzzle.setCandidate(0, 0, digital);
+
+        digital = new ArrayList<>();
+        digital.add("1");
+        digital.add("2");
+        digital.add("3");
+        puzzle.setCandidate(0, 1, digital);
+
+        digital = new ArrayList<>();
+        digital.add("3");
+        digital.add("7");
+        puzzle.setCandidate(0, 2, digital);
+
+        digital = new ArrayList<>();
+        digital.add("1");
+        digital.add("3");
+        digital.add("4");
+        digital.add("8");
+        digital.add("9");
+        puzzle.setCandidate(0, 3, digital);
+
+        digital = new ArrayList<>();
+        digital.add("3");
+        digital.add("4");
+        puzzle.setCandidate(0, 4, digital);
+
+        digital = new ArrayList<>();
+        digital.add("3");
+        digital.add("8");
+        puzzle.setCandidate(0, 7, digital);
+
+
+        digital = new ArrayList<>();
+        digital.add("4");
+        digital.add("9");
+        puzzle.setCandidate(0, 8, digital);
+
+        Optional<HintModel> result = new HiddenTriplesStrategy().tryStrategy(puzzle);
+        Assert.assertFalse(result.isPresent());
+
 
     }
 

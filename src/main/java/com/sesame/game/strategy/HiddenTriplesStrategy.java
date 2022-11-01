@@ -86,26 +86,29 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
      */
     private Optional<HintModel> buildHintModel(Map<Position, List<String>> remaining, Position p1, Position p2,
         Position p3, List<String> d1, List<String> d2, List<String> d3) {
+        //Position 1
         for (int na = 0; na <= d1.size() - 2; na++) {
             for (int nb = na + 1; nb <= d1.size() - 1; nb++) {
-                // key为数字，value为次数
-                // 从P1找出两个数字
-                Map<String, Integer> innerCount = new HashMap<>();
-                List<String> nAll = new ArrayList<>();
-                nAll.add(d1.get(na));
-                nAll.add(d1.get(nb));
-                processCount(innerCount, nAll);
-
+                //Position 2
                 for (int ms = 0; ms <= d2.size() - 2; ms++) {
                     for (int mz = ms + 1; mz <= d2.size() - 1; mz++) {
-                        // 从P2找出两个数字
-                        List<String> mAll = new ArrayList<>();
-                        mAll.add(d2.get(ms));
-                        mAll.add(d2.get(mz));
-                        processCount(innerCount, mAll);
-
+                        //Position 3
                         for (int pd = 0; pd <= d3.size() - 2; pd++) {
                             for (int pe = pd + 1; pe <= d3.size() - 1; pe++) {
+                                // key为数字，value为次数
+                                // 从P1找出两个数字
+                                Map<String, Integer> innerCount = new HashMap<>();
+                                List<String> nAll = new ArrayList<>();
+                                nAll.add(d1.get(na));
+                                nAll.add(d1.get(nb));
+                                processCount(innerCount, nAll);
+
+                                // 从P2找出两个数字
+                                List<String> mAll = new ArrayList<>();
+                                mAll.add(d2.get(ms));
+                                mAll.add(d2.get(mz));
+                                processCount(innerCount, mAll);
+
                                 // 从P3找出两个数字
                                 List<String> pAll = new ArrayList<>();
                                 pAll.add(d3.get(pd));
@@ -139,7 +142,6 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         }
         return Optional.empty();
     }
-
     private void calcPosition(Map<Position, List<String>> remaining, Position p2, List<String> mAll,
         Map<Position, List<String>> causeMap, Map<Position, List<String>> deleteMap) {
         List<String> innerRemain = new ArrayList<>(remaining.get(p2));
