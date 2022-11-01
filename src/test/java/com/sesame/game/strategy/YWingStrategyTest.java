@@ -172,7 +172,6 @@ public class YWingStrategyTest {
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("8", delDigital.get(0));
 
-
         List<UnitModel> unitModelList = hintModel.getUnitModelList();
         Assert.assertEquals(2, unitModelList.size());
         UnitModel actual = unitModelList.get(0);
@@ -572,7 +571,7 @@ public class YWingStrategyTest {
         Assert.assertEquals(1, deleteMap.size());
         List<String> delDigital = deleteMap.get(new Position(3, 1));
         Assert.assertEquals(1, delDigital.size());
-        Assert.assertEquals("2", delDigital.get(0));
+        Assert.assertEquals("3", delDigital.get(0));
 
         List<UnitModel> unitModelList = hintModel.getUnitModelList();
         Assert.assertEquals(2, unitModelList.size());

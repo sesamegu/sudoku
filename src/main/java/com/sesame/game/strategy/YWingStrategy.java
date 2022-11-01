@@ -156,7 +156,7 @@ public class YWingStrategy implements FillStrategy {
                 //  查找第二个行数：因为第1行和第2行位置不定，因此同样存在四种造型情况
                 positionByRow = PuzzleTools.getPositionByRow(second.getRow());
                 hintModel = boxBuildHintModel(remaining, row, column, first, second,
-                    thirdDigital, positionByRow, firstDeleteDigital, Direction.ROW, -1, first.getRow());
+                    thirdDigital, positionByRow, secondDeleteDigital, Direction.ROW, -1, first.getRow());
                 if (hintModel.isPresent()) {
                     List<UnitModel> unitModelList = new ArrayList<>();
                     unitModelList.add(UnitModel.buildFromRow(second.getRow()));
