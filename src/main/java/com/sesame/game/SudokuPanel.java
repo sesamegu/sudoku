@@ -63,7 +63,7 @@ public class SudokuPanel extends JPanel {
     public SudokuPanel() {
         this.setPreferredSize(new Dimension(540, 450));
         this.addMouseListener(new SudokuPanelMouseAdapter(this));
-        this.puzzle = new SudokuGenerator().generateRandomSudoku(SudokuPuzzleType.NORMAL);
+        this.puzzle = SudokuGenerator.generateRandomSudoku(GameLevel.NORMAL);
         currentlySelectedCol = -1;
         currentlySelectedRow = -1;
         usedWidth = 0;
@@ -93,7 +93,7 @@ public class SudokuPanel extends JPanel {
 
         slotWidth = this.getWidth() / Const.ROWS;
         slotHeight = this.getHeight() / Const.ROWS;
-        usedWidth = (this.getWidth() / puzzle.getNumColumns()) * puzzle.getNumColumns();
+        usedWidth = (this.getWidth() / Const.COLUMNS) * Const.COLUMNS;
         usedHeight = (this.getHeight() / Const.ROWS) * Const.ROWS;
 
         g2d.setColor(new Color(1.0f, 1.0f, 1.0f));
@@ -148,14 +148,14 @@ public class SudokuPanel extends JPanel {
 
     private void drawDigital(Graphics2D g2d, int slotWidth, int slotHeight, FontRenderContext fContext) {
         for (int row = 0; row < Const.ROWS; row++) {
-            for (int col = 0; col < puzzle.getNumColumns(); col++) {
+            for (int col = 0; col < Const.COLUMNS; col++) {
                 if (!puzzle.isSlotAvailable(row, col)) {
                     int textWidth = (int)f.getStringBounds(puzzle.getValue(row, col), fContext).getWidth();
                     int textHeight = (int)f.getStringBounds(puzzle.getValue(row, col), fContext).getHeight();
 
                     // 区分颜色
                     if (puzzle.isSlotMutable(row, col)) {
-                        g2d.setColor(Color.GRAY);
+                        g2d.setColor(new Color(0.25390625f, 0.41015625f, 0.87890625f));
                     } else {
                         g2d.setColor(Color.BLACK);
                     }

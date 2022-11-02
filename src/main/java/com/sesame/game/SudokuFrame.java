@@ -40,36 +40,72 @@ public class SudokuFrame extends JFrame {
         this.setMinimumSize(new Dimension(800, 600));
 
         JMenuBar menuBar = new JMenuBar();
-        JMenu newGame = new JMenu("New Game");
-        JMenuItem sixBySixGame = new JMenuItem("Easy");
-        sixBySixGame.addActionListener(new NewGameListener(SudokuPuzzleType.EASY));
-        JMenuItem nineByNineGame = new JMenuItem("Normal");
-        nineByNineGame.addActionListener(new NewGameListener(SudokuPuzzleType.NORMAL));
-        JMenuItem twelveByTwelveGame = new JMenuItem("Hard");
-        twelveByTwelveGame.addActionListener(new NewGameListener(SudokuPuzzleType.HARD));
 
-        newGame.add(sixBySixGame);
-        newGame.add(nineByNineGame);
-        newGame.add(twelveByTwelveGame);
-        menuBar.add(newGame);
+        //add easy menu
+        JMenu easyMenu = new JMenu("Easy");
+        for (int i = 0; i < 10; i++) {
+            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            oneCase.addActionListener(new LevelGameListener(GameLevel.EASY, (i + 1)));
+            easyMenu.add(oneCase);
+        }
+        menuBar.add(easyMenu);
 
+        //add normal menu
+        JMenu normalMenu = new JMenu("Normal");
+        for (int i = 0; i < 10; i++) {
+            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            oneCase.addActionListener(new LevelGameListener(GameLevel.NORMAL, (i + 1)));
+            normalMenu.add(oneCase);
+        }
+        menuBar.add(normalMenu);
+
+        //add hard menu
+        JMenu hardMenu = new JMenu("Hard");
+        for (int i = 0; i < 10; i++) {
+            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            oneCase.addActionListener(new LevelGameListener(GameLevel.HARD, (i + 1)));
+            hardMenu.add(oneCase);
+        }
+        menuBar.add(hardMenu);
+        //add vip menu
+        JMenu vipMenu = new JMenu("Vip");
+        for (int i = 0; i < 5; i++) {
+            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            oneCase.addActionListener(new LevelGameListener(GameLevel.VIP, (i + 1)));
+            vipMenu.add(oneCase);
+        }
+        menuBar.add(vipMenu);
+
+        //Focus
+        JMenu focus = new JMenu("Focus");
+        menuBar.add(focus);
+
+        JMenuItem solver = new JMenuItem("Solver");
+        solver.addActionListener(new LoadGameListener(1));
+        focus.add(solver);
+
+        JMenuItem randomGame = new JMenuItem("Random Game");
+        randomGame.addActionListener(new NewGameListener(GameLevel.NORMAL));
+        focus.add(randomGame);
+
+        // develop
         JMenu loadGame = new JMenu("Develop");
-        JMenuItem caseOne = new JMenuItem("自由练习场");
-        caseOne.addActionListener(new LoadGameListener(1));
-        loadGame.add(caseOne);
+        menuBar.add(loadGame);
 
-        JMenuItem caseTwo = new JMenuItem("测试局");
+        JMenuItem Unstoppable = new JMenuItem("Unstoppable Hint");
+        Unstoppable.addActionListener(new UnStopHintListener(this, sPanel));
+        loadGame.add(Unstoppable);
+
+        JMenuItem caseTwo = new JMenuItem("Test Game");
         caseTwo.addActionListener(new LoadGameListener(2));
         loadGame.add(caseTwo);
 
-        JMenuItem copy = new JMenuItem("复制到剪切板");
+        JMenuItem copy = new JMenuItem("Copy To Clipboard");
         copy.addActionListener(new CopyListener(sPanel));
         loadGame.add(copy);
 
-        menuBar.add(loadGame);
 
         this.setJMenuBar(menuBar);
-
         JPanel windowPanel = new JPanel();
         windowPanel.setLayout(new FlowLayout());
         windowPanel.setPreferredSize(new Dimension(800, 600));
@@ -82,7 +118,7 @@ public class SudokuFrame extends JFrame {
 
         this.add(windowPanel);
 
-        newGameRebuild(SudokuPuzzleType.NORMAL);
+        newGameRebuild(GameLevel.NORMAL);
     }
 
     public static void main(String[] args) {
@@ -95,13 +131,18 @@ public class SudokuFrame extends JFrame {
         });
     }
 
-    public void newGameRebuild(SudokuPuzzleType puzzleType) {
-        SudokuPuzzle generatedPuzzle = new SudokuGenerator().generateRandomSudoku(puzzleType);
+    public void newGameRebuild(GameLevel puzzleType) {
+        SudokuPuzzle generatedPuzzle = SudokuGenerator.generateRandomSudoku(puzzleType);
         rebuildInterface(generatedPuzzle);
     }
 
     public void loadGameRebuild(int caseType) {
-        SudokuPuzzle generatedPuzzle = new SudokuGenerator().useSpecified(caseType);
+        SudokuPuzzle generatedPuzzle = SudokuGenerator.useSpecified(caseType);
+        rebuildInterface(generatedPuzzle);
+    }
+
+    public void loadLevelGameRebuild(GameLevel gameLevel, int caseNumber) {
+        SudokuPuzzle generatedPuzzle = SudokuGenerator.useLevelGame(gameLevel, caseNumber);
         rebuildInterface(generatedPuzzle);
     }
 
@@ -137,12 +178,6 @@ public class SudokuFrame extends JFrame {
         hint.setPreferredSize(new Dimension(90, 40));
         hint.addActionListener(new HintActionListener(this, sPanel));
         buttonSelectionPanel.add(hint);
-
-        //无尽提示按钮
-        JButton Unstop = new JButton("Unstop Hint");
-        Unstop.setPreferredSize(new Dimension(90, 40));
-        Unstop.addActionListener(new UnStopHintListener(this, sPanel));
-        buttonSelectionPanel.add(Unstop);
 
         //无可用提示文案
         unAvailableLabel = new JLabel("");
@@ -192,9 +227,9 @@ public class SudokuFrame extends JFrame {
 
     private class NewGameListener implements ActionListener {
 
-        private final SudokuPuzzleType puzzleType;
+        private final GameLevel puzzleType;
 
-        public NewGameListener(SudokuPuzzleType puzzleType) {
+        public NewGameListener(GameLevel puzzleType) {
             this.puzzleType = puzzleType;
         }
 
@@ -218,4 +253,19 @@ public class SudokuFrame extends JFrame {
         }
     }
 
+    private class LevelGameListener implements ActionListener {
+
+        private final GameLevel gameLevel;
+        private final int caseNumber;
+
+        public LevelGameListener(GameLevel gameLevel, int caseNumber) {
+            this.caseNumber = caseNumber;
+            this.gameLevel = gameLevel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            loadLevelGameRebuild(gameLevel, caseNumber);
+        }
+    }
 }

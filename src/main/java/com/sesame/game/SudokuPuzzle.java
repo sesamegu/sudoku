@@ -357,8 +357,27 @@ public class SudokuPuzzle {
         return possibleValues;
     }
 
-    public int getNumColumns() {
-        return Const.COLUMNS;
+    public String printBoard() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < Const.ROWS; i++) {
+            sb.append("{");
+            for (int j = 0; j < Const.COLUMNS; j++) {
+                sb.append("\"");
+                sb.append(board[i][j]);
+                sb.append("\"");
+                if (j != Const.COLUMNS - 1) {
+                    sb.append(",");
+                }
+            }
+
+            if (i != Const.ROWS - 1) {
+                sb.append("},\n");
+            } else {
+                sb.append("},");
+            }
+        }
+
+        return sb.toString();
     }
 
 }

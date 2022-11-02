@@ -38,4 +38,25 @@ public class UnitModel {
         return unitModel;
     }
 
+    @Override
+    public String toString() {
+        if (unit == null) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(unit.getDesc());
+        sb.append("\t");
+
+        if (unit == Unit.ROW) {
+            sb.append(row);
+        } else if (unit == Unit.COLUMN) {
+            sb.append(column);
+        } else if (unit == Unit.BOX) {
+            sb.append(row).append("\t").append(column);
+        } else {
+            return "";
+        }
+        return sb.toString();
+    }
+
 }
