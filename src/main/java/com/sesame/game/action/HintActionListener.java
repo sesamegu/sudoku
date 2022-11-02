@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.sesame.game.SudokuFrame;
 import com.sesame.game.SudokuPanel;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.HintModel;
@@ -50,7 +51,7 @@ public class HintActionListener implements ActionListener {
             }
             panel.repaint();
         } else {
-            sudokuFrame.setUnAvailableLabel("无可用技巧");
+            sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("no_strategy_available"));
             new Thread(new HideTheTextThread(sudokuFrame)).start();
         }
     }

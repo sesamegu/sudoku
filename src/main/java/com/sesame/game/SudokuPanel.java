@@ -19,6 +19,7 @@ import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
+import com.sesame.game.tool.SudokuGenerator;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 

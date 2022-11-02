@@ -30,7 +30,6 @@ public class GameGenerator {
     public static final int EASY_CELL_NUMBER = 40;
     public static final int NORMAL_CELL_NUMBER = 32;
     public static final int HARD_CELL_NUMBER = 26;
-    public static final int Hard_STRATEGY_NUMBER = 4;
     public static final List<Integer> EASY_STRATEGY = new ArrayList<>();
     public static final List<Integer> NORAML_STRATEGY = new ArrayList<>();
     public static final List<Integer> HARD_STRATEGY = new ArrayList<>();

@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import com.sesame.game.SudokuFrame;
 import com.sesame.game.SudokuPanel;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.CandidateModel;
@@ -58,7 +59,7 @@ public class UnStopHintListener implements ActionListener {
         }
         panel.repaint();
 
-        sudokuFrame.setUnAvailableLabel("已完成探索");
+        sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("search_finished"));
         new Thread(new HideTheTextThread(sudokuFrame)).start();
 
     }

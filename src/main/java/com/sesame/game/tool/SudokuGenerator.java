@@ -1,8 +1,11 @@
-package com.sesame.game;
+package com.sesame.game.tool;
 
 import java.util.Optional;
 import java.util.Random;
 
+import com.sesame.game.Const;
+import com.sesame.game.GameLevel;
+import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.library.CaseLibrary;
 import com.sesame.game.tool.BruteForceSolver;
 import org.springframework.util.Assert;

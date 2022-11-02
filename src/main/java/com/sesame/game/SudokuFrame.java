@@ -24,7 +24,9 @@ import com.sesame.game.action.DeleteActionListener;
 import com.sesame.game.action.HintActionListener;
 import com.sesame.game.action.NumActionListener;
 import com.sesame.game.action.UnStopHintListener;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.Strategy;
+import com.sesame.game.tool.SudokuGenerator;
 
 @SuppressWarnings("serial")
 public class SudokuFrame extends JFrame {
@@ -42,68 +44,67 @@ public class SudokuFrame extends JFrame {
         JMenuBar menuBar = new JMenuBar();
 
         //add easy menu
-        JMenu easyMenu = new JMenu("Easy");
+        JMenu easyMenu = new JMenu(I18nProcessor.getValue("easy"));
         for (int i = 0; i < 10; i++) {
-            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.EASY, (i + 1)));
             easyMenu.add(oneCase);
         }
         menuBar.add(easyMenu);
 
         //add normal menu
-        JMenu normalMenu = new JMenu("Normal");
+        JMenu normalMenu = new JMenu(I18nProcessor.getValue("normal"));
         for (int i = 0; i < 10; i++) {
-            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.NORMAL, (i + 1)));
             normalMenu.add(oneCase);
         }
         menuBar.add(normalMenu);
 
         //add hard menu
-        JMenu hardMenu = new JMenu("Hard");
+        JMenu hardMenu = new JMenu(I18nProcessor.getValue("hard"));
         for (int i = 0; i < 10; i++) {
-            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.HARD, (i + 1)));
             hardMenu.add(oneCase);
         }
         menuBar.add(hardMenu);
         //add vip menu
-        JMenu vipMenu = new JMenu("Vip");
+        JMenu vipMenu = new JMenu(I18nProcessor.getValue("vip"));
         for (int i = 0; i < 5; i++) {
-            JMenuItem oneCase = new JMenuItem("Case " + (i + 1));
+            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.VIP, (i + 1)));
             vipMenu.add(oneCase);
         }
         menuBar.add(vipMenu);
 
         //Focus
-        JMenu focus = new JMenu("Focus");
+        JMenu focus = new JMenu(I18nProcessor.getValue("focus"));
         menuBar.add(focus);
 
-        JMenuItem solver = new JMenuItem("Solver");
+        JMenuItem solver = new JMenuItem(I18nProcessor.getValue("solver"));
         solver.addActionListener(new LoadGameListener(1));
         focus.add(solver);
 
-        JMenuItem randomGame = new JMenuItem("Random Game");
+        JMenuItem randomGame = new JMenuItem(I18nProcessor.getValue("random_game"));
         randomGame.addActionListener(new NewGameListener(GameLevel.NORMAL));
         focus.add(randomGame);
 
         // develop
-        JMenu loadGame = new JMenu("Develop");
+        JMenu loadGame = new JMenu(I18nProcessor.getValue("develop"));
         menuBar.add(loadGame);
 
-        JMenuItem Unstoppable = new JMenuItem("Unstoppable Hint");
+        JMenuItem Unstoppable = new JMenuItem(I18nProcessor.getValue("unstoppable"));
         Unstoppable.addActionListener(new UnStopHintListener(this, sPanel));
         loadGame.add(Unstoppable);
 
-        JMenuItem caseTwo = new JMenuItem("Test Game");
+        JMenuItem caseTwo = new JMenuItem(I18nProcessor.getValue("test_game"));
         caseTwo.addActionListener(new LoadGameListener(2));
         loadGame.add(caseTwo);
 
-        JMenuItem copy = new JMenuItem("Copy To Clipboard");
+        JMenuItem copy = new JMenuItem(I18nProcessor.getValue("copy_2_clipboard"));
         copy.addActionListener(new CopyListener(sPanel));
         loadGame.add(copy);
-
 
         this.setJMenuBar(menuBar);
         JPanel windowPanel = new JPanel();
@@ -163,18 +164,18 @@ public class SudokuFrame extends JFrame {
             buttonSelectionPanel.add(b);
         }
         //删除按钮
-        JButton delete = new JButton("Delete");
+        JButton delete = new JButton(I18nProcessor.getValue("delete"));
         delete.setPreferredSize(new Dimension(90, 40));
         delete.addActionListener(new DeleteActionListener(sPanel));
         buttonSelectionPanel.add(delete);
 
-        JToggleButton candidateButton = new JToggleButton("Note Off");
+        JToggleButton candidateButton = new JToggleButton(I18nProcessor.getValue("note_off"));
         candidateButton.setPreferredSize(new Dimension(90, 40));
         candidateButton.addChangeListener(new CandidateActionListener(sPanel, candidateButton));
         buttonSelectionPanel.add(candidateButton);
 
         //提示按钮
-        JButton hint = new JButton("Hint");
+        JButton hint = new JButton(I18nProcessor.getValue("hint"));
         hint.setPreferredSize(new Dimension(90, 40));
         hint.addActionListener(new HintActionListener(this, sPanel));
         buttonSelectionPanel.add(hint);
@@ -193,11 +194,11 @@ public class SudokuFrame extends JFrame {
 
         buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
 
-        JLabel jLabel = new JLabel("技巧名称:");
+        JLabel jLabel = new JLabel(I18nProcessor.getValue("strategy_name") + ":");
         jLabel.setPreferredSize(new Dimension(110, 15));
         buttonSelectionPanel.add(jLabel);
 
-        JLabel jLabel2 = new JLabel(strategy.getName());
+        JLabel jLabel2 = new JLabel(I18nProcessor.getValue(strategy.getName()));
         jLabel2.setPreferredSize(new Dimension(110, 15));
         jLabel2.setForeground(Color.red);
         buttonSelectionPanel.add(jLabel2);
@@ -208,11 +209,11 @@ public class SudokuFrame extends JFrame {
         textArea.setLineWrap(true);
         textArea.setEnabled(false);
 
-        textArea.setText(strategy.getDesc());
+        textArea.setText(I18nProcessor.getValue(strategy.getName() + "_desc"));
         buttonSelectionPanel.add(textArea);
 
         //应用按钮
-        JButton apply = new JButton("应用");
+        JButton apply = new JButton(I18nProcessor.getValue("apply"));
         apply.setPreferredSize(new Dimension(110, 40));
         apply.addActionListener(new ApplyListener(this, sPanel));
         buttonSelectionPanel.add(apply);

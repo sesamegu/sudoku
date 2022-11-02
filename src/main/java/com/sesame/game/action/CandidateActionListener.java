@@ -5,6 +5,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.sesame.game.SudokuPanel;
+import com.sesame.game.i18n.I18nProcessor;
 
 /**
  * Introduction:
@@ -24,11 +25,11 @@ public class CandidateActionListener implements ChangeListener {
     public void stateChanged(ChangeEvent e) {
         if (candidateButton.isSelected()) {
             sudokuPanel.isNoteMode = true;
-            candidateButton.setText("Note ON");
+            candidateButton.setText(I18nProcessor.getValue("note_on"));
             candidateButton.repaint();
         } else {
             sudokuPanel.isNoteMode = false;
-            candidateButton.setText("Note Off");
+            candidateButton.setText(I18nProcessor.getValue("note_off"));
         }
     }
 }
