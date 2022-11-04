@@ -198,8 +198,12 @@ public class SudokuFrame extends JFrame {
         jLabel.setPreferredSize(new Dimension(110, 15));
         buttonSelectionPanel.add(jLabel);
 
-        JLabel jLabel2 = new JLabel(I18nProcessor.getValue(strategy.getName()));
-        jLabel2.setPreferredSize(new Dimension(110, 15));
+        String value = I18nProcessor.getValue(strategy.getName());
+        if (value.length() > 15) {
+            value = "<html><body>" + value.substring(0, 14) + "<br>" + value.substring(14) + "<body></html>";
+        }
+        JLabel jLabel2 = new JLabel(value);
+        jLabel2.setPreferredSize(new Dimension(110, 30));
         jLabel2.setForeground(Color.red);
         buttonSelectionPanel.add(jLabel2);
 
