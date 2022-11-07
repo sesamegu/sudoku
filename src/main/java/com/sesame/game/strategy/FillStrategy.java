@@ -6,30 +6,23 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 
 /**
- * Introduction: 策略接口
+ * Introduction: the strategy interface
  *
  * @author sesame 2022/10/13
  */
 public interface FillStrategy {
     /**
-     * 执行策略
+     * execute the strategy
      *
      * @param sudokuPuzzle
      * @return
      */
-    Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle);
+    Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle);
 
     /**
-     * 策略名称
+     * the strategy's  name
      *
      * @return
      */
     Strategy getStrategy();
-
-    /**
-     * 策略优先级
-     *
-     * @return
-     */
-    int priority();
 }

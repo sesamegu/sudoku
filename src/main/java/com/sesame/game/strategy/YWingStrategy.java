@@ -20,16 +20,19 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:Y翼，基于行列的有四种造型：右下、左下、右上、左上。基于宫的，有8个造型右下、左下、右上、左上、
+ * Introduction:Y Wing or XY Wing
+ * "Y-Wing" technique is similar to "X-Wing", but it based on three corners instead of four.
+ *
+ * 基于行列的有四种造型：右下、左下、右上、左上。基于宫的，有8个造型右下、左下、右上、左上、
  * 右右下、左左下、右右上、左左上
  *
  * @author sesame 2022/10/23
  */
 public class YWingStrategy implements FillStrategy {
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
-        // 基于每行，找出候选个数数量为2的所有位置
+        // by row, find the position which have two candidates
         List<List<Position>> allRowList = new ArrayList<>();
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> rowList = PuzzleTools.getPositionByRow(i);
@@ -41,7 +44,7 @@ public class YWingStrategy implements FillStrategy {
             }
         }
 
-        // 基于每列，找出候选个数数量为2的所有位置
+        // by column, find the position which have two candidates
         List<List<Position>> allColumnList = new ArrayList<>();
         for (int i = 0; i < Const.COLUMNS; i++) {
             List<Position> columnList = PuzzleTools.getPositionByColumn(i);
@@ -58,11 +61,11 @@ public class YWingStrategy implements FillStrategy {
             return result;
         }
 
-        //以宫为单位，遍历9个宫
+        //iterate the nine boxes
         for (int row = 0; row < Const.ROWS; row = row + Const.BOX_WIDTH) {
             for (int column = 0; column < Const.COLUMNS; column = column + Const.BOX_WIDTH) {
 
-                //过滤出后续个数为2的位置列表
+                // find the position which have two candidates
                 List<Position> boxList = PuzzleTools.getPositionByBox(row, column);
                 List<Position> filterList = boxList.stream().filter(one -> (!CollectionUtils.isEmpty(
                     remaining.get(one))) && remaining.get(one).size() == 2).collect(Collectors.toList());
@@ -91,19 +94,19 @@ public class YWingStrategy implements FillStrategy {
             for (int j = i + 1; j < size; j++) {
                 Position first = filterList.get(i);
                 Position second = filterList.get(j);
-                //不在同行同列
+                // not the same row or same column
                 if (first.getCol() == second.getCol() || first.getRow() == second.getRow()) {
                     continue;
                 }
 
-                //两个候选数一个是相同，一个不同
+                //two candidates: one is the same, the other is different
                 List<String> sameDigital = new ArrayList<>(remaining.get(first));
                 sameDigital.retainAll(remaining.get(second));
                 if (sameDigital.size() != 1) {
                     continue;
                 }
 
-                //找出第三格需要匹配的候选数组
+                //build the two digital in the third cell
                 List<String> thirdDigital = new ArrayList<>();
                 thirdDigital.addAll(remaining.get(first));
                 thirdDigital.addAll(remaining.get(second));
@@ -173,7 +176,7 @@ public class YWingStrategy implements FillStrategy {
         Position first, Position second, List<String> thirdDigital, List<Position> positionList,
         String deleteDigital, Direction direction, int forthColumn, int forthRow) {
         for (Position third : positionList) {
-            //过滤同宫的位置
+            //filter the same box
             if (direction == Direction.COLUMN) {
                 int thirdRow = third.getRow();
                 if (thirdRow == row || thirdRow == row + 1 || thirdRow == row + 2) {
@@ -195,7 +198,7 @@ public class YWingStrategy implements FillStrategy {
                 continue;
             }
 
-            //尝试Y翼的位置
+            //build the Y wing positions
             List<Position> possiblePosition = new ArrayList<>();
             if (direction == Direction.COLUMN) {
                 // 第四个位置有多重可能性：除了Y翼的位置，还有两个位置：在这个宫且列和第三个数的列 相同的两个位置
@@ -206,7 +209,7 @@ public class YWingStrategy implements FillStrategy {
                 threeColumnInBox.add(new Position(row + 1, third.getCol()));
                 threeColumnInBox.add(new Position(row + 2, third.getCol()));
 
-                //排除原来的数
+                //remove themselves
                 threeColumnInBox.remove(first);
                 threeColumnInBox.remove(second);
                 Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
@@ -221,7 +224,7 @@ public class YWingStrategy implements FillStrategy {
                 threeColumnInBox.add(new Position(third.getRow(), column + 1));
                 threeColumnInBox.add(new Position(third.getRow(), column + 2));
 
-                //排除原来的数
+                //remove themselves
                 threeColumnInBox.remove(first);
                 threeColumnInBox.remove(second);
                 Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
@@ -245,7 +248,6 @@ public class YWingStrategy implements FillStrategy {
                     return Optional.of(tt);
                 }
             }
-
 
         }
         return Optional.empty();
@@ -327,7 +329,7 @@ public class YWingStrategy implements FillStrategy {
             if (CollectionUtils.isEmpty(remaining.get(third))) {
                 continue;
             }
-            // 检查第三格单元格候选、第四格是否包含 删除数
+            // check the third cell and check the forth cell include the candidate
             if (remaining.get(third).equals(thirdDigital)) {
                 Position forth = new Position(third.getRow(), forthColumn);
                 if (!CollectionUtils.isEmpty(remaining.get(forth)) && remaining.get(forth).contains(
@@ -355,8 +357,4 @@ public class YWingStrategy implements FillStrategy {
         return Strategy.Y_WING;
     }
 
-    @Override
-    public int priority() {
-        return 0;
-    }
 }

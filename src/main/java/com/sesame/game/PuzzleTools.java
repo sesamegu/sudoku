@@ -9,7 +9,7 @@ import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: 工具类
+ * Introduction: puzzle tools
  *
  * @author sesame 2022/10/17
  */
@@ -31,16 +31,12 @@ public abstract class PuzzleTools {
         return positionList;
     }
 
-    /**
-     * @param row 行的位置，任意位置
-     * @param column 列的位置，任意位置
-     * @return
-     */
+
     public static List<Position> getPositionByBox(int row, int column) {
         int rowStart = row - row % Const.BOX_WIDTH;
         int columnStart = column - column % Const.BOX_WIDTH;
 
-        List<Position> positionList  = new ArrayList<>(9);
+        List<Position> positionList = new ArrayList<>(9);
         for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
             for (int j = columnStart; j < columnStart + Const.BOX_WIDTH; j++) {
                 positionList.add(new Position(i, j));
@@ -50,7 +46,8 @@ public abstract class PuzzleTools {
     }
 
     /**
-     * 返回字母以及对应出现的次数
+     * key is the digital, the value is the position
+     *
      * @param remaining
      * @param positionList
      * @return

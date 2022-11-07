@@ -35,10 +35,10 @@ public class PointingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new PointingStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new PointingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -93,10 +93,10 @@ public class PointingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new PointingStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new PointingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();

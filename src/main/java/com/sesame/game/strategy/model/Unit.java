@@ -3,7 +3,7 @@ package com.sesame.game.strategy.model;
 import lombok.Getter;
 
 /**
- * Introduction: 基本单元
+ * Introduction: the three basic units
  *
  * @author sesame 2022/10/27
  */
@@ -13,7 +13,7 @@ public enum Unit {
     BOX("box");
 
     @Getter
-    private String desc;
+    private final String desc;
 
     Unit(String desc) {
         this.desc = desc;

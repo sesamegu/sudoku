@@ -6,13 +6,13 @@ import java.awt.event.ActionListener;
 import com.sesame.game.SudokuPanel;
 
 /**
- * Introduction:
+ * Introduction: delete the cell
  *
  * @author sesame 2022/10/26
  */
 public class DeleteActionListener implements ActionListener {
 
-    private SudokuPanel panel;
+    private final SudokuPanel panel;
 
     public DeleteActionListener(SudokuPanel panel) {
         this.panel = panel;
@@ -21,8 +21,9 @@ public class DeleteActionListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (panel.currentlySelectedCol != -1 && panel.currentlySelectedRow != -1) {
-            if (panel.puzzle.isSlotMutable(panel.currentlySelectedRow, panel.currentlySelectedCol) && panel.puzzle.isSlotValid(
-                panel.currentlySelectedRow, panel.currentlySelectedCol)) {
+            if (panel.puzzle.isSlotMutable(panel.currentlySelectedRow, panel.currentlySelectedCol) && panel.puzzle
+                .isSlotValid(
+                    panel.currentlySelectedRow, panel.currentlySelectedCol)) {
                 panel.puzzle.makeSlotEmpty(panel.currentlySelectedRow, panel.currentlySelectedCol);
             }
             panel.repaint();

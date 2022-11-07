@@ -12,21 +12,23 @@ import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:显性数对
+ * Introduction:Obvious Pairs
+ * In a the block, vertical column or horizontal row, there are two cells which have the same two candidates. Then we
+ * can delete the two candidates in the area.
  *
  * @author sesame 2022/10/16
  */
 public class ObviousPairsStrategy extends AbstractUnitStrategy {
     /**
-     * 否存在显性数对
+     * check if exists the obvious pairs
      *
      * @param remaining
      * @param positionList
      * @return
      */
     @Override
-    public Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
-        //key 为数字字符串、value为之前的位置
+    public Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining, List<Position> positionList) {
+        //key is the digital、value the position
         Map<String, Position> contains = new HashMap<>();
         for (Position position : positionList) {
             List<String> digital = remaining.get(position);
@@ -36,13 +38,13 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
 
             String key = digital.get(0) + digital.get(1);
 
+            // two positions have the same two candidates
             if (contains.containsKey(key)) {
-                //找到两个位置包含相同的候选值
                 List<Position> twoSamePosition = new ArrayList<>();
                 twoSamePosition.add(contains.get(key));
                 twoSamePosition.add(position);
 
-                //检查其它位置是否包含任意这两个任一值
+                //check if other position contains the two candidates
                 Map<Position, List<String>> deleteMap = new HashMap<>();
                 for (Position inner : positionList) {
                     if ((!twoSamePosition.contains(inner)) && (!CollectionUtils.isEmpty(
@@ -81,8 +83,4 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
         return Strategy.OBVIOUS_PAIRS;
     }
 
-    @Override
-    public int priority() {
-        return 4;
-    }
 }

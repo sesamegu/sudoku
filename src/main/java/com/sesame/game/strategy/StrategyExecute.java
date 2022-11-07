@@ -8,12 +8,12 @@ import com.sesame.game.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 
 /**
- * Introduction: 策略执行列表
+ * Introduction: execute the all strategy in the order
  *
  * @author sesame 2022/10/26
  */
 public abstract class StrategyExecute {
-    private static List<FillStrategy> allStrategy = new ArrayList<>();
+    private static final List<FillStrategy> allStrategy = new ArrayList<>();
 
     static {
         allStrategy.add(new LastFreeCellStrategy());
@@ -32,7 +32,7 @@ public abstract class StrategyExecute {
 
     public static Optional<HintModel> tryAllStrategy(SudokuPuzzle puzzle) {
         for (FillStrategy one : allStrategy) {
-            Optional<HintModel> hintModel = one.tryStrategy(puzzle);
+            Optional<HintModel> hintModel = one.execute(puzzle);
             if (hintModel.isPresent()) {
                 return hintModel;
             }

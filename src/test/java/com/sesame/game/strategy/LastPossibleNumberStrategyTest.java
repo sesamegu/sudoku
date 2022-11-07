@@ -32,13 +32,13 @@ public class LastPossibleNumberStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new LastPossibleNumberStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new LastPossibleNumberStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
         SolutionModel solutionModel = hintModel.getSolutionModel();
 
         Assert.assertTrue(new Position(7, 7).equals(solutionModel.getPosition()));
-        Assert.assertEquals("9", solutionModel.getValue());
+        Assert.assertEquals("9", solutionModel.getSolutionDigital());
         List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(20, related.size());
     }
@@ -61,13 +61,13 @@ public class LastPossibleNumberStrategyTest {
         List<String> digital = new ArrayList<>();
         digital.add("9");
         puzzle.setCandidate(7, 7, digital);
-        Optional<HintModel> result = new LastPossibleNumberStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new LastPossibleNumberStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
         SolutionModel solutionModel = hintModel.getSolutionModel();
 
         Assert.assertTrue(new Position(7, 7).equals(solutionModel.getPosition()));
-        Assert.assertEquals("9", solutionModel.getValue());
+        Assert.assertEquals("9", solutionModel.getSolutionDigital());
         List<Position> related = solutionModel.getRelated();
         Assert.assertEquals(20, related.size());
     }

@@ -8,13 +8,13 @@ import com.sesame.game.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
 
 /**
- * Introduction:
+ * Introduction: candidate model switch
  *
  * @author sesame 2022/10/26
  */
 public class CandidateActionListener implements ChangeListener {
-    private SudokuPanel sudokuPanel;
-    private JToggleButton candidateButton;
+    private final SudokuPanel sudokuPanel;
+    private final JToggleButton candidateButton;
 
     public CandidateActionListener(SudokuPanel sudokuPanel, JToggleButton candidateButton) {
         this.sudokuPanel = sudokuPanel;

@@ -17,19 +17,22 @@ import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: 宫策略（宫对、宫三）
+ * Introduction: Pointing
+ * When a Note is present twice or three in a block and this Note also belongs to the same row or column. This means
+ * that the Note must be the solution for one of the two cells in the block. So, you can eliminate this Note from any
+ * other cells in the row or column.
  *
  * @author sesame 2022/10/22
  */
 public class PointingStrategy implements FillStrategy {
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
-        //对9个宫依次遍历
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
+        //iterate the nine box
         for (int rowPoint = 0; rowPoint < Const.ROWS; rowPoint = rowPoint + Const.BOX_WIDTH) {
             for (int columnPoint = 0; columnPoint < Const.COLUMNS; columnPoint = columnPoint + Const.BOX_WIDTH) {
 
                 List<Position> boxList = PuzzleTools.getPositionByBox(rowPoint, columnPoint);
-                //对每个宫内的3行处理
+                // check the three rows in the box
                 for (int row = rowPoint; row < rowPoint + 3; row++) {
                     List<Position> threePosition = new ArrayList<>(3);
                     threePosition.add(new Position(row, columnPoint));
@@ -48,7 +51,7 @@ public class PointingStrategy implements FillStrategy {
                         return result;
                     }
                 }
-                //对每个宫内的3列依次处理
+                //check the three columns in the box
                 for (int column = columnPoint; column < columnPoint + 3; column++) {
                     List<Position> threePosition = new ArrayList<>(3);
                     threePosition.add(new Position(rowPoint, column));
@@ -79,7 +82,7 @@ public class PointingStrategy implements FillStrategy {
         for (int i = 0; i < Const.VALID_VALUES.length; i++) {
             String oneDigital = Const.VALID_VALUES[i];
 
-            //在三个单元格中至少2个单元格包含
+            // at least two cells contain the candidate
             List<Position> causeList = threePosition.stream().filter(one ->
                 !CollectionUtils.isEmpty(remaining.get(one)) && remaining.get(one).contains(oneDigital)
             ).collect(Collectors.toList());
@@ -87,7 +90,7 @@ public class PointingStrategy implements FillStrategy {
                 continue;
             }
 
-            //宫的其它单元格不包含这个数字
+            //other cells doesn't contain the candidate
             boolean isContainInOther = false;
             for (Position onePos : boxList) {
                 if (threePosition.contains(onePos)) {
@@ -101,7 +104,7 @@ public class PointingStrategy implements FillStrategy {
                 continue;
             }
 
-            // 行或者列的列表包含这个数字
+            // the row or column contains the candidate
             List<Position> deletePosition = new ArrayList<>();
             for (Position onePos : relatedList) {
                 if (threePosition.contains(onePos)) {
@@ -145,8 +148,4 @@ public class PointingStrategy implements FillStrategy {
         return Strategy.POINTING_PAIRS;
     }
 
-    @Override
-    public int priority() {
-        return 0;
-    }
 }

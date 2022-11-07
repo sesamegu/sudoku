@@ -12,14 +12,14 @@ import com.sesame.game.SudokuPuzzle;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:
+ * Introduction: put the number to the cell
  *
  * @author sesame 2022/10/26
  */
 
 public class NumActionListener implements ActionListener {
 
-    private SudokuPanel panel;
+    private final SudokuPanel panel;
 
     public NumActionListener(SudokuPanel sPanel) {
         panel = sPanel;

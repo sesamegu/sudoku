@@ -10,7 +10,7 @@ import com.sesame.game.Const;
 import com.sesame.game.SudokuPuzzle;
 
 /**
- * Introduction:
+ * Introduction:brute force solver
  *
  * @author sesame 2022/10/31
  */

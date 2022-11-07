@@ -9,21 +9,21 @@ import lombok.Getter;
 import org.springframework.util.Assert;
 
 /**
- * Introduction:
+ * Introduction: candidate model
  *
  * @author sesame 2022/10/17
  */
 @Getter
 public class CandidateModel {
     /**
-     * 原因位置及对应的数字：key为位置，value为对应的值
+     * key is cause's position，value is the list of digital
      */
-    private Map<Position, List<String>> causeMap;
+    private final Map<Position, List<String>> causeMap;
 
     /**
-     * 删除的位置及对应的值：key为位置，value为对应的值
+     * key is deletion's position，value is the list of digital
      */
-    private Map<Position, List<String>> deleteMap;
+    private final Map<Position, List<String>> deleteMap;
 
     public CandidateModel(List<Position> causeList, List<String> causeDigital,
         Map<Position, List<String>> deleteMap) {

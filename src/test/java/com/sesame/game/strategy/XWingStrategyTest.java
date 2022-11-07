@@ -34,10 +34,10 @@ public class XWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new XWingStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new XWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -118,10 +118,10 @@ public class XWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new XWingStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new XWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -176,7 +176,6 @@ public class XWingStrategyTest {
         delDigital = deleteMap.get(new Position(3, 8));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("4", delDigital.get(0));
-
 
         List<UnitModel> unitModelList = hintModel.getUnitModelList();
         Assert.assertEquals(2, unitModelList.size());

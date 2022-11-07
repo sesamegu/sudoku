@@ -15,23 +15,16 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:显性三数对
+ * Introduction:Obvious Triples
+ * In a the block, vertical column or horizontal row, there are three cells which have the three pairs candidates. Then
+ * we can delete the three candidates in the area.
  *
  * @author sesame 2022/10/19
  */
 public class ObviousTriplesStrategy extends AbstractUnitStrategy {
 
-    /**
-     * 否存在显性三数对
-     *
-     * @param remaining
-     * @param positionList
-     * @return
-     */
     @Override
-    public Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
-        //key 为位置，value为对应的数字
-
+    public Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining, List<Position> positionList) {
         List<Position> collect = positionList.stream().filter(
             one -> (!CollectionUtils.isEmpty(remaining.get(one))) && remaining.get(one).size() == 2).collect(
             Collectors.toList());
@@ -51,7 +44,7 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                     causeList.add(p2);
                     causeList.add(p3);
 
-                    // key为数字，value为次数
+                    // key is digital，value is the count
                     Map<String, Integer> countForDigital = new HashMap<>();
                     for (Position onePosition : causeList) {
                         List<String> digital = remaining.get(onePosition);
@@ -64,7 +57,7 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                         });
                     }
 
-                    // 满足3个位置总共三个数字，每个数字出现2次
+                    // three digital which appear twice
                     int count = (int)countForDigital.values().stream().filter(one -> one == 2).count();
                     if (count != 3) {
                         continue;
@@ -73,7 +66,7 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                     List<String> threeDigital = new ArrayList<>(countForDigital.keySet());
                     Collections.sort(threeDigital);
                     Assert.isTrue(threeDigital.size() == 3, "should be three.");
-                    //检查其它位置是否包含任意这三个任一值
+                    //check if other position contains the three candidates
                     Map<Position, List<String>> deleteMap = new HashMap<>();
                     for (Position innerPosition : positionList) {
                         if ((!causeList.contains(innerPosition)) && (!CollectionUtils.isEmpty(
@@ -81,7 +74,7 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                             List<String> innerDigital = remaining.get(innerPosition);
                             List<String> deleteString = new ArrayList<>();
                             threeDigital.forEach(one -> {
-                                if (innerDigital.contains(one)){
+                                if (innerDigital.contains(one)) {
                                     deleteString.add(one);
                                 }
                             });
@@ -109,8 +102,4 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
         return Strategy.OBVIOUS_TRIPLES;
     }
 
-    @Override
-    public int priority() {
-        return 4;
-    }
 }

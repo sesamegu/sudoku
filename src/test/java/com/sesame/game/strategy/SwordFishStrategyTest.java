@@ -34,10 +34,10 @@ public class SwordFishStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new SwordFishStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new SwordFishStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -112,7 +112,6 @@ public class SwordFishStrategyTest {
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("6", delDigital.get(0));
 
-
         List<UnitModel> unitModelList = hintModel.getUnitModelList();
         Assert.assertEquals(3, unitModelList.size());
         UnitModel actual = unitModelList.get(0);
@@ -141,10 +140,10 @@ public class SwordFishStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new SwordFishStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new SwordFishStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();

@@ -16,15 +16,17 @@ import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: 隐性三数对
+ * Introduction: Hidden Triples
+ * When three cells in a row, column, or block contain the same three Notes. These three cells also contain other
+ * candidates, which may be removed from them
  *
  * @author sesame 2022/10/21
  */
 public class HiddenTriplesStrategy extends AbstractUnitStrategy {
 
     @Override
-    protected Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
-        //找出候选数量大于等2的所有位置
+    protected Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining, List<Position> positionList) {
+        // find the positions which have more than 2 candidates
         List<Position> targetPosition = positionList.stream().filter(
             one -> (!CollectionUtils.isEmpty(remaining.get(one))) && remaining.get(one).size() >= 2).collect(
             Collectors.toList());
@@ -33,7 +35,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
             return Optional.empty();
         }
 
-        //找出只出现过两次的数字
+        //find the digital which appear twice
         Map<String, Integer> countForDigital = PuzzleTools.buildDigitalCountMap(remaining, positionList);
         List<String> targetDigital = countForDigital.entrySet().stream().filter(entry -> entry.getValue() == 2).map(
             Entry::getKey).collect(Collectors.toList());
@@ -42,7 +44,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         }
         Collections.sort(targetDigital);
 
-        // 以此遍历所有有效位置，找出三个位置和对应的数字list
+        // iterate all combination
         for (int i = 0; i <= targetPosition.size() - 3; i++) {
             for (int j = i + 1; j <= targetPosition.size() - 2; j++) {
                 for (int k = j + 1; k <= targetPosition.size() - 1; k++) {
@@ -73,15 +75,15 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
     }
 
     /**
-     * 从3个位置以此分别找出两个数字，看这6个数字是否符合隐形三数对
+     * check the three positions have three pairs
      *
      * @param remaining
-     * @param p1 位置1
-     * @param p2 位置2
-     * @param p3 位置3
-     * @param d1 数字1
-     * @param d2 数字2
-     * @param d3 数字3
+     * @param p1 position 1
+     * @param p2 position 2
+     * @param p3 position 3
+     * @param d1 digital 1
+     * @param d2 digital 2
+     * @param d3 digital 3
      * @return
      */
     private Optional<HintModel> buildHintModel(Map<Position, List<String>> remaining, Position p1, Position p2,
@@ -95,27 +97,26 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
                         //Position 3
                         for (int pd = 0; pd <= d3.size() - 2; pd++) {
                             for (int pe = pd + 1; pe <= d3.size() - 1; pe++) {
-                                // key为数字，value为次数
-                                // 从P1找出两个数字
+                                // get two digital from position 1
                                 Map<String, Integer> innerCount = new HashMap<>();
                                 List<String> nAll = new ArrayList<>();
                                 nAll.add(d1.get(na));
                                 nAll.add(d1.get(nb));
                                 processCount(innerCount, nAll);
 
-                                // 从P2找出两个数字
+                                //  get two digital from position 2
                                 List<String> mAll = new ArrayList<>();
                                 mAll.add(d2.get(ms));
                                 mAll.add(d2.get(mz));
                                 processCount(innerCount, mAll);
 
-                                // 从P3找出两个数字
+                                //  get two digital from position 3
                                 List<String> pAll = new ArrayList<>();
                                 pAll.add(d3.get(pd));
                                 pAll.add(d3.get(pe));
                                 processCount(innerCount, pAll);
 
-                                // 满足3个位置总共三个数字，每个数字出现2次
+                                // three digital which appear twice
                                 int count = (int)innerCount.values().stream().filter(one -> one == 2)
                                     .count();
                                 if (count != 3) {
@@ -142,6 +143,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         }
         return Optional.empty();
     }
+
     private void calcPosition(Map<Position, List<String>> remaining, Position p2, List<String> mAll,
         Map<Position, List<String>> causeMap, Map<Position, List<String>> deleteMap) {
         List<String> innerRemain = new ArrayList<>(remaining.get(p2));
@@ -168,8 +170,4 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         return Strategy.HIDDEN_TRIPLES;
     }
 
-    @Override
-    public int priority() {
-        return 0;
-    }
 }

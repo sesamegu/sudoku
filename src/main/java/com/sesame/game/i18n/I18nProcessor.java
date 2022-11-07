@@ -4,15 +4,15 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
- * Introduction:
+ * Introduction: I18N
  *
  * @author sesame 2022/11/2
  */
 public class I18nProcessor {
 
-    private static ResourceBundle rbEn;
-    private static ResourceBundle rbZh;
-    private static boolean isChinese;
+    private static final ResourceBundle rbEn;
+    private static final ResourceBundle rbZh;
+    private static final boolean isChinese;
 
     static {
         Locale localeEn = new Locale("en", "US");
@@ -20,11 +20,7 @@ public class I18nProcessor {
         rbEn = ResourceBundle.getBundle("i18n.content", localeEn);
         rbZh = ResourceBundle.getBundle("i18n.content", localeZh);
         String s = Locale.getDefault().toString();
-        if ("zh_CN".equals(s) || "zh_TW".equals(s)) {
-            isChinese = true;
-        } else {
-            isChinese = false;
-        }
+        isChinese = "zh_CN".equals(s) || "zh_TW".equals(s);
 
     }
 

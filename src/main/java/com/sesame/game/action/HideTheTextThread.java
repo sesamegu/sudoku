@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 import com.sesame.game.SudokuFrame;
 
 /**
- * Introduction:
+ * Introduction: hide the hint's text thread
  *
  * @author sesame 2022/10/26
  */

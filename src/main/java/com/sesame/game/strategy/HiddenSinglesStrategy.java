@@ -20,15 +20,16 @@ import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:隐性单一数 策略
+ * Introduction:Hidden Singles
+ * The point is that in a specific cell only one digit (from the Notes) remains possible
  *
  * @author sesame 2022/10/14
  */
 public class HiddenSinglesStrategy implements FillStrategy {
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
-        // 以行、列、宫为单元找出隐形的单一数
+
         Optional<HintModel> byRow = findByRow(sudokuPuzzle, remaining);
         if (byRow.isPresent()) {
             return byRow;
@@ -49,9 +50,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private Optional<HintModel> findByRow(SudokuPuzzle sudokuPuzzle, Map<Position, List<String>> remaining) {
         for (int row = 0; row < Const.ROWS; row++) {
-            // 以行为单位，统计每个数字出现的次数，过滤出只出现一次的数字。Map key 为数字，value为出现的次数
             List<Position> positionList = PuzzleTools.getPositionByRow(row);
-            List<String> collect = statTimesByNumber(remaining, positionList);
+            List<String> collect = findAppearOnce(remaining, positionList);
             if (CollectionUtils.isEmpty(collect)) {
                 continue;
             }
@@ -61,14 +61,13 @@ public class HiddenSinglesStrategy implements FillStrategy {
                     if (remaining.containsKey(position) && remaining.get(position).contains(one)) {
                         List<Position> related = findTheRelatedByRow(position, one, sudokuPuzzle);
 
-                        //位置、值、相关点
+                        // build the result
                         SolutionModel solutionModel = new SolutionModel(position, one, related);
                         HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
 
                         List<UnitModel> unitModelList = new ArrayList<>();
                         unitModelList.add(UnitModel.buildFromRow(row));
                         result.of(unitModelList);
-
 
                         return Optional.of(result);
                     }
@@ -82,9 +81,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private Optional<HintModel> findByColumn(SudokuPuzzle sudokuPuzzle, Map<Position, List<String>> remaining) {
         for (int column = 0; column < Const.COLUMNS; column++) {
-            // 以列单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
             List<Position> positionList = PuzzleTools.getPositionByColumn(column);
-            List<String> collect = statTimesByNumber(remaining, positionList);
+            List<String> collect = findAppearOnce(remaining, positionList);
             if (CollectionUtils.isEmpty(collect)) {
                 continue;
             }
@@ -94,7 +92,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
                     if (remaining.containsKey(position) && remaining.get(position).contains(one)) {
                         List<Position> related = findTheRelatedByColumn(position, one, sudokuPuzzle);
 
-                        //位置、值、相关点
+                        // build the result
                         SolutionModel solutionModel = new SolutionModel(position, one, related);
                         HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
 
@@ -129,10 +127,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
     private Optional<HintModel> checkNineBox(SudokuPuzzle sudokuPuzzle, int rowStartPoint, int columnStartPoint,
         Map<Position, List<String>> remaining) {
 
-        // 以宫为单位，统计每个数字出现的次数。Map key 为数字，value为出现的次数
         List<Position> positionList = PuzzleTools.getPositionByBox(rowStartPoint, columnStartPoint);
-
-        List<String> collect = statTimesByNumber(remaining, positionList);
+        List<String> collect = findAppearOnce(remaining, positionList);
         if (CollectionUtils.isEmpty(collect)) {
             return Optional.empty();
         }
@@ -141,8 +137,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
             for (Position position : positionList) {
                 if (remaining.containsKey(position) && remaining.get(position).contains(one)) {
                     List<Position> related = findTheRelatedByBox(position, one, sudokuPuzzle);
-                    //位置、值、相关点
 
+                    //build the result
                     SolutionModel solutionModel = new SolutionModel(position, one, related);
                     HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
 
@@ -159,8 +155,8 @@ public class HiddenSinglesStrategy implements FillStrategy {
         throw new RuntimeException("should not be here.sudokuPuzzle " + sudokuPuzzle);
     }
 
-    private List<String> statTimesByNumber(Map<Position, List<String>> remaining, List<Position> positionList) {
-        // key 为数字，value为出现的次数
+    private List<String> findAppearOnce(Map<Position, List<String>> remaining, List<Position> positionList) {
+        // key is the digital，value is the time
         Map<String, Integer> countForNumber = new HashMap<>(9);
         for (Position onePosition : positionList) {
             if (remaining.containsKey(onePosition)) {
@@ -175,11 +171,10 @@ public class HiddenSinglesStrategy implements FillStrategy {
             }
         }
 
-        // 检查是否存在 某个数只有一个
+        // filter the time is one
         List<String> collect = countForNumber.entrySet().stream().filter(one -> one.getValue() == 1)
             .map(one -> one.getKey()).collect(Collectors.toList());
 
-        //默认数字序
         Collections.sort(collect);
         return collect;
 
@@ -190,21 +185,21 @@ public class HiddenSinglesStrategy implements FillStrategy {
         List<Position> positions = PuzzleTools.getPositionByRow(position.getRow());
         Set<Position> allRelated = new HashSet<>(positions);
 
-        // 找出本行所有空的单元格
+        // find the empty position
         List<Position> allEmpty = positions.stream().filter(
             one -> !sudokuPuzzle.isSlotValid(one.getRow(), one.getCol()))
             .filter(one -> !one.equals(position)).collect(Collectors.toList());
 
         for (Position onePos : allEmpty) {
 
-            //检查列是否包含数字
+            // check the column
             Optional<Position> columnResult = sudokuPuzzle.numInColumnPosition(onePos.getCol(), value);
             if (columnResult.isPresent()) {
                 allRelated.add(columnResult.get());
                 continue;
             }
 
-            //检查宫是否包含
+            //check the box
             Optional<Position> boxResult = sudokuPuzzle.numInBoxPosition(onePos.getRow(), onePos.getCol(), value);
             if (boxResult.isPresent()) {
                 allRelated.add(boxResult.get());
@@ -217,7 +212,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private List<Position> findTheRelatedByColumn(Position position, String value, SudokuPuzzle sudokuPuzzle) {
 
-        // 找出本列所有空的单元格
+        // find the empty position
         List<Position> positions = PuzzleTools.getPositionByColumn(position.getCol());
         Set<Position> allRelated = new HashSet<>(positions);
         List<Position> allEmpty = positions.stream().filter(
@@ -225,14 +220,14 @@ public class HiddenSinglesStrategy implements FillStrategy {
             .filter(one -> !one.equals(position)).collect(Collectors.toList());
 
         for (Position onePos : allEmpty) {
-            //检查行是否包含数字
+            // check the row
             Optional<Position> result = sudokuPuzzle.numInRowPosition(onePos.getRow(), value);
             if (result.isPresent()) {
                 allRelated.add(result.get());
                 continue;
             }
 
-            //检查宫是否包含
+            // check the box
             Optional<Position> boxResult = sudokuPuzzle.numInBoxPosition(onePos.getRow(), onePos.getCol(), value);
             if (boxResult.isPresent()) {
                 allRelated.add(boxResult.get());
@@ -244,7 +239,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
     }
 
     private List<Position> findTheRelatedByBox(Position position, String value, SudokuPuzzle sudokuPuzzle) {
-        // 找出本宫所有空的单元格
+        // find the empty position
         List<Position> positions = PuzzleTools.getPositionByBox(position.getRow(), position.getCol());
         Set<Position> allRelated = new HashSet<>(positions);
         List<Position> allEmpty = positions.stream().filter(
@@ -252,14 +247,14 @@ public class HiddenSinglesStrategy implements FillStrategy {
             .filter(one -> !one.equals(position)).collect(Collectors.toList());
 
         for (Position onePos : allEmpty) {
-            //检查行是否包含数字
+            // check the row
             Optional<Position> result = sudokuPuzzle.numInRowPosition(onePos.getRow(), value);
             if (result.isPresent()) {
                 allRelated.add(result.get());
                 continue;
             }
 
-            //检查列是否包含数字
+            // check the column
             Optional<Position> columnResult = sudokuPuzzle.numInColumnPosition(onePos.getCol(), value);
             if (columnResult.isPresent()) {
                 allRelated.add(columnResult.get());
@@ -275,8 +270,4 @@ public class HiddenSinglesStrategy implements FillStrategy {
         return Strategy.HIDDEN_SINGLES;
     }
 
-    @Override
-    public int priority() {
-        return 3;
-    }
 }

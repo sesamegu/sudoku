@@ -8,12 +8,12 @@ import com.sesame.game.Const;
 import com.sesame.game.SudokuPanel;
 
 /**
- * Introduction:
+ * Introduction: mouse adapter
  *
  * @author sesame 2022/10/26
  */
 public class SudokuPanelMouseAdapter extends MouseInputAdapter {
-    private SudokuPanel panel;
+    private final SudokuPanel panel;
 
     public SudokuPanelMouseAdapter(SudokuPanel panel) {
         this.panel = panel;

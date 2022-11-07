@@ -7,18 +7,18 @@ import java.util.Map;
 
 import com.sesame.game.SudokuFrame;
 import com.sesame.game.SudokuPanel;
-import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.CandidateModel;
+import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 
 /**
- * Introduction:
+ * Introduction: do the hint
  *
  * @author sesame 2022/10/26
  */
 public class ApplyListener implements ActionListener {
     private final SudokuFrame sudokuFrame;
-    private SudokuPanel panel;
+    private final SudokuPanel panel;
 
     public ApplyListener(SudokuFrame sudokuFrame, SudokuPanel panel) {
         this.sudokuFrame = sudokuFrame;
@@ -27,7 +27,7 @@ public class ApplyListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (panel.hintModel.isCandidate()) {
+        if (panel.hintModel.isCandidateModel()) {
             CandidateModel candidateModel = panel.hintModel.getCandidateModel();
             Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
             deleteMap.entrySet().forEach(
@@ -36,7 +36,7 @@ public class ApplyListener implements ActionListener {
         } else {
             SolutionModel solutionModel = panel.hintModel.getSolutionModel();
             panel.puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
-                solutionModel.getValue(),
+                solutionModel.getSolutionDigital(),
                 true);
             panel.currentlySelectedRow = solutionModel.getPosition().getRow();
             panel.currentlySelectedCol = solutionModel.getPosition().getCol();

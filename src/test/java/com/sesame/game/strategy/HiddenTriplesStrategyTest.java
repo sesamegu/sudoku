@@ -35,10 +35,10 @@ public class HiddenTriplesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new HiddenTriplesStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new HiddenTriplesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -144,15 +144,13 @@ public class HiddenTriplesStrategyTest {
         digital.add("8");
         puzzle.setCandidate(0, 7, digital);
 
-
         digital = new ArrayList<>();
         digital.add("4");
         digital.add("9");
         puzzle.setCandidate(0, 8, digital);
 
-        Optional<HintModel> result = new HiddenTriplesStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new HiddenTriplesStrategy().execute(puzzle);
         Assert.assertFalse(result.isPresent());
-
 
     }
 

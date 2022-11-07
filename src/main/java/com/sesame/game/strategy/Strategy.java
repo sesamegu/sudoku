@@ -1,7 +1,7 @@
 package com.sesame.game.strategy;
 
 /**
- * Introduction: 所有的策略
+ * Introduction: all strategies
  *
  * @author sesame 2022/10/14
  */
@@ -21,7 +21,7 @@ public enum Strategy {
     HIDDEN_THREE("hidden_three"),
     ;
 
-    private String name;
+    private final String name;
 
     Strategy(String name) {
         this.name = name;

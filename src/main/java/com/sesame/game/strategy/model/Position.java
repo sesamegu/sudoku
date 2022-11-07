@@ -3,7 +3,7 @@ package com.sesame.game.strategy.model;
 import java.util.Objects;
 
 /**
- * Introduction:
+ * Introduction: the cell's position
  *
  * @author sesame 2022/10/13
  */
@@ -50,9 +50,9 @@ public class Position implements Comparable<Position> {
         } else {
             if (col > o.col) {
                 return 1;
-            }else if (col<o.col){
+            } else if (col < o.col) {
                 return -1;
-            }else {
+            } else {
                 return 0;
             }
         }

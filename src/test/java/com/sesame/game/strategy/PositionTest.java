@@ -22,14 +22,11 @@ public class PositionTest {
         Collections.sort(positions);
         Assert.assertEquals(new Position(0, 0), positions.get(0));
 
-
         positions = new ArrayList<>();
         positions.add(new Position(1, 1));
         positions.add(new Position(1, 7));
         Collections.sort(positions);
         Assert.assertEquals(new Position(1, 1), positions.get(0));
-
-
 
     }
 }

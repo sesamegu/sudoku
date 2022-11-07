@@ -57,8 +57,8 @@ public class GameGenerator {
         }
         SudokuPuzzle copy = resultPuzzle.get();
 
-        //按宫随机确定每个宫的可见数量
-        int numberInCell[] = new int[9];
+        //random the number in the each box
+        int[] numberInCell = new int[9];
         for (int i = 0; i < numberInCell.length; i++) {
             numberInCell[i] = 2;
         }
@@ -73,7 +73,7 @@ public class GameGenerator {
             }
         }
 
-        //按宫填上数字
+        //make the digital in the each box
         for (int rowPoint = 0; rowPoint < Const.ROWS; rowPoint = rowPoint + Const.BOX_WIDTH) {
             for (int columnPoint = 0; columnPoint < Const.COLUMNS; columnPoint = columnPoint + Const.BOX_WIDTH) {
                 int index = rowPoint + columnPoint / Const.BOX_WIDTH;
@@ -98,14 +98,13 @@ public class GameGenerator {
     public static boolean resolve(SudokuPuzzle puzzle, List<Integer> interval) {
         SudokuPuzzle temp = new SudokuPuzzle(puzzle);
 
-        //用策略尝试解，如果找到则结束，并保存策略
+        // try the strategy util the end
         List<HintModel> allHint = new ArrayList<>(81);
-        // 执行策略
         Optional<HintModel> result = StrategyExecute.tryAllStrategy(puzzle);
         while (result.isPresent()) {
             HintModel hm = result.get();
             allHint.add(hm);
-            if (hm.isCandidate()) {
+            if (hm.isCandidateModel()) {
                 CandidateModel candidateModel = hm.getCandidateModel();
                 Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
                 deleteMap.entrySet().forEach(
@@ -114,10 +113,11 @@ public class GameGenerator {
             } else {
                 SolutionModel solutionModel = hm.getSolutionModel();
                 puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
-                    solutionModel.getValue(), true);
+                    solutionModel.getSolutionDigital(), true);
             }
             result = StrategyExecute.tryAllStrategy(puzzle);
 
+            // this shouldn't happen only if there is a bug :-(
             if (allHint.size() > 81) {
                 System.err.println("some thing goes wrong");
 
@@ -181,8 +181,8 @@ public class GameGenerator {
 
 class TaskThread implements Runnable {
 
-    private CountDownLatch count;
-    private int number;
+    private final CountDownLatch count;
+    private final int number;
 
     public TaskThread(CountDownLatch count, int number) {
         this.count = count;

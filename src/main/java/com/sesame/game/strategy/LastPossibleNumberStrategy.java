@@ -16,13 +16,14 @@ import com.sesame.game.strategy.model.SolutionModel;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: 最后一个可能数，基于候选数
+ * Introduction: Last Possible Number
+ * Check what numbers do the block, vertical column and horizontal row have for the cell, then find out the missing one.
  *
  * @author sesame 2022/10/14
  */
 public class LastPossibleNumberStrategy implements FillStrategy {
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
         for (int row = 0; row < Const.ROWS; row++) {
             for (int column = 0; column < Const.COLUMNS; column++) {
@@ -31,7 +32,7 @@ public class LastPossibleNumberStrategy implements FillStrategy {
                 }
 
                 Set<Position> related = new HashSet<>(27);
-                //获取这行/列/宫的所有数字
+                //get the row、column and box digital
                 related.addAll(PuzzleTools.getPositionByRow(row));
                 related.addAll(PuzzleTools.getPositionByColumn(column));
                 related.addAll(PuzzleTools.getPositionByBox(row, column));
@@ -40,12 +41,11 @@ public class LastPossibleNumberStrategy implements FillStrategy {
                     continue;
                 }
 
-                //检查结果是否满足
                 List<String> digitalRemain = remaining.get(new Position(row, column));
                 if (digitalRemain.size() == 1) {
                     related.remove(new Position(row, column));
 
-                    //位置、值、相关点
+                    //build the result
                     SolutionModel solutionModel = new SolutionModel(new Position(row, column), digitalRemain.get(0),
                         new ArrayList<>(related));
 
@@ -63,8 +63,4 @@ public class LastPossibleNumberStrategy implements FillStrategy {
         return Strategy.LAST_POSSIBLE_NUMBER;
     }
 
-    @Override
-    public int priority() {
-        return 2;
-    }
 }

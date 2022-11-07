@@ -6,8 +6,7 @@ import java.util.Random;
 import com.sesame.game.Const;
 import com.sesame.game.GameLevel;
 import com.sesame.game.SudokuPuzzle;
-import com.sesame.game.library.CaseLibrary;
-import com.sesame.game.tool.BruteForceSolver;
+import com.sesame.game.library.PuzzleLibrary;
 import org.springframework.util.Assert;
 
 public class SudokuGenerator {
@@ -38,7 +37,7 @@ public class SudokuGenerator {
     }
 
     public static SudokuPuzzle useSpecified(int caseType) {
-        Optional<SudokuPuzzle> byCaseType = new CaseLibrary().getByCaseType(caseType);
+        Optional<SudokuPuzzle> byCaseType = PuzzleLibrary.getByCaseType(caseType);
         if (!byCaseType.isPresent()) {
             throw new RuntimeException("can't find the case " + caseType);
         }
@@ -47,7 +46,7 @@ public class SudokuGenerator {
     }
 
     public static SudokuPuzzle useLevelGame(GameLevel gameLevel, int casNumber) {
-        SudokuPuzzle aCase = new CaseLibrary().getCase(gameLevel, casNumber);
+        SudokuPuzzle aCase = PuzzleLibrary.getCase(gameLevel, casNumber);
         Assert.isTrue(aCase != null, "should not be null");
         return aCase;
     }

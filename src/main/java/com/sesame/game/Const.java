@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Introduction: 全局常量
+ * Introduction: all the constants
  *
  * @author sesame 2022/10/12
  */
@@ -18,11 +18,11 @@ public interface Const {
     Set<String> SET_VALUES = new HashSet<>(Arrays.asList(VALID_VALUES));
 
     /**
-     * 正常字体大小
+     * normal font size
      */
     int NORMAL_FONT_SIZE = 26;
     /**
-     * 提示字体大小
+     * hint font size
      */
     int HINT_FONT_SIZE = 13;
 }

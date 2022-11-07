@@ -13,14 +13,17 @@ import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:三三三
+ * Introduction:Hidden Three
+ * In a block, vertical column or horizontal row， there are three cells which have the same three candidates. Then we
+ * can delete the three candidates in the area.
  *
  * @author sesame 2022/10/24
  */
 public class HiddenThreeStrategy extends AbstractUnitStrategy {
     @Override
-    protected Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
+    protected Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining, List<Position> positionList) {
 
+        // find the positions which have three candidates
         List<Position> filterList = positionList.stream().filter(
             one -> !CollectionUtils.isEmpty(remaining.get(one)) && remaining.get(one).size() == 3).collect(
             Collectors.toList());
@@ -36,14 +39,14 @@ public class HiddenThreeStrategy extends AbstractUnitStrategy {
                     Position first = filterList.get(i);
                     Position second = filterList.get(j);
                     Position third = filterList.get(k);
-                    //三个单元格的候选数相同
+                    //three cells have the same candidates
                     List<String> firstRemain = remaining.get(first);
                     if (firstRemain.equals(remaining.get(second)) && firstRemain.equals(
                         remaining.get(third))) {
                         Map<Position, List<String>> deleteMap = new HashMap<>();
-                        //找到关联的位置
+                        //find the related position
                         for (Position onePosition : positionList) {
-                            //过滤自身
+                            //filter themselves
                             if (first.equals(onePosition) || second.equals(onePosition) || third.equals(onePosition)) {
                                 continue;
                             }
@@ -83,8 +86,4 @@ public class HiddenThreeStrategy extends AbstractUnitStrategy {
         return Strategy.HIDDEN_THREE;
     }
 
-    @Override
-    public int priority() {
-        return 0;
-    }
 }

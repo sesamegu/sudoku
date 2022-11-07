@@ -19,16 +19,17 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: 剑鱼
+ * Introduction: Sword Fish
+ * "Swordfish" is similar to X-wing but uses three sets of cells instead of two.
  *
  * @author sesame 2022/10/23
  */
 public class SwordFishStrategy implements FillStrategy {
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
-        //基于行的处理
-        //找出每行的数字，满足这个数字在2个格子作为候选数
+        //by row
+        //find the digital which is two cell's candidate
         List<Map<String, List<Position>>> allList = new ArrayList<>();
         for (int row = 0; row < Const.ROWS; row++) {
             List<Position> positionByRow = PuzzleTools.getPositionByRow(row);
@@ -45,8 +46,8 @@ public class SwordFishStrategy implements FillStrategy {
             }
         }
 
-        //基于列的处理
-        //找出每列的数字，满足这个数字在2个格子作为候选数
+        //by column
+        //find the digital which is two cell's candidate
         allList = new ArrayList<>();
         for (int column = 0; column < Const.COLUMNS; column++) {
             List<Position> positionList = PuzzleTools.getPositionByColumn(column);
@@ -66,7 +67,7 @@ public class SwordFishStrategy implements FillStrategy {
     private Optional<HintModel> buildHintModel(Map<Position, List<String>> remaining,
         List<Map<String, List<Position>>> allList, Direction direction) {
         for (int i = 0; i < Const.VALID_VALUES.length; i++) {
-            // 找出每个数字：满足在三行或者三列及以上，这个数字在2个格子作为候选数
+            // find the digital appear in three rows or three columns
             String digital = Const.VALID_VALUES[i];
             List<Map<String, List<Position>>> selectedList = allList.stream().filter(
                 one -> one.containsKey(digital))
@@ -87,7 +88,6 @@ public class SwordFishStrategy implements FillStrategy {
                         Assert.isTrue(secondList.size() == 2, "should be two");
                         Assert.isTrue(thirdList.size() == 2, "should be two");
                         Map<Integer, Integer> countMap = checkSwordFish(firstList, secondList, thirdList, direction);
-                        //检查这三列或三行中，是否存在数字为候选数
                         if (countMap.size() == 3) {
                             Map<Position, List<String>> deleteMap = new HashMap<>();
                             for (Integer index : countMap.keySet()) {
@@ -100,7 +100,6 @@ public class SwordFishStrategy implements FillStrategy {
                                 }
 
                                 for (Position onePosition : positionList) {
-                                    //排除本身
                                     if (firstList.contains(onePosition) || secondList.contains(
                                         onePosition) || thirdList.contains(onePosition)) {
                                         continue;
@@ -116,7 +115,7 @@ public class SwordFishStrategy implements FillStrategy {
                                 }
                             }
 
-                            //存在可删除的候选数，构建结果
+                            // check if the candidate exists in the other cells
                             if (!CollectionUtils.isEmpty(deleteMap)) {
                                 Map<Position, List<String>> causeMap = new HashMap<>();
 
@@ -146,13 +145,13 @@ public class SwordFishStrategy implements FillStrategy {
                                 CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                                 HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
 
-                                if (direction==Direction.ROW){
+                                if (direction == Direction.ROW) {
                                     List<UnitModel> unitModelList = new ArrayList<>();
                                     unitModelList.add(UnitModel.buildFromRow(firstList.get(0).getRow()));
                                     unitModelList.add(UnitModel.buildFromRow(secondList.get(0).getRow()));
                                     unitModelList.add(UnitModel.buildFromRow(thirdList.get(0).getRow()));
                                     result.of(unitModelList);
-                                }else {
+                                } else {
                                     List<UnitModel> unitModelList = new ArrayList<>();
                                     unitModelList.add(UnitModel.buildFromColumn(firstList.get(0).getCol()));
                                     unitModelList.add(UnitModel.buildFromColumn(secondList.get(0).getCol()));
@@ -172,11 +171,10 @@ public class SwordFishStrategy implements FillStrategy {
     }
 
     /**
-     * 构建候选个数数量为2的Map，key为数字，value为对应的位置
+     * key is the digital, value is the position
      */
     private Map<String, List<Position>> buildDigitalCountMap(Map<Position, List<String>> remaining,
         List<Position> positionList) {
-        //key 为数字，value为位置
         Map<String, List<Position>> countPerDigital = new HashMap<>();
         for (Position onePosition : positionList) {
             if (CollectionUtils.isEmpty(remaining.get(onePosition))) {
@@ -236,8 +234,4 @@ public class SwordFishStrategy implements FillStrategy {
         return Strategy.SWORDFISH;
     }
 
-    @Override
-    public int priority() {
-        return 0;
-    }
 }

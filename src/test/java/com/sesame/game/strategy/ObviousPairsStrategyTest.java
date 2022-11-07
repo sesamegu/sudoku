@@ -35,10 +35,10 @@ public class ObviousPairsStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new ObviousPairsStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new ObviousPairsStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
         Assert.assertEquals(2, causeMap.size());
@@ -59,13 +59,11 @@ public class ObviousPairsStrategyTest {
         Assert.assertEquals("1", delDigital.get(0));
         Assert.assertEquals("2", delDigital.get(1));
 
-
         List<UnitModel> unitModelList = hintModel.getUnitModelList();
         Assert.assertEquals(1, unitModelList.size());
         UnitModel actual = unitModelList.get(0);
         Assert.assertEquals(Unit.ROW, actual.getUnit());
         Assert.assertEquals(0, actual.getRow());
-
 
     }
 
@@ -85,10 +83,10 @@ public class ObviousPairsStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new ObviousPairsStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new ObviousPairsStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -132,10 +130,10 @@ public class ObviousPairsStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-        Optional<HintModel> result = new ObviousPairsStrategy().tryStrategy(puzzle);
+        Optional<HintModel> result = new ObviousPairsStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
-        Assert.assertTrue(hintModel.isCandidate());
+        Assert.assertTrue(hintModel.isCandidateModel());
         CandidateModel candidateModel = hintModel.getCandidateModel();
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
@@ -156,7 +154,6 @@ public class ObviousPairsStrategyTest {
         Assert.assertEquals(2, delDigital.size());
         Assert.assertEquals("8", delDigital.get(0));
         Assert.assertEquals("9", delDigital.get(1));
-
 
         List<UnitModel> unitModelList = hintModel.getUnitModelList();
         Assert.assertEquals(1, unitModelList.size());

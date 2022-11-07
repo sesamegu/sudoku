@@ -21,16 +21,18 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction: X翼
+ * Introduction: X Wing
+ * Find the four cells which is a X patten. The four cells have a candidate which doesn't belong to the
+ * other cell in the row or column. Then we can delete the  candidate in the column or row.
  *
  * @author sesame 2022/10/22
  */
 public class XWingStrategy implements FillStrategy {
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
 
-        // 基于每行，找出空余数量为2的数字及对应位置
+        // by row, find the digital as the candidate appear twice
         List<Map<String, List<Position>>> allList = new ArrayList<>();
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> rowList = PuzzleTools.getPositionByRow(i);
@@ -47,7 +49,7 @@ public class XWingStrategy implements FillStrategy {
             }
         }
 
-        // 基于每列，找出空余数量为2的数字及对应位置
+        // by column, find the digital as the candidate appear twice
         allList = new ArrayList<>();
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> columnList = PuzzleTools.getPositionByColumn(i);
@@ -69,7 +71,7 @@ public class XWingStrategy implements FillStrategy {
 
     private Optional<HintModel> buildHintModel(Map<Position, List<String>> remaining,
         List<Map<String, List<Position>>> allList, Direction direction) {
-        //对行或列进行双循环，找出两行或者两列都包含的同一数字且位置相同
+        // double iterate, find the digital which are the same position in two rows  or two columns
         for (int i = 0; i < allList.size() - 1; i++) {
             Map<String, List<Position>> outter = allList.get(i);
             for (int j = i + 1; j < allList.size(); j++) {
@@ -100,17 +102,16 @@ public class XWingStrategy implements FillStrategy {
 
                         List<Position> relatedList;
                         if (direction == Direction.ROW) {
-                            //对应的两列上的找出 候选数有这个数的位置
+                            //find the candidate appear in the two columns
                             relatedList = PuzzleTools.getPositionByColumn(innerList.get(0).getCol());
                             relatedList.addAll(PuzzleTools.getPositionByColumn(innerList.get(1).getCol()));
                         } else {
-                            //对应的两行上的找出 候选数有这个数的位置
+                            //find the candidate appear in the two rows
                             relatedList = PuzzleTools.getPositionByRow(innerList.get(0).getRow());
                             relatedList.addAll(PuzzleTools.getPositionByRow(innerList.get(1).getRow()));
                         }
 
                         for (Position position : relatedList) {
-                            //排除自身
                             if (innerList.contains(position) || outList.contains(position)) {
                                 continue;
                             }
@@ -127,7 +128,7 @@ public class XWingStrategy implements FillStrategy {
                             }
                         }
 
-                        //构造结果
+                        //build the result
                         if (!CollectionUtils.isEmpty(deleteMap)) {
                             Map<Position, List<String>> causeMap = new HashMap<>();
                             List<String> digital = new ArrayList<>();
@@ -172,7 +173,7 @@ public class XWingStrategy implements FillStrategy {
     }
 
     /**
-     * 找出每个数字对应的所有位置，并过滤出 候选个数为2
+     * find the digital as the candidate appear twice
      */
     private Map<String, List<Position>> countDigital(List<Position> positionList,
         Map<Position, List<String>> remaining) {
@@ -203,8 +204,4 @@ public class XWingStrategy implements FillStrategy {
         return Strategy.X_WING;
     }
 
-    @Override
-    public int priority() {
-        return 0;
-    }
 }

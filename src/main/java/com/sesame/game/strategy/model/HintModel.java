@@ -6,35 +6,17 @@ import com.sesame.game.strategy.Strategy;
 import lombok.Getter;
 
 /**
- * Introduction: 提示的数据模型
+ * Introduction: hint model
  *
  * @author sesame 2022/10/12
  */
 @Getter
 public class HintModel {
 
-    /**
-     * 策略名
-     */
     private Strategy strategy;
-    /**
-     * 是否候选数模式
-     */
-    private boolean isCandidate;
-
-    /**
-     * 解的模型
-     */
+    private boolean isCandidateModel;
     private SolutionModel solutionModel;
-
-    /**
-     * 候选数模型
-     */
     private CandidateModel candidateModel;
-
-    /**
-     * 关联的单元
-     */
     private List<UnitModel> unitModelList;
 
     public static HintModel build() {
@@ -47,13 +29,13 @@ public class HintModel {
     }
 
     public HintModel of(SolutionModel solutionModel) {
-        this.isCandidate = false;
+        this.isCandidateModel = false;
         this.solutionModel = solutionModel;
         return this;
     }
 
     public HintModel of(CandidateModel candidateModel) {
-        this.isCandidate = true;
+        this.isCandidateModel = true;
         this.candidateModel = candidateModel;
         return this;
     }

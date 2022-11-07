@@ -15,14 +15,16 @@ import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 
 /**
- * Introduction:最后一个空白格
+ * Introduction:Last Free Cell
+ * There is only one free cell left in the block, vertical column or horizontal row, then we have to define which number
+ * from 1 to 9 is missing
  *
  * @author sesame 2022/10/12
  */
 public class LastFreeCellStrategy implements FillStrategy {
 
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Optional<HintModel> rowResult = tryRow(sudokuPuzzle);
         if (rowResult.isPresent()) {
             return rowResult;
@@ -57,7 +59,7 @@ public class LastFreeCellStrategy implements FillStrategy {
                 Assert.isTrue(copy.size() == 1, "should be one");
                 Assert.isTrue(related.size() == 8, "should be eight");
 
-                //位置、值、相关点
+                //build the result
                 SolutionModel solutionModel = new SolutionModel(new Position(i, emptyColumnPosition),
                     copy.iterator().next(), related);
                 HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
@@ -92,7 +94,7 @@ public class LastFreeCellStrategy implements FillStrategy {
                 Assert.isTrue(copy.size() == 1, "should be one");
                 Assert.isTrue(related.size() == 8, "should be eight");
 
-                //位置、值、相关点
+                //build the result
                 SolutionModel solutionModel = new SolutionModel(new Position(emptyRowPosition, i),
                     copy.iterator().next(), related);
                 HintModel result = HintModel.build().of(solutionModel).of(getStrategy());
@@ -109,7 +111,7 @@ public class LastFreeCellStrategy implements FillStrategy {
     }
 
     private Optional<HintModel> tryBox(SudokuPuzzle sudokuPuzzle) {
-        //获取每个宫的起点
+        //iterate the box
         for (int rowStartPoint = 0; rowStartPoint < Const.ROWS; rowStartPoint = rowStartPoint + Const.BOX_WIDTH) {
             for (int columnStartPoint = 0; columnStartPoint < Const.COLUMNS;
                 columnStartPoint = columnStartPoint + Const.BOX_WIDTH) {
@@ -147,7 +149,7 @@ public class LastFreeCellStrategy implements FillStrategy {
             Assert.isTrue(copy.size() == 1, "should be one");
             Assert.isTrue(related.size() == 8, "should be eight");
 
-            //位置、值、相关点
+            //build the result
             SolutionModel solutionModel = new SolutionModel(new Position(rowPosition, columnPosition),
                 copy.iterator().next(), related);
 
@@ -166,11 +168,6 @@ public class LastFreeCellStrategy implements FillStrategy {
     @Override
     public Strategy getStrategy() {
         return Strategy.LAST_FREE_CELL;
-    }
-
-    @Override
-    public int priority() {
-        return 1;
     }
 
 }

@@ -7,19 +7,19 @@ import java.util.Optional;
 import com.sesame.game.SudokuFrame;
 import com.sesame.game.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
-import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.HintModel;
+import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 
 /**
- * Introduction:
+ * Introduction: hint listener
  *
  * @author sesame 2022/10/26
  */
 public class HintActionListener implements ActionListener {
     private final SudokuFrame sudokuFrame;
-    private SudokuPanel panel;
+    private final SudokuPanel panel;
 
     public HintActionListener(SudokuFrame sudokuFrame, SudokuPanel panel) {
         this.sudokuFrame = sudokuFrame;
@@ -28,13 +28,13 @@ public class HintActionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //如果用户做过标志，需要重置候选数
+        // if user marked the candidate, reset the candidate first.
         if (panel.isUserNoted) {
             panel.puzzle.resetCandidate();
             panel.isUserNoted = false;
         }
 
-        // 执行策略
+        // execute the strategy
         Optional<HintModel> result = StrategyExecute.tryAllStrategy(panel.puzzle);
         if (result.isPresent()) {
             panel.isHintMode = true;
@@ -42,7 +42,7 @@ public class HintActionListener implements ActionListener {
             sudokuFrame.hintModel(panel.hintModel.getStrategy());
 
             // 命中解决方案后，直接删除候选数
-            if (!panel.hintModel.isCandidate()) {
+            if (!panel.hintModel.isCandidateModel()) {
                 SolutionModel solutionModel = panel.hintModel.getSolutionModel();
                 Position position = solutionModel.getPosition();
                 panel.puzzle.deleteCandidate(position.getRow(), position.getCol(),

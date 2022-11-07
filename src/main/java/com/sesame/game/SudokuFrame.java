@@ -163,7 +163,7 @@ public class SudokuFrame extends JFrame {
             b.addActionListener(new NumActionListener(sPanel));
             buttonSelectionPanel.add(b);
         }
-        //删除按钮
+        //delete button
         JButton delete = new JButton(I18nProcessor.getValue("delete"));
         delete.setPreferredSize(new Dimension(90, 40));
         delete.addActionListener(new DeleteActionListener(sPanel));
@@ -174,13 +174,13 @@ public class SudokuFrame extends JFrame {
         candidateButton.addChangeListener(new CandidateActionListener(sPanel, candidateButton));
         buttonSelectionPanel.add(candidateButton);
 
-        //提示按钮
+        //hint button
         JButton hint = new JButton(I18nProcessor.getValue("hint"));
         hint.setPreferredSize(new Dimension(90, 40));
         hint.addActionListener(new HintActionListener(this, sPanel));
         buttonSelectionPanel.add(hint);
 
-        //无可用提示文案
+        //hint text
         unAvailableLabel = new JLabel("");
         unAvailableLabel.setPreferredSize(new Dimension(90, 40));
         buttonSelectionPanel.add(unAvailableLabel);
@@ -207,7 +207,7 @@ public class SudokuFrame extends JFrame {
         jLabel2.setForeground(Color.red);
         buttonSelectionPanel.add(jLabel2);
 
-        //提示按钮
+        //hint desc
         JTextArea textArea = new JTextArea("");
         textArea.setPreferredSize(new Dimension(110, 220));
         textArea.setLineWrap(true);
@@ -216,7 +216,7 @@ public class SudokuFrame extends JFrame {
         textArea.setText(I18nProcessor.getValue(strategy.getName() + "_desc"));
         buttonSelectionPanel.add(textArea);
 
-        //应用按钮
+        //apply button
         JButton apply = new JButton(I18nProcessor.getValue("apply"));
         apply.setPreferredSize(new Dimension(110, 40));
         apply.addActionListener(new ApplyListener(this, sPanel));

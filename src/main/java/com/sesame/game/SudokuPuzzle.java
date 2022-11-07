@@ -14,7 +14,7 @@ import lombok.Getter;
 import org.springframework.util.CollectionUtils;
 
 /**
- * 底层数据结构
+ * the core data struct
  *
  * @author mike
  */
@@ -62,23 +62,23 @@ public class SudokuPuzzle {
             this.board[row][col] = value;
             this.mutable[row][col] = isMutable;
 
-            //删除本位置的所有候选数
+            //delete all candidates
             candidate[row][col] = null;
-            //删除对应的行的候选数中包含本数值的数
+            //delete the digital as candidate in the row
             for (int i = 0; i < Const.ROWS; i++) {
                 if (CollectionUtils.isEmpty(candidate[i][col])) {
                     continue;
                 }
                 candidate[i][col].remove(value);
             }
-            //删除对应的列的候选数中包含本数值的数
+            //delete the digital as candidate in the column
             for (int i = 0; i < Const.COLUMNS; i++) {
                 if (CollectionUtils.isEmpty(candidate[row][i])) {
                     continue;
                 }
                 candidate[row][i].remove(value);
             }
-            //删除对应的宫的候选数中包含本数值的数
+            //delete the digital as candidate in the box
             int rowStart = row - row % Const.BOX_WIDTH;
             int columnStart = col - col % Const.BOX_WIDTH;
             for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
@@ -207,7 +207,6 @@ public class SudokuPuzzle {
 
     public void makeSlotEmpty(int row, int col) {
         this.board[row][col] = "";
-        //初始化候选值，丢弃所有手动对候选值的修改
         resetCandidate();
     }
 
@@ -303,19 +302,19 @@ public class SudokuPuzzle {
                 }
 
                 Set<String> contain = new HashSet<>(9);
-                //获取这行的所有数字
+                //the row
                 for (int k = 0; k < Const.ROWS; k++) {
                     if (isSlotValid(row, k)) {
                         contain.add(getValue(row, k));
                     }
                 }
-                //获取这列的所有数字
+                //the column
                 for (int i = 0; i < Const.COLUMNS; i++) {
                     if (isSlotValid(i, column)) {
                         contain.add(getValue(i, column));
                     }
                 }
-                //获取这宫的所有数字
+                //the box
                 int rowStart = row - row % Const.BOX_WIDTH;
                 int columnStart = column - column % Const.BOX_WIDTH;
                 for (int i = rowStart; i < rowStart + Const.BOX_WIDTH; i++) {
@@ -338,7 +337,7 @@ public class SudokuPuzzle {
 
     public Map<Position, List<String>> findRemaining() {
         Map<Position, List<String>> possibleValues = new HashMap<>(81);
-        // 找出每个空白格的候选数
+        // find all the candidates
         for (int row = 0; row < Const.ROWS; row++) {
             for (int column = 0; column < Const.COLUMNS; column++) {
                 if (isSlotValid(row, column)) {

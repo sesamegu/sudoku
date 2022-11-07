@@ -3,12 +3,10 @@ package com.sesame.game.library;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sesame.game.Const;
-import com.sesame.game.SudokuPuzzle;
 import org.springframework.util.Assert;
 
 /**
- * Introduction:
+ * Introduction: easy puzzles
  *
  * @author sesame 2022/11/2
  */

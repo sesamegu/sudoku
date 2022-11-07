@@ -16,7 +16,9 @@ import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
 /**
- * Introduction:隐性数对
+ * Introduction: Hidden Pairs
+ * If you can find two cells within a row, column, or block where two Notes appear nowhere outside these cells, these
+ * two Notes must be placed in the two cells. All other Notes can be eliminated from these two cells.
  *
  * @author sesame 2022/10/19
  */
@@ -28,15 +30,10 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
     }
 
     @Override
-    public int priority() {
-        return 0;
-    }
-
-    @Override
-    protected Optional<HintModel> getHintModel(Map<Position, List<String>> remaining, List<Position> positionList) {
+    protected Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining, List<Position> positionList) {
         Map<String, Integer> countForDigital = PuzzleTools.buildDigitalCountMap(remaining, positionList);
 
-        //过滤出次数为2的数字
+        // find the digital which are appeared twice.
         List<String> collect = countForDigital.entrySet().stream().filter(entry -> entry.getValue() == 2).map(
             Entry::getKey).collect(Collectors.toList());
         if (collect.size() < 2) {
@@ -44,6 +41,7 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
         }
         Collections.sort(collect);
 
+        // iterate the digital's comb
         for (int i = 0; i <= collect.size() - 2; i++) {
             for (int j = i + 1; j <= collect.size() - 1; j++) {
                 List<String> causeDigital = new ArrayList<>();
@@ -63,7 +61,7 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
                         hasOther = true;
                     }
                 }
-
+                // check the there are two positions and one or two position' candidate number is bigger than 2
                 if (causeList.size() == 2 && hasOther) {
                     Map<Position, List<String>> deleteMap = new HashMap<>(2);
                     List<String> deleteOne = new ArrayList<>(remaining.get(causeList.get(0)));

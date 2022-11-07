@@ -10,13 +10,13 @@ import java.awt.event.ActionListener;
 import com.sesame.game.SudokuPanel;
 
 /**
- * Introduction:
+ * Introduction: copy the puzzle data
  *
  * @author sesame 2022/10/26
  */
 
 public class CopyListener implements ActionListener {
-    private SudokuPanel sudokuPanel;
+    private final SudokuPanel sudokuPanel;
 
     public CopyListener(SudokuPanel sudokuPanel) {
         this.sudokuPanel = sudokuPanel;

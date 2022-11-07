@@ -3,7 +3,7 @@ package com.sesame.game.strategy.model;
 import lombok.Getter;
 
 /**
- * Introduction: Unit模型
+ * Introduction: unit model
  *
  * @author sesame 2022/10/27
  */

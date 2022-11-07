@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.util.Assert;
 
 /**
- * Introduction:
+ * Introduction: normal puzzle
  *
  * @author sesame 2022/11/2
  */

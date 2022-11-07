@@ -13,16 +13,16 @@ import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
 
 /**
- * Introduction:以Unit（行、列、公）为单元处理策略的 抽象基类
+ * Introduction: the abstract class when the strategy is based on the basic unit（row、column、box）
  *
  * @author sesame 2022/10/19
  */
 public abstract class AbstractUnitStrategy implements FillStrategy {
 
     @Override
-    public Optional<HintModel> tryStrategy(SudokuPuzzle sudokuPuzzle) {
+    public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
-        // 以行、列、宫为单元找出 显性数对
+
         Optional<HintModel> byRow = findByRow(remaining);
         if (byRow.isPresent()) {
             return byRow;
@@ -45,7 +45,7 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
         for (int row = 0; row < Const.ROWS; row++) {
 
             List<Position> positionList = PuzzleTools.getPositionByRow(row);
-            Optional<HintModel> result = getHintModel(remaining, positionList);
+            Optional<HintModel> result = processBasicUnit(remaining, positionList);
             if (result.isPresent()) {
                 List<UnitModel> unitModelList = new ArrayList<>();
                 unitModelList.add(UnitModel.buildFromRow(row));
@@ -60,7 +60,7 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
     private Optional<HintModel> findByColumn(Map<Position, List<String>> remaining) {
         for (int column = 0; column < Const.COLUMNS; column++) {
             List<Position> positionList = PuzzleTools.getPositionByColumn(column);
-            Optional<HintModel> result = getHintModel(remaining, positionList);
+            Optional<HintModel> result = processBasicUnit(remaining, positionList);
             if (result.isPresent()) {
                 List<UnitModel> unitModelList = new ArrayList<>();
                 unitModelList.add(UnitModel.buildFromColumn(column));
@@ -77,7 +77,7 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
         for (int row = 0; row < Const.ROWS; row = row + Const.BOX_WIDTH) {
             for (int column = 0; column < Const.COLUMNS; column = column + Const.BOX_WIDTH) {
                 List<Position> positionList = PuzzleTools.getPositionByBox(row, column);
-                Optional<HintModel> result = getHintModel(remaining, positionList);
+                Optional<HintModel> result = processBasicUnit(remaining, positionList);
                 if (result.isPresent()) {
                     List<UnitModel> unitModelList = new ArrayList<>();
                     unitModelList.add(UnitModel.buildFromBox(row, column));
@@ -92,13 +92,13 @@ public abstract class AbstractUnitStrategy implements FillStrategy {
     }
 
     /**
-     * 以Unit（行、列、公）为单元处理
+     * the process of the unit
      *
      * @param remaining
      * @param positionList
      * @return
      */
-    protected abstract Optional<HintModel> getHintModel(Map<Position, List<String>> remaining,
+    protected abstract Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining,
         List<Position> positionList);
 
 }

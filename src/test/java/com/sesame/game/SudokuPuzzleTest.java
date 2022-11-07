@@ -102,8 +102,6 @@ public class SudokuPuzzleTest {
         Assert.assertEquals("8", candidate.get(2));
         Assert.assertEquals("9", candidate.get(3));
 
-
-
         puzzle.makeMove(5, 7, "4", true);
 
         candidate = puzzle.getCandidate(5, 2);
@@ -127,10 +125,6 @@ public class SudokuPuzzleTest {
         Assert.assertEquals("7", candidate.get(0));
         Assert.assertEquals("8", candidate.get(1));
         Assert.assertEquals("9", candidate.get(2));
-
-
-
-
 
     }
 
