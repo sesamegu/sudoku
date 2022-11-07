@@ -87,7 +87,7 @@ public class SudokuFrame extends JFrame {
         focus.add(solver);
 
         JMenuItem randomGame = new JMenuItem(I18nProcessor.getValue("random_game"));
-        randomGame.addActionListener(new NewGameListener(GameLevel.NORMAL));
+        randomGame.addActionListener(new NewGameListener());
         focus.add(randomGame);
 
         // develop
@@ -119,7 +119,7 @@ public class SudokuFrame extends JFrame {
 
         this.add(windowPanel);
 
-        newGameRebuild(GameLevel.NORMAL);
+        newGameRebuild();
     }
 
     public static void main(String[] args) {
@@ -132,8 +132,8 @@ public class SudokuFrame extends JFrame {
         });
     }
 
-    public void newGameRebuild(GameLevel puzzleType) {
-        SudokuPuzzle generatedPuzzle = SudokuGenerator.generateRandomSudoku(puzzleType);
+    public void newGameRebuild() {
+        SudokuPuzzle generatedPuzzle = SudokuGenerator.generateRandomSudoku();
         rebuildInterface(generatedPuzzle);
     }
 
@@ -232,15 +232,9 @@ public class SudokuFrame extends JFrame {
 
     private class NewGameListener implements ActionListener {
 
-        private final GameLevel puzzleType;
-
-        public NewGameListener(GameLevel puzzleType) {
-            this.puzzleType = puzzleType;
-        }
-
         @Override
         public void actionPerformed(ActionEvent e) {
-            newGameRebuild(puzzleType);
+            newGameRebuild();
         }
     }
 

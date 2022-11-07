@@ -11,7 +11,7 @@ import org.springframework.util.Assert;
 
 public class SudokuGenerator {
 
-    public static SudokuPuzzle generateRandomSudoku(GameLevel puzzleType) {
+    public static SudokuPuzzle generateRandomSudoku() {
         SudokuPuzzle puzzle = new SudokuPuzzle();
         Optional<SudokuPuzzle> result = BruteForceSolver.buildSudokuPuzzle(puzzle);
         if (!result.isPresent()) {
@@ -19,7 +19,7 @@ public class SudokuGenerator {
         }
         SudokuPuzzle copy = result.get();
 
-        int numberOfValuesToKeep = (int)(puzzleType.getDifficult() * (Const.ROWS * Const.ROWS));
+        int numberOfValuesToKeep = (int)(0.45000f * (Const.ROWS * Const.ROWS));
         Random randomGenerator = new Random();
         for (int i = 0; i < numberOfValuesToKeep; ) {
             int randomRow = randomGenerator.nextInt(Const.ROWS);
