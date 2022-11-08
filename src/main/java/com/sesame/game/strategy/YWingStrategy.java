@@ -22,9 +22,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * Introduction:Y Wing or XY Wing
  * "Y-Wing" technique is similar to "X-Wing", but it based on three corners instead of four.
- *
- * 基于行列的有四种造型：右下、左下、右上、左上。基于宫的，有8个造型右下、左下、右上、左上、
- * 右右下、左左下、右右上、左左上
+ * two pattern: by row, by box
  *
  * @author sesame 2022/10/23
  */
@@ -32,36 +30,13 @@ public class YWingStrategy implements FillStrategy {
     @Override
     public Optional<HintModel> execute(SudokuPuzzle sudokuPuzzle) {
         Map<Position, List<String>> remaining = sudokuPuzzle.findRemaining();
-        // by row, find the position which have two candidates
-        List<List<Position>> allRowList = new ArrayList<>();
-        for (int i = 0; i < Const.ROWS; i++) {
-            List<Position> rowList = PuzzleTools.getPositionByRow(i);
-            List<Position> collect = rowList.stream().filter(onePosition ->
-                !CollectionUtils.isEmpty(remaining.get(onePosition)) && remaining.get(onePosition).size()
-                    == 2).collect(Collectors.toList());
-            if (!CollectionUtils.isEmpty(collect)) {
-                allRowList.add(collect);
-            }
-        }
-
-        // by column, find the position which have two candidates
-        List<List<Position>> allColumnList = new ArrayList<>();
-        for (int i = 0; i < Const.COLUMNS; i++) {
-            List<Position> columnList = PuzzleTools.getPositionByColumn(i);
-            List<Position> collect = columnList.stream().filter(onePosition ->
-                !CollectionUtils.isEmpty(remaining.get(onePosition)) && remaining.get(onePosition).size()
-                    == 2).collect(Collectors.toList());
-            if (!CollectionUtils.isEmpty(collect)) {
-                allColumnList.add(collect);
-            }
-        }
-
-        Optional<HintModel> result = processRowHintModel(remaining, allRowList, allColumnList);
+        // process by row
+        Optional<HintModel> result = processRowHintModel(remaining);
         if (result.isPresent()) {
             return result;
         }
 
-        //iterate the nine boxes
+        //process by box, iterate the nine boxes
         for (int row = 0; row < Const.ROWS; row = row + Const.BOX_WIDTH) {
             for (int column = 0; column < Const.COLUMNS; column = column + Const.BOX_WIDTH) {
 
@@ -94,7 +69,7 @@ public class YWingStrategy implements FillStrategy {
             for (int j = i + 1; j < size; j++) {
                 Position first = filterList.get(i);
                 Position second = filterList.get(j);
-                // not the same row or same column
+                // not the same row and same column
                 if (first.getCol() == second.getCol() || first.getRow() == second.getRow()) {
                     continue;
                 }
@@ -114,7 +89,7 @@ public class YWingStrategy implements FillStrategy {
                 Assert.isTrue(thirdDigital.size() == 2, "should be two");
                 Collections.sort(thirdDigital);
 
-                // 查找第一个数列：因为第1列和第2列位置不定，因此同样存在四种造型情况
+                // find the first column, there are four patterns
                 List<String> tempDigital = new ArrayList<>(thirdDigital);
                 tempDigital.removeAll(remaining.get(first));
                 Assert.isTrue(tempDigital.size() == 1, "should be one");
@@ -130,7 +105,7 @@ public class YWingStrategy implements FillStrategy {
                     return hintModel;
                 }
 
-                // 查找第二数列：因为第1列和第2列位置不定，因此同样存在四种造型情况
+                // find the second column, there are four patterns
                 tempDigital = new ArrayList<>(thirdDigital);
                 tempDigital.removeAll(remaining.get(second));
                 Assert.isTrue(tempDigital.size() == 1, "should be one");
@@ -145,7 +120,7 @@ public class YWingStrategy implements FillStrategy {
                     return hintModel;
                 }
 
-                //  查找第一个行数：因为第1行和第2行位置不定，因此同样存在四种造型情况
+                // find the first row, there are four patterns
                 List<Position> positionByRow = PuzzleTools.getPositionByRow(first.getRow());
                 hintModel = boxBuildHintModel(remaining, row, column, first, second,
                     thirdDigital, positionByRow, firstDeleteDigital, Direction.ROW, -1, second.getRow());
@@ -156,7 +131,7 @@ public class YWingStrategy implements FillStrategy {
                     return hintModel;
                 }
 
-                //  查找第二个行数：因为第1行和第2行位置不定，因此同样存在四种造型情况
+                // find the second row, there are four patterns
                 positionByRow = PuzzleTools.getPositionByRow(second.getRow());
                 hintModel = boxBuildHintModel(remaining, row, column, first, second,
                     thirdDigital, positionByRow, secondDeleteDigital, Direction.ROW, -1, first.getRow());
@@ -201,7 +176,7 @@ public class YWingStrategy implements FillStrategy {
             //build the Y wing positions
             List<Position> possiblePosition = new ArrayList<>();
             if (direction == Direction.COLUMN) {
-                // 第四个位置有多重可能性：除了Y翼的位置，还有两个位置：在这个宫且列和第三个数的列 相同的两个位置
+                // the forth cell potential positions
                 possiblePosition.add(new Position(third.getRow(), forthColumn));
 
                 List<Position> threeColumnInBox = new ArrayList<>(3);
@@ -216,7 +191,7 @@ public class YWingStrategy implements FillStrategy {
                 possiblePosition.addAll(threeColumnInBox);
 
             } else {
-                // 第四个位置有多重可能性：除了Y翼的位置，还有两个位置：在这个宫且列和第三个数的行 相同的两个位置
+                // the forth cell potential positions
                 possiblePosition.add(new Position(forthRow, third.getCol()));
 
                 List<Position> threeColumnInBox = new ArrayList<>(3);
@@ -253,15 +228,38 @@ public class YWingStrategy implements FillStrategy {
         return Optional.empty();
     }
 
-    private Optional<HintModel> processRowHintModel(Map<Position, List<String>> remaining,
-        List<List<Position>> allList, List<List<Position>> allColumnList) {
-        if (allList.size() < 2 || allColumnList.size() < 2) {
+    private Optional<HintModel> processRowHintModel(Map<Position, List<String>> remaining) {
+        // by row, find the positions which have two candidates
+        List<List<Position>> allRowList = new ArrayList<>();
+        for (int i = 0; i < Const.ROWS; i++) {
+            List<Position> rowList = PuzzleTools.getPositionByRow(i);
+            List<Position> collect = rowList.stream().filter(onePosition ->
+                !CollectionUtils.isEmpty(remaining.get(onePosition)) && remaining.get(onePosition).size()
+                    == 2).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(collect)) {
+                allRowList.add(collect);
+            }
+        }
+
+        // by column, find the positions which have two candidates
+        List<List<Position>> allColumnList = new ArrayList<>();
+        for (int i = 0; i < Const.COLUMNS; i++) {
+            List<Position> columnList = PuzzleTools.getPositionByColumn(i);
+            List<Position> collect = columnList.stream().filter(onePosition ->
+                !CollectionUtils.isEmpty(remaining.get(onePosition)) && remaining.get(onePosition).size()
+                    == 2).collect(Collectors.toList());
+            if (!CollectionUtils.isEmpty(collect)) {
+                allColumnList.add(collect);
+            }
+        }
+
+        if (allRowList.size() < 2 || allColumnList.size() < 2) {
             return Optional.empty();
         }
 
-        // 对每行进行双循环遍历
-        for (int i = 0; i < allList.size(); i++) {
-            List<Position> positionList = allList.get(i);
+        // double iterate the rows
+        for (int i = 0; i < allRowList.size(); i++) {
+            List<Position> positionList = allRowList.get(i);
             if (positionList.size() < 2) {
                 continue;
             }
@@ -270,13 +268,13 @@ public class YWingStrategy implements FillStrategy {
 
                     Position first = positionList.get(n);
                     Position second = positionList.get(m);
-                    //找出有共同一个数字的两个位置
+                    // find two position which have one common digital
                     List<String> causeDigital = new ArrayList<>(remaining.get(first));
                     causeDigital.retainAll(remaining.get(second));
                     if (causeDigital.size() != 1) {
                         continue;
                     }
-                    //找出第三格需要匹配的候选数组
+                    //define the candidates which arr the third cell needed
                     List<String> thirdDigital = new ArrayList<>();
                     thirdDigital.addAll(remaining.get(first));
                     thirdDigital.addAll(remaining.get(second));
@@ -284,7 +282,7 @@ public class YWingStrategy implements FillStrategy {
                     Assert.isTrue(thirdDigital.size() == 2, "should be two");
                     Collections.sort(thirdDigital);
 
-                    // 右下、右上：查找前列，是否存在一个单元格剩余数符合
+                    // find the right column
                     List<String> tempDigital = new ArrayList<>(thirdDigital);
                     tempDigital.removeAll(remaining.get(first));
                     Assert.isTrue(tempDigital.size() == 1, "should be one");
@@ -300,12 +298,12 @@ public class YWingStrategy implements FillStrategy {
                         return result;
                     }
 
+                    // find the left column
                     tempDigital = new ArrayList<>(thirdDigital);
                     tempDigital.removeAll(remaining.get(second));
                     Assert.isTrue(tempDigital.size() == 1, "should be one");
                     deleteDigital = tempDigital.get(0);
 
-                    // 左下、左上：查找后列，是否存在一个单元格剩余数符合
                     result = buildHintModel(remaining, first, second,
                         thirdDigital, deleteDigital, second.getCol(), first.getCol());
                     if (result.isPresent()) {
