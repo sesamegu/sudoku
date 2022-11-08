@@ -2,7 +2,7 @@ package com.sesame.game;
 
 public enum GameLevel {
     EASY("Easy"),
-    NORMAL("Noraml"),
+    NORMAL("Normal"),
     HARD("Hard"),
     VIP("VIP");
 

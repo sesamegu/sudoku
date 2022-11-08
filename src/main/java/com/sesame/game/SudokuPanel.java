@@ -48,24 +48,16 @@ public class SudokuPanel extends JPanel {
      * has user noted
      */
     public boolean isUserNoted;
+    public boolean showCandidate;
     private int slotWidth;
     private int slotHeight;
 
     public SudokuPanel() {
         this.setPreferredSize(new Dimension(540, 450));
         this.addMouseListener(new SudokuPanelMouseAdapter(this));
-        this.puzzle = SudokuGenerator.generateRandomSudoku();
-        currentlySelectedCol = -1;
-        currentlySelectedRow = -1;
-        usedWidth = 0;
-        usedHeight = 0;
-        isHintMode = false;
-        hintModel = null;
-        isNoteMode = false;
-        isUserNoted = false;
     }
 
-    public void newSudokuPuzzle(SudokuPuzzle puzzle) {
+    public void newSudokuPuzzle(SudokuPuzzle puzzle, boolean showCandidate) {
         this.puzzle = puzzle;
         currentlySelectedCol = -1;
         currentlySelectedRow = -1;
@@ -75,6 +67,7 @@ public class SudokuPanel extends JPanel {
         hintModel = null;
         isNoteMode = false;
         isUserNoted = false;
+        this.showCandidate = showCandidate;
     }
 
     @Override
@@ -121,8 +114,9 @@ public class SudokuPanel extends JPanel {
         FontRenderContext fContext = g2d.getFontRenderContext();
 
         drawDigital(g2d, slotWidth, slotHeight, fContext);
-        drawCandidate(g2d, slotWidth, slotHeight, fContext);
-
+        if (showCandidate) {
+            drawCandidate(g2d, slotWidth, slotHeight, fContext);
+        }
         // draw selected cell
         if (!isHintMode) {
             if (currentlySelectedCol != -1 && currentlySelectedRow != -1) {

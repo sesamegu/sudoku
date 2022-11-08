@@ -23,6 +23,7 @@ import com.sesame.game.action.CopyListener;
 import com.sesame.game.action.DeleteActionListener;
 import com.sesame.game.action.HintActionListener;
 import com.sesame.game.action.NumActionListener;
+import com.sesame.game.action.ShowCandidateListener;
 import com.sesame.game.action.UnStopHintListener;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.Strategy;
@@ -38,7 +39,7 @@ public class SudokuFrame extends JFrame {
     public SudokuFrame() {
         sPanel = new SudokuPanel();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("Sudoku");
+        this.setTitle(I18nProcessor.getValue("sudoku"));
         this.setMinimumSize(new Dimension(800, 600));
 
         JMenuBar menuBar = new JMenuBar();
@@ -94,6 +95,10 @@ public class SudokuFrame extends JFrame {
         JMenu loadGame = new JMenu(I18nProcessor.getValue("develop"));
         menuBar.add(loadGame);
 
+        JMenuItem showCandidate = new JMenuItem(I18nProcessor.getValue("show_candidate"));
+        showCandidate.addActionListener(new ShowCandidateListener(sPanel));
+        loadGame.add(showCandidate);
+
         JMenuItem Unstoppable = new JMenuItem(I18nProcessor.getValue("unstoppable"));
         Unstoppable.addActionListener(new UnStopHintListener(this, sPanel));
         loadGame.add(Unstoppable);
@@ -119,36 +124,37 @@ public class SudokuFrame extends JFrame {
 
         this.add(windowPanel);
 
-        newGameRebuild();
+        loadLevelGameRebuild(GameLevel.EASY, 1);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                SudokuFrame frame = new SudokuFrame();
-                frame.setVisible(true);
-            }
+        SwingUtilities.invokeLater(() -> {
+            SudokuFrame frame = new SudokuFrame();
+            frame.setVisible(true);
         });
     }
 
     public void newGameRebuild() {
         SudokuPuzzle generatedPuzzle = SudokuGenerator.generateRandomSudoku();
-        rebuildInterface(generatedPuzzle);
+        rebuildInterface(generatedPuzzle, true);
     }
 
     public void loadGameRebuild(int caseType) {
         SudokuPuzzle generatedPuzzle = SudokuGenerator.useSpecified(caseType);
-        rebuildInterface(generatedPuzzle);
+        rebuildInterface(generatedPuzzle, true);
     }
 
     public void loadLevelGameRebuild(GameLevel gameLevel, int caseNumber) {
         SudokuPuzzle generatedPuzzle = SudokuGenerator.useLevelGame(gameLevel, caseNumber);
-        rebuildInterface(generatedPuzzle);
+        if (gameLevel == GameLevel.EASY) {
+            rebuildInterface(generatedPuzzle, false);
+        } else {
+            rebuildInterface(generatedPuzzle, true);
+        }
     }
 
-    private void rebuildInterface(SudokuPuzzle generatedPuzzle) {
-        sPanel.newSudokuPuzzle(generatedPuzzle);
+    private void rebuildInterface(SudokuPuzzle generatedPuzzle, boolean showCandidate) {
+        sPanel.newSudokuPuzzle(generatedPuzzle, showCandidate);
         sPanel.repaint();
         buttonModel();
     }
