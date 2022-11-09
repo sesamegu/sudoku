@@ -181,7 +181,7 @@ public class SudokuPanel extends JPanel {
                         } else if ((deleteMap.containsKey(onePosition)) && (!CollectionUtils.isEmpty(
                             deleteMap.get(onePosition)))
                             && deleteMap.get(onePosition).contains(digital)) {
-                            g2d.setColor(Color.BLUE);
+                            g2d.setColor(Color.GREEN);
                         } else {
                             g2d.setColor(Color.gray);
                         }

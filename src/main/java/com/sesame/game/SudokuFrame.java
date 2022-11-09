@@ -162,6 +162,10 @@ public class SudokuFrame extends JFrame {
     public void buttonModel() {
         buttonSelectionPanel.removeAll();
         buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
+        //empty Label
+        JLabel emptyLabel = new JLabel("");
+        emptyLabel.setPreferredSize(new Dimension(90, 15));
+        buttonSelectionPanel.add(emptyLabel);
 
         for (String value : Const.VALID_VALUES) {
             JButton b = new JButton(value);
@@ -199,6 +203,10 @@ public class SudokuFrame extends JFrame {
         buttonSelectionPanel.removeAll();
 
         buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
+        //empty Label
+        JLabel emptyLabel = new JLabel("");
+        emptyLabel.setPreferredSize(new Dimension(90, 15));
+        buttonSelectionPanel.add(emptyLabel);
 
         JLabel jLabel = new JLabel(I18nProcessor.getValue("strategy_name") + ":");
         jLabel.setPreferredSize(new Dimension(110, 15));
