@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.sesame.game.SudokuFrame;
+import com.sesame.game.Sudoku;
 import com.sesame.game.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
@@ -22,11 +22,11 @@ import com.sesame.game.strategy.model.SolutionModel;
  */
 
 public class UnStopHintListener implements ActionListener {
-    private final SudokuFrame sudokuFrame;
+    private final Sudoku sudokuFrame;
 
     private final SudokuPanel panel;
 
-    public UnStopHintListener(SudokuFrame sudokuFrame, SudokuPanel panel) {
+    public UnStopHintListener(Sudoku sudokuFrame, SudokuPanel panel) {
         this.sudokuFrame = sudokuFrame;
         this.panel = panel;
     }

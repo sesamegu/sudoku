@@ -30,13 +30,13 @@ import com.sesame.game.strategy.Strategy;
 import com.sesame.game.tool.SudokuGenerator;
 
 @SuppressWarnings("serial")
-public class SudokuFrame extends JFrame {
+public class Sudoku extends JFrame {
 
     private final JPanel buttonSelectionPanel;
     private final SudokuPanel sPanel;
     private JLabel unAvailableLabel;
 
-    public SudokuFrame() {
+    public Sudoku() {
         sPanel = new SudokuPanel();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle(I18nProcessor.getValue("sudoku"));
@@ -129,7 +129,7 @@ public class SudokuFrame extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            SudokuFrame frame = new SudokuFrame();
+            Sudoku frame = new Sudoku();
             frame.setVisible(true);
         });
     }

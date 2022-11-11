@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Optional;
 
-import com.sesame.game.SudokuFrame;
+import com.sesame.game.Sudoku;
 import com.sesame.game.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
@@ -18,10 +18,10 @@ import com.sesame.game.strategy.model.SolutionModel;
  * @author sesame 2022/10/26
  */
 public class HintActionListener implements ActionListener {
-    private final SudokuFrame sudokuFrame;
+    private final Sudoku sudokuFrame;
     private final SudokuPanel panel;
 
-    public HintActionListener(SudokuFrame sudokuFrame, SudokuPanel panel) {
+    public HintActionListener(Sudoku sudokuFrame, SudokuPanel panel) {
         this.sudokuFrame = sudokuFrame;
         this.panel = panel;
     }

@@ -21,7 +21,12 @@
    支持中文、英语
 
 ## 如何运行 
-
+* 准对开发者     
+   程序的入口类 com.sesame.game.Sudoku
+* Mac or Linux
+   to do
+* Windows
+   to do
 ## 策略介绍
 
 ## 数独解题器

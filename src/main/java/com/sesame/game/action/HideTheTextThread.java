@@ -2,7 +2,7 @@ package com.sesame.game.action;
 
 import java.util.concurrent.TimeUnit;
 
-import com.sesame.game.SudokuFrame;
+import com.sesame.game.Sudoku;
 
 /**
  * Introduction: hide the hint's text thread
@@ -10,9 +10,9 @@ import com.sesame.game.SudokuFrame;
  * @author sesame 2022/10/26
  */
 public class HideTheTextThread implements Runnable {
-    private final SudokuFrame sudokuFrame;
+    private final Sudoku sudokuFrame;
 
-    public HideTheTextThread(SudokuFrame sudokuFrame) {this.sudokuFrame = sudokuFrame;}
+    public HideTheTextThread(Sudoku sudokuFrame) {this.sudokuFrame = sudokuFrame;}
 
     @Override
     public void run() {

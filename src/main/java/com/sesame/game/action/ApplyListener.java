@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-import com.sesame.game.SudokuFrame;
+import com.sesame.game.Sudoku;
 import com.sesame.game.SudokuPanel;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Position;
@@ -17,10 +17,10 @@ import com.sesame.game.strategy.model.SolutionModel;
  * @author sesame 2022/10/26
  */
 public class ApplyListener implements ActionListener {
-    private final SudokuFrame sudokuFrame;
+    private final Sudoku sudokuFrame;
     private final SudokuPanel panel;
 
-    public ApplyListener(SudokuFrame sudokuFrame, SudokuPanel panel) {
+    public ApplyListener(Sudoku sudokuFrame, SudokuPanel panel) {
         this.sudokuFrame = sudokuFrame;
         this.panel = panel;
     }
