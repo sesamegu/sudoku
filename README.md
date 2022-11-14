@@ -11,7 +11,7 @@
    候选数笔记：在空白格中标记数字
    删除：删除单元格数字
 * 实现了主流的求解技巧    
-    唯一候选数、隐性单一数、显性数对、显性三数对、隐形数对、隐形三数对、宫区块数对、x翼、xy翼、剑鱼、三三三 等
+    唯余空白格、唯一候选数、隐性单一数、显性数对、显性三数对、隐形数对、隐形三数对、宫区块数对、x翼、xy翼、剑鱼、三三三 等
 * 解题器      
   在解题器模式中，你可以输入自己的数独谜题，程序会自动求解。求解支持两种方式：技巧求解和暴力求解。技巧求解就是本程序支持的技巧求解，整体
   解题过程和思路清晰可见；暴力求解则是程序直接遍历所有可能找出解
@@ -28,13 +28,58 @@
 * Windows    
    to do
 ## 策略介绍
+* 唯余空白格   
+介绍：一个宫、一行或一列中只剩下一个空白单元格，找出缺少哪个数字，将它填入这个空白单元格
+   
 * 唯一候选数  
-一个宫、一行或一列中只剩下一个空白单元格，找出缺少哪个数字，将它填入这个空白单元格
+介绍：一个宫、一行或一列中只剩下一个空白单元格，找出缺少哪个数字，将它填入这个空白单元格
+<img src="src/main/resources/picture/last_possible_number_CN.png" width="550" height="430" >
+
+* 隐性单一数    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 显性数对    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 显性三数对    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 隐形数对    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 隐形三数对    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 宫区块数对    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* x翼    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* xy翼    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 剑鱼    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+* 三三三    
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
+
+*     
+介绍：    
+<img src="src/main/resources/picture/_CN.png" width="550" height="430" >
 
 
-
-
-、隐性单一数、显性数对、显性三数对、隐形数对、隐形三数对、宫区块数对、x翼、xy翼、剑鱼、三三三
 ## 数独解题器
 
 ## 数独游戏设计器
