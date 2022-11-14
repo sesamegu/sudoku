@@ -3,6 +3,9 @@ package com.sesame.game.i18n;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * Introduction: I18N
  *
@@ -12,7 +15,9 @@ public class I18nProcessor {
 
     private static final ResourceBundle rbEn;
     private static final ResourceBundle rbZh;
-    private static final boolean isChinese;
+    @Getter
+    @Setter
+    private static boolean isChinese;
 
     static {
         Locale localeEn = new Locale("en", "US");

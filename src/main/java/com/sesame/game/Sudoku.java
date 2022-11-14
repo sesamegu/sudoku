@@ -19,6 +19,7 @@ import javax.swing.SwingUtilities;
 
 import com.sesame.game.action.ApplyListener;
 import com.sesame.game.action.CandidateActionListener;
+import com.sesame.game.action.ChangeLanguageListener;
 import com.sesame.game.action.CopyListener;
 import com.sesame.game.action.DeleteActionListener;
 import com.sesame.game.action.HintActionListener;
@@ -29,11 +30,16 @@ import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.Strategy;
 import com.sesame.game.tool.SudokuGenerator;
 
-@SuppressWarnings("serial")
+/**
+ * the Sudoku main entry
+ */
 public class Sudoku extends JFrame {
 
     private final JPanel buttonSelectionPanel;
     private final SudokuPanel sPanel;
+    private JButton delete;
+    private JToggleButton candidateButton;
+    private JButton hint;
     private JLabel unAvailableLabel;
 
     public Sudoku() {
@@ -42,6 +48,31 @@ public class Sudoku extends JFrame {
         this.setTitle(I18nProcessor.getValue("sudoku"));
         this.setMinimumSize(new Dimension(800, 600));
 
+        JMenuBar menuBar = buildJMenuBar();
+        this.setJMenuBar(menuBar);
+        JPanel windowPanel = new JPanel();
+        windowPanel.setLayout(new FlowLayout());
+        windowPanel.setPreferredSize(new Dimension(800, 600));
+
+        buttonSelectionPanel = new JPanel();
+        buttonSelectionPanel.setPreferredSize(new Dimension(150, 500));
+
+        windowPanel.add(sPanel);
+        windowPanel.add(buttonSelectionPanel);
+
+        this.add(windowPanel);
+
+        loadLevelGameRebuild(GameLevel.EASY, 1);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Sudoku frame = new Sudoku();
+            frame.setVisible(true);
+        });
+    }
+
+    public JMenuBar buildJMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
         //add easy menu
@@ -91,6 +122,10 @@ public class Sudoku extends JFrame {
         randomGame.addActionListener(new NewGameListener());
         focus.add(randomGame);
 
+        JMenuItem language = new JMenuItem(I18nProcessor.getValue("language"));
+        language.addActionListener(new ChangeLanguageListener(this));
+        focus.add(language);
+
         // develop
         JMenu loadGame = new JMenu(I18nProcessor.getValue("develop"));
         menuBar.add(loadGame);
@@ -110,28 +145,7 @@ public class Sudoku extends JFrame {
         JMenuItem copy = new JMenuItem(I18nProcessor.getValue("copy_2_clipboard"));
         copy.addActionListener(new CopyListener(sPanel));
         loadGame.add(copy);
-
-        this.setJMenuBar(menuBar);
-        JPanel windowPanel = new JPanel();
-        windowPanel.setLayout(new FlowLayout());
-        windowPanel.setPreferredSize(new Dimension(800, 600));
-
-        buttonSelectionPanel = new JPanel();
-        buttonSelectionPanel.setPreferredSize(new Dimension(150, 500));
-
-        windowPanel.add(sPanel);
-        windowPanel.add(buttonSelectionPanel);
-
-        this.add(windowPanel);
-
-        loadLevelGameRebuild(GameLevel.EASY, 1);
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Sudoku frame = new Sudoku();
-            frame.setVisible(true);
-        });
+        return menuBar;
     }
 
     public void newGameRebuild() {
@@ -174,21 +188,25 @@ public class Sudoku extends JFrame {
             buttonSelectionPanel.add(b);
         }
         //delete button
-        JButton delete = new JButton(I18nProcessor.getValue("delete"));
+        delete = new JButton();
         delete.setPreferredSize(new Dimension(90, 40));
         delete.addActionListener(new DeleteActionListener(sPanel));
-        buttonSelectionPanel.add(delete);
 
-        JToggleButton candidateButton = new JToggleButton(I18nProcessor.getValue("note_off"));
+        buttonSelectionPanel.add(delete);
+        //note button
+        candidateButton = new JToggleButton();
         candidateButton.setPreferredSize(new Dimension(90, 40));
         candidateButton.addChangeListener(new CandidateActionListener(sPanel, candidateButton));
-        buttonSelectionPanel.add(candidateButton);
 
+        buttonSelectionPanel.add(candidateButton);
         //hint button
-        JButton hint = new JButton(I18nProcessor.getValue("hint"));
+        hint = new JButton();
         hint.setPreferredSize(new Dimension(90, 40));
         hint.addActionListener(new HintActionListener(this, sPanel));
+
         buttonSelectionPanel.add(hint);
+
+        setButtonText();
 
         //hint text
         unAvailableLabel = new JLabel("");
@@ -197,6 +215,12 @@ public class Sudoku extends JFrame {
 
         buttonSelectionPanel.revalidate();
         buttonSelectionPanel.repaint();
+    }
+
+    public void setButtonText() {
+        delete.setText(I18nProcessor.getValue("delete"));
+        candidateButton.setText(I18nProcessor.getValue("note_off"));
+        hint.setText(I18nProcessor.getValue("hint"));
     }
 
     public void hintModel(Strategy strategy) {
