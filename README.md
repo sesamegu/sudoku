@@ -33,9 +33,9 @@
 场景行   
 <img src="src/main/resources/picture/last_free_cell_row_CN.png" width="550" height="430" >
 场景列    
-<img src="src/main/resources/picture/last_free_cell_column_CN.png" width="550" height="430" >
+<img src="src/main/resources/picture/last_free_cell_col_CN.png" width="550" height="430" >
 场景宫   
-<img src="src/main/resources/picture/last_free_cell_obx_CN.png" width="550" height="430" >
+<img src="src/main/resources/picture/last_free_cell_box_CN.png" width="550" height="430" >
    
 * 唯一候选数  
 介绍：一个宫、一行或一列中只剩下一个空白单元格，找出缺少哪个数字，将它填入这个空白单元格
