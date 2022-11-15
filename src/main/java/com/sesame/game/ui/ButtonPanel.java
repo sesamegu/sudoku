@@ -26,7 +26,6 @@ import com.sesame.game.strategy.Strategy;
  */
 public class ButtonPanel extends JPanel {
 
-    private final SquarePanel squarePanel;
     private final Sudoku sudoku;
 
     private JButton delete;
@@ -34,8 +33,7 @@ public class ButtonPanel extends JPanel {
     private JButton hint;
     private JLabel unAvailableLabel;
 
-    public ButtonPanel(SquarePanel squarePanel, Sudoku sudoku) {
-        this.squarePanel = squarePanel;
+    public ButtonPanel(Sudoku sudoku) {
         this.sudoku = sudoku;
         this.setPreferredSize(new Dimension(150, 500));
     }
@@ -51,25 +49,25 @@ public class ButtonPanel extends JPanel {
         for (String value : Const.VALID_VALUES) {
             JButton b = new JButton(value);
             b.setPreferredSize(new Dimension(40, 40));
-            b.addActionListener(new NumActionListener(squarePanel));
+            b.addActionListener(new NumActionListener(sudoku.getSquarePanel()));
             add(b);
         }
         //delete button
         delete = new JButton();
         delete.setPreferredSize(new Dimension(90, 40));
-        delete.addActionListener(new DeleteActionListener(squarePanel));
+        delete.addActionListener(new DeleteActionListener(sudoku.getSquarePanel()));
 
         add(delete);
         //note button
         candidateButton = new JToggleButton();
         candidateButton.setPreferredSize(new Dimension(90, 40));
-        candidateButton.addChangeListener(new CandidateActionListener(squarePanel, candidateButton));
+        candidateButton.addChangeListener(new CandidateActionListener(sudoku.getSquarePanel(), candidateButton));
 
         add(candidateButton);
         //hint button
         hint = new JButton();
         hint.setPreferredSize(new Dimension(90, 40));
-        hint.addActionListener(new HintActionListener(sudoku, squarePanel));
+        hint.addActionListener(new HintActionListener(sudoku, sudoku.getSquarePanel()));
 
         add(hint);
 
@@ -124,7 +122,7 @@ public class ButtonPanel extends JPanel {
         //apply button
         JButton apply = new JButton(I18nProcessor.getValue("apply"));
         apply.setPreferredSize(new Dimension(110, 40));
-        apply.addActionListener(new ApplyListener(sudoku, squarePanel));
+        apply.addActionListener(new ApplyListener(sudoku, sudoku.getSquarePanel()));
         add(apply);
 
         revalidate();

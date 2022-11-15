@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -22,13 +21,12 @@ import lombok.Getter;
  *
  * @author sesame
  */
+@Getter
 public class Sudoku extends JFrame {
 
     private final SquarePanel squarePanel;
-    @Getter
-    private ButtonPanel buttonPanel;
-    @Getter
-    private MenuGenerator menuGenerator;
+    private final ButtonPanel buttonPanel;
+    private final MenuGenerator menuGenerator;
 
     public Sudoku() {
         //jFrame
@@ -38,11 +36,10 @@ public class Sudoku extends JFrame {
         //squarePanel
         squarePanel = new SquarePanel();
         //buttonPanel
-        buttonPanel = new ButtonPanel(squarePanel, this);
+        buttonPanel = new ButtonPanel(this);
         //menu
-        menuGenerator = new MenuGenerator(squarePanel, this);
-        JMenuBar menuBar = menuGenerator.buildJMenuBar();
-        this.setJMenuBar(menuBar);
+        menuGenerator = new MenuGenerator(this);
+        this.setJMenuBar(menuGenerator.buildJMenuBar());
         //windowPanel
         JPanel windowPanel = new JPanel();
         windowPanel.setLayout(new FlowLayout());

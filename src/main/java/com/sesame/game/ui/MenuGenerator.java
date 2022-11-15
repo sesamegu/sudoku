@@ -23,11 +23,9 @@ import com.sesame.game.tool.SudokuGenerator;
  * @author sesame 2022/11/15
  */
 public class MenuGenerator {
-    private final SquarePanel sPanel;
     private final Sudoku sudoku;
 
-    public MenuGenerator(SquarePanel sPanel, Sudoku sudoku) {
-        this.sPanel = sPanel;
+    public MenuGenerator(Sudoku sudoku) {
         this.sudoku = sudoku;
     }
 
@@ -81,20 +79,20 @@ public class MenuGenerator {
         randomGame.addActionListener(new NewGameListener());
         focus.add(randomGame);
 
-        JMenuItem language = new JMenuItem(I18nProcessor.getValue("language"));
-        language.addActionListener(new ChangeLanguageListener(sudoku));
-        focus.add(language);
-
         // develop
         JMenu loadGame = new JMenu(I18nProcessor.getValue("develop"));
         menuBar.add(loadGame);
 
+        JMenuItem language = new JMenuItem(I18nProcessor.getValue("language"));
+        language.addActionListener(new ChangeLanguageListener(sudoku));
+        loadGame.add(language);
+
         JMenuItem showCandidate = new JMenuItem(I18nProcessor.getValue("show_candidate"));
-        showCandidate.addActionListener(new ShowCandidateListener(sPanel));
+        showCandidate.addActionListener(new ShowCandidateListener(sudoku.getSquarePanel()));
         loadGame.add(showCandidate);
 
         JMenuItem Unstoppable = new JMenuItem(I18nProcessor.getValue("unstoppable"));
-        Unstoppable.addActionListener(new UnStopHintListener(sudoku, sPanel));
+        Unstoppable.addActionListener(new UnStopHintListener(sudoku, sudoku.getSquarePanel()));
         loadGame.add(Unstoppable);
 
         JMenuItem caseTwo = new JMenuItem(I18nProcessor.getValue("test_game"));
@@ -102,7 +100,7 @@ public class MenuGenerator {
         loadGame.add(caseTwo);
 
         JMenuItem copy = new JMenuItem(I18nProcessor.getValue("copy_2_clipboard"));
-        copy.addActionListener(new CopyListener(sPanel));
+        copy.addActionListener(new CopyListener(sudoku.getSquarePanel()));
         loadGame.add(copy);
         return menuBar;
     }
@@ -116,7 +114,6 @@ public class MenuGenerator {
         SudokuPuzzle generatedPuzzle = SudokuGenerator.useSpecified(caseType);
         sudoku.rebuildInterface(generatedPuzzle, true);
     }
-
 
     private class LevelGameListener implements ActionListener {
 
