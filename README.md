@@ -1,12 +1,24 @@
 # Sudoku Daisy                        [中文](https://github.com/sesamegu/sudoku/blob/main/README_CN.md) 
+This is a Sudoku game programmed using Java and Swing for the GUI. Its features:
+* Well design 35+ puzzles.
+* Support the popular techniques 
+* Good user experience. 
+* the Solver
+* Game generator
+* Multiple Language. 
+It's based on [sudoku](https://github.com/mattnenterprise/Sudoku)
+
+<img src="docs/picture/index_EN.png" width="550" height="430" >   
+<img src="docs/picture/hidden_singles_EN.png" width="550" height="430" >   
+
 
 ## How to run
+* for the developer     
+   main class: com.sesame.game.Sudoku
 
 ## Strategy
 [last free cell](https://github.com/sesamegu/sudoku/blob/main/docs/last_free_cell_EN.md)
-* last possible number    
-brief： Check what numbers do the block, vertical column and horizontal row have for the cell, then find out the missing one.
-<img src="docs/picture/last_possible_number_EN.png" width="550" height="430" >
+[last possible number](https://github.com/sesamegu/sudoku/blob/main/docs/last_possible_number_EN.md)    
 
 * hidden singles    
 brief：The point is that in a specific cell only one digit (from the Notes) remains possible.     
