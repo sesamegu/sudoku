@@ -28,18 +28,18 @@
 * Windows    
    to do
 ## 策略介绍
-[唯余空白格](https://github.com/sesamegu/sudoku/blob/main/docs/last_free_cell_CN.md)
-[唯一候选数](https://github.com/sesamegu/sudoku/blob/main/docs/last_possible_number_CN.md)
-[隐性单一数](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_singles_CN.md)
-[显性数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_pairs_CN.md)
-[显性三数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_triples_CN.md)
-[隐形数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_pairs_CN.md)
-[隐形三数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_CN.md)
-[宫区块数对](https://github.com/sesamegu/sudoku/blob/main/docs/pointing_pairs_CN.md)
-[x翼](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_CN.md)
-[xy翼](https://github.com/sesamegu/sudoku/blob/main/docs/xy_wing_CN.md)
-[剑鱼](https://github.com/sesamegu/sudoku/blob/main/docs/swordfish_CN.md)
-[三三三](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_CN.md)
+[唯余空白格](https://github.com/sesamegu/sudoku/blob/main/docs/last_free_cell_CN.md)      
+[唯一候选数](https://github.com/sesamegu/sudoku/blob/main/docs/last_possible_number_CN.md)      
+[隐性单一数](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_singles_CN.md)      
+[显性数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_pairs_CN.md)      
+[显性三数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_triples_CN.md)      
+[隐形数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_pairs_CN.md)      
+[隐形三数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_CN.md)      
+[宫区块数对](https://github.com/sesamegu/sudoku/blob/main/docs/pointing_pairs_CN.md)      
+[x翼](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_CN.md)      
+[xy翼](https://github.com/sesamegu/sudoku/blob/main/docs/xy_wing_CN.md)      
+[剑鱼](https://github.com/sesamegu/sudoku/blob/main/docs/swordfish_CN.md)      
+[三三三](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_CN.md)      
 
 ## 数独解题器
 
