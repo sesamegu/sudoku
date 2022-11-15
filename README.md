@@ -1,12 +1,13 @@
 # Sudoku Daisy                        [中文](https://github.com/sesamegu/sudoku/blob/main/README_CN.md) 
-This is a Sudoku game programmed using Java and Swing for the GUI. Its features:
+This is a Sudoku game programmed using Java and Swing for the GUI. It's based on [sudoku](https://github.com/mattnenterprise/Sudoku)     
+Features:
 * Well design 35+ puzzles.
 * Support the popular techniques 
 * Good user experience 
 * the Solver
 * Game generator
 * Multiple Languages     
-It's based on [sudoku](https://github.com/mattnenterprise/Sudoku)
+
 
 <img src="docs/picture/index_EN.png" width="550" height="430" >   
 <img src="docs/picture/hidden_singles_EN.png" width="550" height="430" >   
