@@ -2,6 +2,7 @@
 项目是基于java Swing 实现的一个数独游戏。项目的主要特点：精良关卡、操作功能丰富、实现了主流的求解技巧、解题器、关卡设计器、支持多语言。
 项目部分代码基于  [sudoku](https://github.com/mattnenterprise/Sudoku)
 <img src="docs/picture/index_cn.png" width="550" height="430" >
+<img src="docs/picture/hidden_singles_CN.png" width="550" height="430" >   
 ## 特点
 * 精良关卡   
    提供简单、普通、困难、专项四种难度模式，在简单模式中涉及2种技巧即可过关，普通模式3、4种，困难模式5、6种，而在专项模式中涉及
