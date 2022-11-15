@@ -29,50 +29,17 @@
    to do
 ## 策略介绍
 [唯余空白格](https://github.com/sesamegu/sudoku/blob/main/docs/last_free_cell_CN.md)
-* 唯一候选数  
-介绍：一个宫、一行或一列中只剩下一个空白单元格，找出缺少哪个数字，将它填入这个空白单元格
-<img src="docs/picture/last_possible_number_CN.png" width="550" height="430" >
-
-* 隐性单一数    
-介绍：在一个宫、一行或一列中对于特定的某个数字只有一个可行的位置     
-<img src="docs/picture/hidden_singles_CN.png" width="550" height="430" >
-
-* 显性数对    
-介绍：一个宫、一行或一列里找到两个拥有相同的两个候选数的格，则可从该单元里的其他格中排除那两个候选数     
-<img src="docs/picture/obvious_pairs_CN.png" width="550" height="430" >
-
-* 显性三数对    
-介绍：一个宫、一行或一列里找到三个具有三对数的三个候选数的格，则可从该单元里的其他格中排除那三个候选数  
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
-* 隐形数对    
-介绍：在一个宫、一行或一列中的两个单元格中包含两条未出现在其他地方的笔记，那么这两条笔记必须放在这两个单元格中。所有其他笔记都可以从这两个单元格中删除。  
-<img src="docs/picture/hidden_pairs_CN.png" width="550" height="430" >
-
-* 隐形三数对    
-介绍：在一个宫、一行或一列中的三个单元格包含三条未出现在其他地方的笔记，这三个单元格还包含其他候选数，可以将它们删除。     
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
-* 宫区块数对    
-介绍：当一条笔记在一个宫中出现两次或者三次并且该笔记属于同一行或列时，这说明该笔记必然是这个宫中解，可以将该笔记从这一行或列的任何其他单元格中删除。     
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
-* x翼    
-介绍：寻找四个对齐的单元格形成一个X，并且有相同的候选数没有出现在同一行或同一列的其他地方，那么可以删除对应列或行的后续数     
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
-* xy翼    
-介绍：由三个双值单元格构成，两个单元格作为“钳”，一个作为“折”，“钳”和“折”位于同一行、同一列或同一宫中。每个“钳”中的两个数字之一应该与“折点”中的相同。两个“钳”中的另一个数字相同"。可以删除另一个“折”的的后续数。    
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
-* 剑鱼    
-介绍：三行或三列里找到两个拥有本区域内唯二候选数的格，这三行或三列的格两两对齐，那么对应列或行的这个候选数     
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
-* 三三三    
-介绍：在一行、一列、一宫中有三个单元格候选的的数字都为3个且完全相同，那么可以排除其它单元格包含这个三个数字    
-<img src="docs/picture/_CN.png" width="550" height="430" >
-
+[唯一候选数](https://github.com/sesamegu/sudoku/blob/main/docs/last_possible_number_CN.md)
+[隐性单一数](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_singles_CN.md)
+[显性数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_pairs_CN.md)
+[显性三数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_triples_CN.md)
+[隐形数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_pairs_CN.md)
+[隐形三数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_CN.md)
+[宫区块数对](https://github.com/sesamegu/sudoku/blob/main/docs/pointing_pairs_CN.md)
+[x翼](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_CN.md)
+[xy翼](https://github.com/sesamegu/sudoku/blob/main/docs/xy_wing_CN.md)
+[剑鱼](https://github.com/sesamegu/sudoku/blob/main/docs/swordfish_CN.md)
+[三三三](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_CN.md)
 
 ## 数独解题器
 
