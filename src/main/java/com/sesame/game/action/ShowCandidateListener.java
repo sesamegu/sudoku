@@ -3,7 +3,7 @@ package com.sesame.game.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.SquarePanel;
 
 /**
  * Introduction:show candidate switch
@@ -12,9 +12,9 @@ import com.sesame.game.ui.SudokuPanel;
  */
 public class ShowCandidateListener implements ActionListener {
 
-    private final SudokuPanel panel;
+    private final SquarePanel panel;
 
-    public ShowCandidateListener(SudokuPanel panel) {
+    public ShowCandidateListener(SquarePanel panel) {
         this.panel = panel;
     }
 

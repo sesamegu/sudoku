@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.SquarePanel;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
@@ -18,9 +18,9 @@ import com.sesame.game.strategy.model.SolutionModel;
  */
 public class ApplyListener implements ActionListener {
     private final Sudoku sudokuFrame;
-    private final SudokuPanel panel;
+    private final SquarePanel panel;
 
-    public ApplyListener(Sudoku sudokuFrame, SudokuPanel panel) {
+    public ApplyListener(Sudoku sudokuFrame, SquarePanel panel) {
         this.sudokuFrame = sudokuFrame;
         this.panel = panel;
     }
@@ -44,7 +44,7 @@ public class ApplyListener implements ActionListener {
 
         panel.isHintMode = false;
         panel.hintModel = null;
-        sudokuFrame.buttonModel();
+        sudokuFrame.getButtonPanel().buttonModel();
         panel.repaint();
     }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.SquarePanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.CandidateModel;
@@ -24,9 +24,9 @@ import com.sesame.game.strategy.model.SolutionModel;
 public class UnStopHintListener implements ActionListener {
     private final Sudoku sudokuFrame;
 
-    private final SudokuPanel panel;
+    private final SquarePanel panel;
 
-    public UnStopHintListener(Sudoku sudokuFrame, SudokuPanel panel) {
+    public UnStopHintListener(Sudoku sudokuFrame, SquarePanel panel) {
         this.sudokuFrame = sudokuFrame;
         this.panel = panel;
     }
@@ -59,7 +59,7 @@ public class UnStopHintListener implements ActionListener {
         }
         panel.repaint();
 
-        sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("search_finished"));
+        sudokuFrame.getButtonPanel().setUnAvailableLabel(I18nProcessor.getValue("search_finished"));
         new Thread(new HideTheTextThread(sudokuFrame)).start();
 
     }

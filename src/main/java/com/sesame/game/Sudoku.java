@@ -1,71 +1,56 @@
 package com.sesame.game;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import com.sesame.game.action.ApplyListener;
-import com.sesame.game.action.CandidateActionListener;
-import com.sesame.game.action.ChangeLanguageListener;
-import com.sesame.game.action.CopyListener;
-import com.sesame.game.action.DeleteActionListener;
-import com.sesame.game.action.HintActionListener;
-import com.sesame.game.action.NumActionListener;
-import com.sesame.game.action.ShowCandidateListener;
-import com.sesame.game.action.UnStopHintListener;
-import com.sesame.game.common.Const;
 import com.sesame.game.common.GameLevel;
 import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.i18n.I18nProcessor;
-import com.sesame.game.strategy.Strategy;
 import com.sesame.game.tool.SudokuGenerator;
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.ButtonPanel;
+import com.sesame.game.ui.MenuGenerator;
+import com.sesame.game.ui.SquarePanel;
+import lombok.Getter;
 
 /**
  * the Sudoku main entry
+ *
+ * @author sesame
  */
 public class Sudoku extends JFrame {
 
-    private final JPanel buttonSelectionPanel;
-    private final SudokuPanel sPanel;
-    private JButton delete;
-    private JToggleButton candidateButton;
-    private JButton hint;
-    private JLabel unAvailableLabel;
+    private final SquarePanel squarePanel;
+    @Getter
+    private ButtonPanel buttonPanel;
+    @Getter
+    private MenuGenerator menuGenerator;
 
     public Sudoku() {
-        sPanel = new SudokuPanel();
+        //jFrame
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle(I18nProcessor.getValue("sudoku"));
         this.setMinimumSize(new Dimension(800, 600));
-
-        JMenuBar menuBar = buildJMenuBar();
+        //squarePanel
+        squarePanel = new SquarePanel();
+        //buttonPanel
+        buttonPanel = new ButtonPanel(squarePanel, this);
+        //menu
+        menuGenerator = new MenuGenerator(squarePanel, this);
+        JMenuBar menuBar = menuGenerator.buildJMenuBar();
         this.setJMenuBar(menuBar);
+        //windowPanel
         JPanel windowPanel = new JPanel();
         windowPanel.setLayout(new FlowLayout());
         windowPanel.setPreferredSize(new Dimension(800, 600));
-
-        buttonSelectionPanel = new JPanel();
-        buttonSelectionPanel.setPreferredSize(new Dimension(150, 500));
-
-        windowPanel.add(sPanel);
-        windowPanel.add(buttonSelectionPanel);
-
+        windowPanel.add(squarePanel);
+        windowPanel.add(buttonPanel);
         this.add(windowPanel);
-
+        //load default game
         loadLevelGameRebuild(GameLevel.EASY, 1);
     }
 
@@ -74,92 +59,6 @@ public class Sudoku extends JFrame {
             Sudoku frame = new Sudoku();
             frame.setVisible(true);
         });
-    }
-
-    public JMenuBar buildJMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
-
-        //add easy menu
-        JMenu easyMenu = new JMenu(I18nProcessor.getValue("easy"));
-        for (int i = 0; i < 10; i++) {
-            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
-            oneCase.addActionListener(new LevelGameListener(GameLevel.EASY, (i + 1)));
-            easyMenu.add(oneCase);
-        }
-        menuBar.add(easyMenu);
-
-        //add normal menu
-        JMenu normalMenu = new JMenu(I18nProcessor.getValue("normal"));
-        for (int i = 0; i < 10; i++) {
-            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
-            oneCase.addActionListener(new LevelGameListener(GameLevel.NORMAL, (i + 1)));
-            normalMenu.add(oneCase);
-        }
-        menuBar.add(normalMenu);
-
-        //add hard menu
-        JMenu hardMenu = new JMenu(I18nProcessor.getValue("hard"));
-        for (int i = 0; i < 10; i++) {
-            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
-            oneCase.addActionListener(new LevelGameListener(GameLevel.HARD, (i + 1)));
-            hardMenu.add(oneCase);
-        }
-        menuBar.add(hardMenu);
-        //add vip menu
-        JMenu vipMenu = new JMenu(I18nProcessor.getValue("vip"));
-        for (int i = 0; i < 5; i++) {
-            JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
-            oneCase.addActionListener(new LevelGameListener(GameLevel.VIP, (i + 1)));
-            vipMenu.add(oneCase);
-        }
-        menuBar.add(vipMenu);
-
-        //Focus
-        JMenu focus = new JMenu(I18nProcessor.getValue("focus"));
-        menuBar.add(focus);
-
-        JMenuItem solver = new JMenuItem(I18nProcessor.getValue("solver"));
-        solver.addActionListener(new LoadGameListener(1));
-        focus.add(solver);
-
-        JMenuItem randomGame = new JMenuItem(I18nProcessor.getValue("random_game"));
-        randomGame.addActionListener(new NewGameListener());
-        focus.add(randomGame);
-
-        JMenuItem language = new JMenuItem(I18nProcessor.getValue("language"));
-        language.addActionListener(new ChangeLanguageListener(this));
-        focus.add(language);
-
-        // develop
-        JMenu loadGame = new JMenu(I18nProcessor.getValue("develop"));
-        menuBar.add(loadGame);
-
-        JMenuItem showCandidate = new JMenuItem(I18nProcessor.getValue("show_candidate"));
-        showCandidate.addActionListener(new ShowCandidateListener(sPanel));
-        loadGame.add(showCandidate);
-
-        JMenuItem Unstoppable = new JMenuItem(I18nProcessor.getValue("unstoppable"));
-        Unstoppable.addActionListener(new UnStopHintListener(this, sPanel));
-        loadGame.add(Unstoppable);
-
-        JMenuItem caseTwo = new JMenuItem(I18nProcessor.getValue("test_game"));
-        caseTwo.addActionListener(new LoadGameListener(2));
-        loadGame.add(caseTwo);
-
-        JMenuItem copy = new JMenuItem(I18nProcessor.getValue("copy_2_clipboard"));
-        copy.addActionListener(new CopyListener(sPanel));
-        loadGame.add(copy);
-        return menuBar;
-    }
-
-    public void newGameRebuild() {
-        SudokuPuzzle generatedPuzzle = SudokuGenerator.generateRandomSudoku();
-        rebuildInterface(generatedPuzzle, true);
-    }
-
-    public void loadGameRebuild(int caseType) {
-        SudokuPuzzle generatedPuzzle = SudokuGenerator.useSpecified(caseType);
-        rebuildInterface(generatedPuzzle, true);
     }
 
     public void loadLevelGameRebuild(GameLevel gameLevel, int caseNumber) {
@@ -171,142 +70,10 @@ public class Sudoku extends JFrame {
         }
     }
 
-    private void rebuildInterface(SudokuPuzzle generatedPuzzle, boolean showCandidate) {
-        sPanel.newSudokuPuzzle(generatedPuzzle, showCandidate);
-        sPanel.repaint();
-        buttonModel();
+    public void rebuildInterface(SudokuPuzzle generatedPuzzle, boolean showCandidate) {
+        squarePanel.newSudokuPuzzle(generatedPuzzle, showCandidate);
+        squarePanel.repaint();
+        buttonPanel.buttonModel();
     }
 
-    public void buttonModel() {
-        buttonSelectionPanel.removeAll();
-        buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
-        //empty Label
-        JLabel emptyLabel = new JLabel("");
-        emptyLabel.setPreferredSize(new Dimension(90, 15));
-        buttonSelectionPanel.add(emptyLabel);
-
-        for (String value : Const.VALID_VALUES) {
-            JButton b = new JButton(value);
-            b.setPreferredSize(new Dimension(40, 40));
-            b.addActionListener(new NumActionListener(sPanel));
-            buttonSelectionPanel.add(b);
-        }
-        //delete button
-        delete = new JButton();
-        delete.setPreferredSize(new Dimension(90, 40));
-        delete.addActionListener(new DeleteActionListener(sPanel));
-
-        buttonSelectionPanel.add(delete);
-        //note button
-        candidateButton = new JToggleButton();
-        candidateButton.setPreferredSize(new Dimension(90, 40));
-        candidateButton.addChangeListener(new CandidateActionListener(sPanel, candidateButton));
-
-        buttonSelectionPanel.add(candidateButton);
-        //hint button
-        hint = new JButton();
-        hint.setPreferredSize(new Dimension(90, 40));
-        hint.addActionListener(new HintActionListener(this, sPanel));
-
-        buttonSelectionPanel.add(hint);
-
-        setButtonText();
-
-        //hint text
-        unAvailableLabel = new JLabel("");
-        unAvailableLabel.setPreferredSize(new Dimension(90, 40));
-        buttonSelectionPanel.add(unAvailableLabel);
-
-        buttonSelectionPanel.revalidate();
-        buttonSelectionPanel.repaint();
-    }
-
-    public void setButtonText() {
-        delete.setText(I18nProcessor.getValue("delete"));
-        candidateButton.setText(I18nProcessor.getValue("note_off"));
-        hint.setText(I18nProcessor.getValue("hint"));
-    }
-
-    public void hintModel(Strategy strategy) {
-        buttonSelectionPanel.removeAll();
-
-        buttonSelectionPanel.setPreferredSize(new Dimension(110, 500));
-        //empty Label
-        JLabel emptyLabel = new JLabel("");
-        emptyLabel.setPreferredSize(new Dimension(90, 15));
-        buttonSelectionPanel.add(emptyLabel);
-
-        JLabel jLabel = new JLabel(I18nProcessor.getValue("strategy_name") + ":");
-        jLabel.setPreferredSize(new Dimension(110, 15));
-        buttonSelectionPanel.add(jLabel);
-
-        String value = I18nProcessor.getValue(strategy.getName());
-        if (value.length() > 15) {
-            value = "<html><body>" + value.substring(0, 14) + "<br>" + value.substring(14) + "<body></html>";
-        }
-        JLabel jLabel2 = new JLabel(value);
-        jLabel2.setPreferredSize(new Dimension(110, 30));
-        jLabel2.setForeground(Color.red);
-        buttonSelectionPanel.add(jLabel2);
-
-        //hint desc
-        JTextArea textArea = new JTextArea("");
-        textArea.setPreferredSize(new Dimension(110, 220));
-        textArea.setLineWrap(true);
-        textArea.setEnabled(false);
-
-        textArea.setText(I18nProcessor.getValue(strategy.getName() + "_desc"));
-        buttonSelectionPanel.add(textArea);
-
-        //apply button
-        JButton apply = new JButton(I18nProcessor.getValue("apply"));
-        apply.setPreferredSize(new Dimension(110, 40));
-        apply.addActionListener(new ApplyListener(this, sPanel));
-        buttonSelectionPanel.add(apply);
-
-        buttonSelectionPanel.revalidate();
-        buttonSelectionPanel.repaint();
-    }
-
-    public void setUnAvailableLabel(String text) {
-        unAvailableLabel.setText(text);
-    }
-
-    private class NewGameListener implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            newGameRebuild();
-        }
-    }
-
-    private class LoadGameListener implements ActionListener {
-
-        private final int caseType;
-
-        public LoadGameListener(int caseType) {
-            this.caseType = caseType;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            loadGameRebuild(caseType);
-        }
-    }
-
-    private class LevelGameListener implements ActionListener {
-
-        private final GameLevel gameLevel;
-        private final int caseNumber;
-
-        public LevelGameListener(GameLevel gameLevel, int caseNumber) {
-            this.caseNumber = caseNumber;
-            this.gameLevel = gameLevel;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            loadLevelGameRebuild(gameLevel, caseNumber);
-        }
-    }
 }

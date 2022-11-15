@@ -5,7 +5,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.event.MouseInputAdapter;
 
 import com.sesame.game.common.Const;
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.SquarePanel;
 
 /**
  * Introduction: mouse adapter
@@ -13,9 +13,9 @@ import com.sesame.game.ui.SudokuPanel;
  * @author sesame 2022/10/26
  */
 public class SudokuPanelMouseAdapter extends MouseInputAdapter {
-    private final SudokuPanel panel;
+    private final SquarePanel panel;
 
-    public SudokuPanelMouseAdapter(SudokuPanel panel) {
+    public SudokuPanelMouseAdapter(SquarePanel panel) {
         this.panel = panel;
     }
 

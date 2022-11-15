@@ -20,6 +20,6 @@ public class HideTheTextThread implements Runnable {
             TimeUnit.SECONDS.sleep(2);
         } catch (InterruptedException e) {
         }
-        sudokuFrame.setUnAvailableLabel("");
+        sudokuFrame.getButtonPanel().setUnAvailableLabel("");
     }
 }

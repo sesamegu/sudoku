@@ -29,11 +29,11 @@ public class ChangeLanguageListener implements ActionListener {
         sudoku.setTitle(I18nProcessor.getValue("sudoku"));
 
         //menu
-        JMenuBar menubar = sudoku.buildJMenuBar();
+        JMenuBar menubar = sudoku.getMenuGenerator().buildJMenuBar();
         sudoku.setJMenuBar(menubar);
 
         //button
-        sudoku.setButtonText();
+        sudoku.getButtonPanel().setButtonText();
 
         sudoku.revalidate();
     }

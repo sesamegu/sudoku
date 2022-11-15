@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Optional;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.SquarePanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.HintModel;
@@ -19,9 +19,9 @@ import com.sesame.game.strategy.model.SolutionModel;
  */
 public class HintActionListener implements ActionListener {
     private final Sudoku sudokuFrame;
-    private final SudokuPanel panel;
+    private final SquarePanel panel;
 
-    public HintActionListener(Sudoku sudokuFrame, SudokuPanel panel) {
+    public HintActionListener(Sudoku sudokuFrame, SquarePanel panel) {
         this.sudokuFrame = sudokuFrame;
         this.panel = panel;
     }
@@ -39,7 +39,7 @@ public class HintActionListener implements ActionListener {
         if (result.isPresent()) {
             panel.isHintMode = true;
             panel.hintModel = result.get();
-            sudokuFrame.hintModel(panel.hintModel.getStrategy());
+            sudokuFrame.getButtonPanel().hintModel(panel.hintModel.getStrategy());
 
             // 命中解决方案后，直接删除候选数
             if (!panel.hintModel.isCandidateModel()) {
@@ -52,9 +52,9 @@ public class HintActionListener implements ActionListener {
             panel.repaint();
         } else {
             if (panel.puzzle.boardFull()) {
-                sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("puzzle_finished"));
+                sudokuFrame.getButtonPanel().setUnAvailableLabel(I18nProcessor.getValue("puzzle_finished"));
             } else {
-                sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("no_strategy_available"));
+                sudokuFrame.getButtonPanel().setUnAvailableLabel(I18nProcessor.getValue("no_strategy_available"));
             }
             new Thread(new HideTheTextThread(sudokuFrame)).start();
         }

@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.ui.SquarePanel;
 import com.sesame.game.common.SudokuPuzzle;
 import org.springframework.util.CollectionUtils;
 
@@ -19,9 +19,9 @@ import org.springframework.util.CollectionUtils;
 
 public class NumActionListener implements ActionListener {
 
-    private final SudokuPanel panel;
+    private final SquarePanel panel;
 
-    public NumActionListener(SudokuPanel sPanel) {
+    public NumActionListener(SquarePanel sPanel) {
         panel = sPanel;
     }
 

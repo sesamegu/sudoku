@@ -24,8 +24,10 @@ import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-@SuppressWarnings("serial")
-public class SudokuPanel extends JPanel {
+/**
+ * square panel
+ */
+public class SquarePanel extends JPanel {
 
     private final Font f = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);
     public SudokuPuzzle puzzle;
@@ -53,7 +55,7 @@ public class SudokuPanel extends JPanel {
     private int slotWidth;
     private int slotHeight;
 
-    public SudokuPanel() {
+    public SquarePanel() {
         this.setPreferredSize(new Dimension(540, 450));
         this.addMouseListener(new SudokuPanelMouseAdapter(this));
     }
