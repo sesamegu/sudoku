@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.SudokuPanel;
+import com.sesame.game.ui.SudokuPanel;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;

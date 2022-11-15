@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.sesame.game.Const;
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.Const;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;

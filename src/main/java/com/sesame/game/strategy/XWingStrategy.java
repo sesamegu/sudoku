@@ -9,9 +9,9 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import com.sesame.game.Const;
-import com.sesame.game.PuzzleTools;
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.Const;
+import com.sesame.game.common.PuzzleTools;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;

@@ -1,4 +1,4 @@
-package com.sesame.game;
+package com.sesame.game.common;
 
 import java.util.Arrays;
 import java.util.HashSet;

@@ -10,9 +10,9 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import com.sesame.game.Const;
-import com.sesame.game.PuzzleTools;
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.Const;
+import com.sesame.game.common.PuzzleTools;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.Strategy;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.CandidateModel;

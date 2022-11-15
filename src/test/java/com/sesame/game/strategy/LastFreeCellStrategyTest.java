@@ -3,7 +3,7 @@ package com.sesame.game.strategy;
 import java.util.List;
 import java.util.Optional;
 
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;

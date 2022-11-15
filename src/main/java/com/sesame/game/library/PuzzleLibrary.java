@@ -2,9 +2,9 @@ package com.sesame.game.library;
 
 import java.util.Optional;
 
-import com.sesame.game.Const;
-import com.sesame.game.GameLevel;
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.Const;
+import com.sesame.game.common.GameLevel;
+import com.sesame.game.common.SudokuPuzzle;
 
 /**
  * Introduction: puzzle library

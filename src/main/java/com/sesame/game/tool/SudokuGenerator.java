@@ -3,9 +3,9 @@ package com.sesame.game.tool;
 import java.util.Optional;
 import java.util.Random;
 
-import com.sesame.game.Const;
-import com.sesame.game.GameLevel;
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.Const;
+import com.sesame.game.common.GameLevel;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.library.PuzzleLibrary;
 import org.springframework.util.Assert;
 

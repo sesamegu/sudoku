@@ -1,4 +1,4 @@
-package com.sesame.game;
+package com.sesame.game.common;
 
 public enum GameLevel {
     EASY("Easy"),

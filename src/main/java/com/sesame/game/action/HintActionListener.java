@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.Optional;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.SudokuPanel;
+import com.sesame.game.ui.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.HintModel;
@@ -51,7 +51,11 @@ public class HintActionListener implements ActionListener {
             }
             panel.repaint();
         } else {
-            sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("no_strategy_available"));
+            if (panel.puzzle.boardFull()) {
+                sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("puzzle_finished"));
+            } else {
+                sudokuFrame.setUnAvailableLabel(I18nProcessor.getValue("no_strategy_available"));
+            }
             new Thread(new HideTheTextThread(sudokuFrame)).start();
         }
     }

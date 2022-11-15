@@ -26,9 +26,13 @@ import com.sesame.game.action.HintActionListener;
 import com.sesame.game.action.NumActionListener;
 import com.sesame.game.action.ShowCandidateListener;
 import com.sesame.game.action.UnStopHintListener;
+import com.sesame.game.common.Const;
+import com.sesame.game.common.GameLevel;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.Strategy;
 import com.sesame.game.tool.SudokuGenerator;
+import com.sesame.game.ui.SudokuPanel;
 
 /**
  * the Sudoku main entry

@@ -3,7 +3,7 @@ package com.sesame.game.action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import com.sesame.game.SudokuPanel;
+import com.sesame.game.ui.SudokuPanel;
 
 /**
  * Introduction:show candidate switch

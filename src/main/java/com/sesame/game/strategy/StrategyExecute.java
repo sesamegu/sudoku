@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
 
 /**

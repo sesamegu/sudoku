@@ -4,8 +4,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.event.MouseInputAdapter;
 
-import com.sesame.game.Const;
-import com.sesame.game.SudokuPanel;
+import com.sesame.game.common.Const;
+import com.sesame.game.ui.SudokuPanel;
 
 /**
  * Introduction: mouse adapter

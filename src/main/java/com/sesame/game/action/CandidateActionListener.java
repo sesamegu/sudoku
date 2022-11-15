@@ -4,7 +4,7 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.sesame.game.SudokuPanel;
+import com.sesame.game.ui.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
 
 /**

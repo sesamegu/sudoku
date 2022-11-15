@@ -2,6 +2,7 @@ package com.sesame.game;
 
 import java.util.List;
 
+import com.sesame.game.common.SudokuPuzzle;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

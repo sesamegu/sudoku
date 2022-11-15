@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.swing.JButton;
 
-import com.sesame.game.SudokuPanel;
-import com.sesame.game.SudokuPuzzle;
+import com.sesame.game.ui.SudokuPanel;
+import com.sesame.game.common.SudokuPuzzle;
 import org.springframework.util.CollectionUtils;
 
 /**

@@ -1,10 +1,11 @@
-package com.sesame.game;
+package com.sesame.game.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sesame.game.common.Const;
 import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 

@@ -1,4 +1,4 @@
-package com.sesame.game;
+package com.sesame.game.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,6 +12,8 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import com.sesame.game.common.Const;
+import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.action.SudokuPanelMouseAdapter;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
@@ -19,7 +21,6 @@ import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
-import com.sesame.game.tool.SudokuGenerator;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 

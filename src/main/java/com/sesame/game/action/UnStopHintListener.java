@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.SudokuPanel;
+import com.sesame.game.ui.SudokuPanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.CandidateModel;
