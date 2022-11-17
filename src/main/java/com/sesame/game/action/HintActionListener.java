@@ -5,12 +5,12 @@ import java.awt.event.ActionListener;
 import java.util.Optional;
 
 import com.sesame.game.Sudoku;
-import com.sesame.game.ui.SquarePanel;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.ui.SquarePanel;
 
 /**
  * Introduction: hint listener
@@ -21,9 +21,9 @@ public class HintActionListener implements ActionListener {
     private final Sudoku sudokuFrame;
     private final SquarePanel panel;
 
-    public HintActionListener(Sudoku sudokuFrame, SquarePanel panel) {
+    public HintActionListener(Sudoku sudokuFrame) {
         this.sudokuFrame = sudokuFrame;
-        this.panel = panel;
+        this.panel = sudokuFrame.getSquarePanel();
     }
 
     @Override

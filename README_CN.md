@@ -1,4 +1,4 @@
-# 数独 【依宝】                        [English](https://github.com/sesamegu/sudoku) 
+# 数独 【依宝】          -------------------------      [English](https://github.com/sesamegu/sudoku) 
 项目是基于java Swing 实现的一个数独游戏。项目的主要特点：精良关卡、操作功能丰富、实现了主流的求解技巧、解题器、关卡设计器、支持多语言。
 项目部分代码基于  [sudoku](https://github.com/mattnenterprise/Sudoku)     
 
@@ -45,6 +45,12 @@
 [三三三](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_CN.md)      
 
 ## 数独解题器
+这块你可以输入你碰到的任意数独谜题，然后得到答案。
+可以分两种模式进行计算：按步提示（点击提示按钮）和 暴力破解（点击暴力破解按钮）。
+按步提示：基于已经实现的技巧进行破解，优点是每步解法清晰可见，缺点是部分谜题可能无法解答；
+暴力破解：穷举所有可能性进行破解，优点是能破解任意谜题，缺点是知其然不知其所以然。
+
+<img src="docs/picture/brute_force_CN.png" width="550" height="430" >   
 
 ## 数独游戏设计器
 

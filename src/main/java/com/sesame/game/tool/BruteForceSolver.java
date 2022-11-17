@@ -43,9 +43,14 @@ public class BruteForceSolver {
      * @return valid move or not or done
      * Responses: Erroneous data
      */
-    private static boolean backtrackSudokuSolver(int r, int c, SudokuPuzzle puzzle) {
+    public static boolean backtrackSudokuSolver(int r, int c, SudokuPuzzle puzzle) {
         //If the move is not valid return false
         puzzle.makeSureInRange(r, c);
+
+        //if puzzle solved return true
+        if (puzzle.boardFull()) {
+            return true;
+        }
 
         //if the current space is empty
         if (puzzle.isSlotAvailable(r, c)) {

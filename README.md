@@ -1,4 +1,4 @@
-# Sudoku Daisy                        [中文](https://github.com/sesamegu/sudoku/blob/main/README_CN.md) 
+# Sudoku Daisy           -------------------------      [中文](https://github.com/sesamegu/sudoku/blob/main/README_CN.md)              
 This is a Sudoku game programmed using Java and Swing for the GUI. It's based on [sudoku](https://github.com/mattnenterprise/Sudoku)     
 Features:
 * Well design 35+ puzzles.
@@ -31,6 +31,13 @@ Features:
 [hidden three](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_EN.md)      
 
 ## Solver
+You can input any sudoku puzzle and get the answer.
+there are two methods for computing : the hint mode and the brute force mode.
+可以分两种模式进行计算：按步提示（点击提示按钮）和 暴力破解（点击暴力破解按钮）。
+the hint mode's advantage : you can see every step's strategy
+the brute force mode's advantage: you can crack any Sudoku puzzle.
+
+<img src="docs/picture/brute_force_EN.png" width="550" height="430" >   
 
 ## Game Designer
 

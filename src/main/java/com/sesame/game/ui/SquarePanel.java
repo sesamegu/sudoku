@@ -12,9 +12,9 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
+import com.sesame.game.action.SudokuPanelMouseAdapter;
 import com.sesame.game.common.Const;
 import com.sesame.game.common.SudokuPuzzle;
-import com.sesame.game.action.SudokuPanelMouseAdapter;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
@@ -160,7 +160,7 @@ public class SquarePanel extends JPanel {
                 if (CollectionUtils.isEmpty(candidate)) {
                     continue;
                 }
-                Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid");
+                Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid:row= " + row + "\tcol=" + col);
                 Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.HINT_FONT_SIZE);
                 g2d.setFont(smallFont);
 

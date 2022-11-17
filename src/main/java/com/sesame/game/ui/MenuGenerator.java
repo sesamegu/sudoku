@@ -112,7 +112,12 @@ public class MenuGenerator {
 
     public void loadGameRebuild(int caseType) {
         SudokuPuzzle generatedPuzzle = SudokuGenerator.useSpecified(caseType);
-        sudoku.rebuildInterface(generatedPuzzle, true);
+        if (caseType == 1) {
+            sudoku.rebuildInterface(generatedPuzzle, true, true);
+        } else {
+            sudoku.rebuildInterface(generatedPuzzle, true);
+        }
+
     }
 
     private class LevelGameListener implements ActionListener {

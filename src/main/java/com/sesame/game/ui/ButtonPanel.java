@@ -11,6 +11,7 @@ import javax.swing.JToggleButton;
 
 import com.sesame.game.Sudoku;
 import com.sesame.game.action.ApplyListener;
+import com.sesame.game.action.BruteForceActionListener;
 import com.sesame.game.action.CandidateActionListener;
 import com.sesame.game.action.DeleteActionListener;
 import com.sesame.game.action.HintActionListener;
@@ -32,6 +33,7 @@ public class ButtonPanel extends JPanel {
     private JToggleButton candidateButton;
     private JButton hint;
     private JLabel unAvailableLabel;
+    private JButton bruteForce;
 
     public ButtonPanel(Sudoku sudoku) {
         this.sudoku = sudoku;
@@ -39,6 +41,10 @@ public class ButtonPanel extends JPanel {
     }
 
     public void buttonModel() {
+        buttonModel(false);
+    }
+
+    public void buttonModel(boolean showBruteButton) {
         removeAll();
         setPreferredSize(new Dimension(110, 500));
         //empty Label
@@ -62,14 +68,22 @@ public class ButtonPanel extends JPanel {
         candidateButton = new JToggleButton();
         candidateButton.setPreferredSize(new Dimension(90, 40));
         candidateButton.addChangeListener(new CandidateActionListener(sudoku.getSquarePanel(), candidateButton));
-
-        add(candidateButton);
+        if (!showBruteButton) {
+            add(candidateButton);
+        }
         //hint button
         hint = new JButton();
         hint.setPreferredSize(new Dimension(90, 40));
-        hint.addActionListener(new HintActionListener(sudoku, sudoku.getSquarePanel()));
-
+        hint.addActionListener(new HintActionListener(sudoku));
         add(hint);
+
+        //bruteForce button
+        bruteForce = new JButton();
+        bruteForce.setPreferredSize(new Dimension(90, 40));
+        bruteForce.addActionListener(new BruteForceActionListener(sudoku));
+        if (showBruteButton) {
+            add(bruteForce);
+        }
 
         setButtonText();
 
@@ -86,6 +100,7 @@ public class ButtonPanel extends JPanel {
         delete.setText(I18nProcessor.getValue("delete"));
         candidateButton.setText(I18nProcessor.getValue("note_off"));
         hint.setText(I18nProcessor.getValue("hint"));
+        bruteForce.setText(I18nProcessor.getValue("brute_force"));
     }
 
     public void hintModel(Strategy strategy) {

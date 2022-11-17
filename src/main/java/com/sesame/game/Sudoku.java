@@ -68,9 +68,13 @@ public class Sudoku extends JFrame {
     }
 
     public void rebuildInterface(SudokuPuzzle generatedPuzzle, boolean showCandidate) {
+        rebuildInterface(generatedPuzzle, showCandidate, false);
+    }
+
+    public void rebuildInterface(SudokuPuzzle generatedPuzzle, boolean showCandidate, boolean showBruteForceButton) {
         squarePanel.newSudokuPuzzle(generatedPuzzle, showCandidate);
         squarePanel.repaint();
-        buttonPanel.buttonModel();
+        buttonPanel.buttonModel(showBruteForceButton);
     }
 
 }
