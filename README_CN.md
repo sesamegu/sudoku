@@ -53,4 +53,5 @@
 <img src="docs/picture/brute_force_CN.png" width="550" height="430" >   
 
 ## 数独游戏设计器
-
+本游戏中的关卡都是由"数独游戏设计器"自动生成，可参见代码（当前没有界面）      
+      com.sesame.game.tool.GameGenerator
