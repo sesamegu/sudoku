@@ -33,7 +33,6 @@ Features:
 ## Solver
 You can input any sudoku puzzle and get the answer.
 there are two methods for computing : the hint mode and the brute force mode.
-可以分两种模式进行计算：按步提示（点击提示按钮）和 暴力破解（点击暴力破解按钮）。
 the hint mode's advantage : you can see every step's strategy
 the brute force mode's advantage: you can crack any Sudoku puzzle.
 
