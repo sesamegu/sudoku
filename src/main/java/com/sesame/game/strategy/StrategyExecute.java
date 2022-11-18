@@ -25,6 +25,7 @@ public abstract class StrategyExecute {
         allStrategy.add(new HiddenTriplesStrategy());
         allStrategy.add(new HiddenThreeStrategy());
         allStrategy.add(new PointingStrategy());
+        allStrategy.add(new RowColumnToBox());
         allStrategy.add(new XWingStrategy());
         allStrategy.add(new YWingStrategy());
         allStrategy.add(new SwordFishStrategy());

@@ -15,6 +15,7 @@ public enum Strategy {
     HIDDEN_PAIRS("hidden_pairs"),
     HIDDEN_TRIPLES("hidden_triples"),
     POINTING_PAIRS("pointing_pairs"),
+    ROW_COLUMN_TO_BOX("row_column_to_box"),
     X_WING("x_wing"),
     Y_WING("y_wing"),
     SWORDFISH("swordfish"),

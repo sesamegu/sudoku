@@ -25,6 +25,7 @@ Features:
 [hidden pairs](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_pairs_EN.md)      
 [hidden triples](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_EN.md)      
 [pointing pairs](https://github.com/sesamegu/sudoku/blob/main/docs/pointing_pairs_EN.md)      
+[row column to box](https://github.com/sesamegu/sudoku/blob/main/docs/row_column_to_box_EN.md)       
 [x wing](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_EN.md)      
 [xy wing](https://github.com/sesamegu/sudoku/blob/main/docs/xy_wing_EN.md)      
 [swordfish](https://github.com/sesamegu/sudoku/blob/main/docs/swordfish_EN.md)      
