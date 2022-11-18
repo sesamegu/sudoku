@@ -31,10 +31,10 @@ Features:
 [hidden three](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_EN.md)      
 
 ## Solver
-You can input any sudoku puzzle and get the answer.
-there are two methods for computing : the hint mode and the brute force mode.
-the hint mode's advantage : you can see every step's strategy
-the brute force mode's advantage: you can crack any Sudoku puzzle.
+You can input any sudoku puzzle and get the answer.      
+there are two methods for computing : the hint mode and the brute force mode.        
+the hint mode's advantage : you can see every step's strategy       
+the brute force mode's advantage: you can crack any Sudoku puzzle.       
 
 <img src="docs/picture/brute_force_EN.png" width="550" height="430" >   
 
