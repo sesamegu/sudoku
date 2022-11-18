@@ -7,6 +7,8 @@ import javax.swing.JMenuBar;
 
 import com.sesame.game.Sudoku;
 import com.sesame.game.i18n.I18nProcessor;
+import com.sesame.game.ui.ButtonPanel;
+import com.sesame.game.ui.SquarePanel;
 
 /**
  * Introduction: change language
@@ -32,8 +34,15 @@ public class ChangeLanguageListener implements ActionListener {
         JMenuBar menubar = sudoku.getMenuGenerator().buildJMenuBar();
         sudoku.setJMenuBar(menubar);
 
-        //button
-        sudoku.getButtonPanel().setButtonText();
+        //button mode
+        ButtonPanel buttonPanel = sudoku.getButtonPanel();
+        buttonPanel.setButtonText();
+
+        //hint mode
+        SquarePanel squarePanel = sudoku.getSquarePanel();
+        if (squarePanel.isHintMode) {
+            buttonPanel.hintModel(squarePanel.hintModel.getStrategy());
+        }
 
         sudoku.revalidate();
     }

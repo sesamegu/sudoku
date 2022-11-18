@@ -41,14 +41,6 @@ public class HintActionListener implements ActionListener {
             panel.hintModel = result.get();
             sudokuFrame.getButtonPanel().hintModel(panel.hintModel.getStrategy());
 
-            // 命中解决方案后，直接删除候选数
-            if (!panel.hintModel.isCandidateModel()) {
-                SolutionModel solutionModel = panel.hintModel.getSolutionModel();
-                Position position = solutionModel.getPosition();
-                panel.puzzle.deleteCandidate(position.getRow(), position.getCol(),
-                    panel.puzzle.getCandidate(position.getRow(), position.getCol()));
-
-            }
             panel.repaint();
         } else {
             if (panel.puzzle.boardFull()) {

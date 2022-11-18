@@ -154,12 +154,25 @@ public class SquarePanel extends JPanel {
     }
 
     private void drawCandidate(Graphics2D g2d, int slotWidth, int slotHeight, FontRenderContext fContext) {
+
+        // 命中解决数值后，候选数不展示
+        Position notShowPosition = null;
+        if (hintModel != null && !hintModel.isCandidateModel()) {
+            SolutionModel solutionModel = hintModel.getSolutionModel();
+            notShowPosition = solutionModel.getPosition();
+        }
+
         for (int row = 0; row < Const.ROWS; row++) {
             for (int col = 0; col < Const.COLUMNS; col++) {
                 List<String> candidate = puzzle.getCandidate(row, col);
                 if (CollectionUtils.isEmpty(candidate)) {
                     continue;
                 }
+
+                if (notShowPosition != null && notShowPosition.getRow() == row && notShowPosition.getCol() == col) {
+                    continue;
+                }
+
                 Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid:row= " + row + "\tcol=" + col);
                 Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.HINT_FONT_SIZE);
                 g2d.setFont(smallFont);
