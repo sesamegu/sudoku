@@ -37,7 +37,7 @@
 [显性数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_pairs_CN.md)      
 [显性三数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_triples_CN.md)      
 [隐形数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_pairs_CN.md)      
-[隐形三数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_CN.md)      
+[隐形三数](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_CN.md)      
 [宫区块数对](https://github.com/sesamegu/sudoku/blob/main/docs/pointing_pairs_CN.md)    
 [行列摒除区块](https://github.com/sesamegu/sudoku/blob/main/docs/row_column_to_box_CN.md)      
 [x翼](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_CN.md)      

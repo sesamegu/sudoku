@@ -16,8 +16,13 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * Introduction:Obvious Triples
- * In a the block, vertical column or horizontal row, there are three cells which have the three pairs candidates. Then
+ * In a block, vertical column or horizontal row， there are three cells which only contain three same candidates. Then
  * we can delete the three candidates in the area.
+ * four different types:
+ * type 1:  2,2,2   eg: three cells candidates like [1,2] [2,3], [1,3]
+ * type 2:  2,2,3   eg: three cells candidates like [1,2] [2,3], [1,2,3]
+ * type 3:  2,3,3   eg: three cells candidates like [1,2] [1,2,3], [1,2,3]
+ * type 4:  3,3,3   eg: three cells candidates like [1,2,3] [1,2,3], [1,2,3]
  *
  * @author sesame 2022/10/19
  */
@@ -26,8 +31,8 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
     @Override
     public Optional<HintModel> processBasicUnit(Map<Position, List<String>> remaining, List<Position> positionList) {
         List<Position> collect = positionList.stream().filter(
-            one -> (!CollectionUtils.isEmpty(remaining.get(one))) && remaining.get(one).size() == 2).collect(
-            Collectors.toList());
+            one -> !CollectionUtils.isEmpty(remaining.get(one)) && (remaining.get(one).size() == 2 || remaining.get(one)
+                .size() == 3)).collect(Collectors.toList());
 
         if (collect.size() < 3) {
             return Optional.empty();
@@ -57,9 +62,8 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                         });
                     }
 
-                    // three digital which appear twice
-                    int count = (int)countForDigital.values().stream().filter(one -> one == 2).count();
-                    if (count != 3) {
+                    // three digital
+                    if (countForDigital.size() != 3) {
                         continue;
                     }
 
@@ -86,7 +90,11 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                     }
 
                     if (!CollectionUtils.isEmpty(deleteMap)) {
-                        CandidateModel candidateModel = new CandidateModel(causeList, threeDigital, deleteMap);
+                        Map<Position, List<String>> causeMap = new HashMap<>(3);
+                        causeList.forEach(
+                            onePosition -> causeMap.put(onePosition, remaining.get(onePosition))
+                        );
+                        CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                         HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
                         return Optional.of(result);
                     }
