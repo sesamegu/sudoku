@@ -43,7 +43,6 @@
 [x翼](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_CN.md)      
 [xy翼](https://github.com/sesamegu/sudoku/blob/main/docs/xy_wing_CN.md)      
 [剑鱼](https://github.com/sesamegu/sudoku/blob/main/docs/swordfish_CN.md)      
-[三三三](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_CN.md)      
 
 ## 数独解题器
 这块你可以输入你碰到的任意数独谜题，然后得到答案。     

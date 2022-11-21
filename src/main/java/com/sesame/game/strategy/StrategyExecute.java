@@ -23,7 +23,6 @@ public abstract class StrategyExecute {
         allStrategy.add(new ObviousTriplesStrategy());
         allStrategy.add(new HiddenPairsStrategy());
         allStrategy.add(new HiddenTriplesStrategy());
-        allStrategy.add(new HiddenThreeStrategy());
         allStrategy.add(new PointingStrategy());
         allStrategy.add(new RowColumnToBox());
         allStrategy.add(new XWingStrategy());

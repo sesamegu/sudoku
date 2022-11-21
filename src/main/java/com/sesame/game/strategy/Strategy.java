@@ -19,7 +19,6 @@ public enum Strategy {
     X_WING("x_wing"),
     Y_WING("y_wing"),
     SWORDFISH("swordfish"),
-    HIDDEN_THREE("hidden_three"),
     ;
 
     private final String name;

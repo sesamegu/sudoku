@@ -29,7 +29,6 @@ Features:
 [x wing](https://github.com/sesamegu/sudoku/blob/main/docs/x_wing_EN.md)      
 [xy wing](https://github.com/sesamegu/sudoku/blob/main/docs/xy_wing_EN.md)      
 [swordfish](https://github.com/sesamegu/sudoku/blob/main/docs/swordfish_EN.md)      
-[hidden three](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_three_EN.md)      
 
 ## Solver
 You can input any sudoku puzzle and get the answer.      
