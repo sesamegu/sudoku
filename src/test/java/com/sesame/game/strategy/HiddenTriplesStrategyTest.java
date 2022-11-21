@@ -1,6 +1,5 @@
 package com.sesame.game.strategy;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +20,7 @@ import org.junit.Test;
 public class HiddenTriplesStrategyTest {
 
     @Test
-    public void row_test() {
+    public void row_222_test() {
         String[][] board = new String[][] {
             {"", "4", "", "", "5", "", "", "", ""},
             {"", "", "", "", "", "", "", "", ""},
@@ -95,7 +94,7 @@ public class HiddenTriplesStrategyTest {
     }
 
     @Test
-    public void row_test_not_the_case() {
+    public void box_233_test() {
         String[][] board = new String[][] {
             {"", "", "", "", "", "6", "5", "", ""},
             {"4", "", "8", "", "5", "", "2", "", ""},
@@ -110,47 +109,49 @@ public class HiddenTriplesStrategyTest {
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
 
-        List<String> digital = new ArrayList<>();
-        digital.add("2");
-        digital.add("7");
-        puzzle.setCandidate(0, 0, digital);
-
-        digital = new ArrayList<>();
-        digital.add("1");
-        digital.add("2");
-        digital.add("3");
-        puzzle.setCandidate(0, 1, digital);
-
-        digital = new ArrayList<>();
-        digital.add("3");
-        digital.add("7");
-        puzzle.setCandidate(0, 2, digital);
-
-        digital = new ArrayList<>();
-        digital.add("1");
-        digital.add("3");
-        digital.add("4");
-        digital.add("8");
-        digital.add("9");
-        puzzle.setCandidate(0, 3, digital);
-
-        digital = new ArrayList<>();
-        digital.add("3");
-        digital.add("4");
-        puzzle.setCandidate(0, 4, digital);
-
-        digital = new ArrayList<>();
-        digital.add("3");
-        digital.add("8");
-        puzzle.setCandidate(0, 7, digital);
-
-        digital = new ArrayList<>();
-        digital.add("4");
-        digital.add("9");
-        puzzle.setCandidate(0, 8, digital);
-
         Optional<HintModel> result = new HiddenTriplesStrategy().execute(puzzle);
-        Assert.assertFalse(result.isPresent());
+        Assert.assertTrue(result.isPresent());
+        HintModel hintModel = result.get();
+        Assert.assertTrue(hintModel.isCandidateModel());
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.assertEquals(3, causeMap.size());
+        List<String> cause = causeMap.get(new Position(0, 7));
+        Assert.assertEquals(3, cause.size());
+        Assert.assertEquals("3", cause.get(0));
+        Assert.assertEquals("7", cause.get(1));
+        Assert.assertEquals("8", cause.get(2));
+
+        cause = causeMap.get(new Position(1, 7));
+        Assert.assertEquals(2, cause.size());
+        Assert.assertEquals("3", cause.get(0));
+        Assert.assertEquals("7", cause.get(1));
+
+        cause = causeMap.get(new Position(2, 7));
+        Assert.assertEquals(3, cause.size());
+        Assert.assertEquals("3", cause.get(0));
+        Assert.assertEquals("7", cause.get(1));
+        Assert.assertEquals("8", cause.get(2));
+
+        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+
+        Assert.assertEquals(2, deleteMap.size());
+        List<String> delDigital = deleteMap.get(new Position(1, 7));
+        Assert.assertEquals(1, delDigital.size());
+        Assert.assertEquals("6", delDigital.get(0));
+
+        delDigital = deleteMap.get(new Position(2, 7));
+        Assert.assertEquals(1, delDigital.size());
+        Assert.assertEquals("6", delDigital.get(0));
+
+        List<UnitModel> unitModelList = hintModel.getUnitModelList();
+        Assert.assertEquals(1, unitModelList.size());
+        UnitModel actual = unitModelList.get(0);
+        Assert.assertEquals(Unit.BOX, actual.getUnit());
+        Assert.assertEquals(0, actual.getRow());
+        Assert.assertEquals(6, actual.getColumn());
+
 
     }
 

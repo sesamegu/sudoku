@@ -30,7 +30,7 @@ public class RowColumnToBox implements FillStrategy {
         // iterate the rows
         for (int row = 0; row < Const.ROWS; row++) {
             List<Position> positionByRow = PuzzleTools.getPositionByRow(row);
-            Map<String, List<Position>> candidatePosition = buildDigitalMap(remaining, positionByRow);
+            Map<String, List<Position>> candidatePosition = PuzzleTools.buildDigPosiMap(remaining, positionByRow);
             if (CollectionUtils.isEmpty(candidatePosition)) {
                 continue;
             }
@@ -56,7 +56,7 @@ public class RowColumnToBox implements FillStrategy {
         // iterate the columns
         for (int column = 0; column < Const.COLUMNS; column++) {
             List<Position> positionByColumn = PuzzleTools.getPositionByColumn(column);
-            Map<String, List<Position>> candidatePosition = buildDigitalMap(remaining, positionByColumn);
+            Map<String, List<Position>> candidatePosition = PuzzleTools.buildDigPosiMap(remaining, positionByColumn);
             if (CollectionUtils.isEmpty(candidatePosition)) {
                 continue;
             }
@@ -81,7 +81,6 @@ public class RowColumnToBox implements FillStrategy {
 
         return Optional.empty();
     }
-
 
     private List<Position> checkOtherCells(Map<Position, List<String>> remaining, List<Position> causeList,
         String key) {
@@ -118,32 +117,6 @@ public class RowColumnToBox implements FillStrategy {
 
         return true;
     }
-
-    /**
-     * build key to position map
-     *
-     * @param remaining
-     * @param positionList
-     * @return key is the digital,value is its positions
-     */
-    private Map<String, List<Position>> buildDigitalMap(Map<Position, List<String>> remaining,
-        List<Position> positionList) {
-        Map<String, List<Position>> candidatePosition = new HashMap<>();
-        for (Position onePosition : positionList) {
-            List<String> candidates = remaining.get(onePosition);
-            if (CollectionUtils.isEmpty(candidates)) {
-                continue;
-            }
-            candidates.forEach(oneDigital -> {
-                if (!candidatePosition.containsKey(oneDigital)) {
-                    candidatePosition.put(oneDigital, new ArrayList<>());
-                }
-                candidatePosition.get(oneDigital).add(onePosition);
-            });
-        }
-        return candidatePosition;
-    }
-
 
     private Optional<HintModel> buildHintModel(int row, int column, List<Position> causeList, String key,
         List<Position> deletePosition, Direction direction) {

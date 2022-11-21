@@ -47,7 +47,7 @@ public abstract class PuzzleTools {
     }
 
     /**
-     * key is the digital, the value is the position
+     * key is the digital, the value is the count
      *
      * @param remaining
      * @param positionList
@@ -71,4 +71,30 @@ public abstract class PuzzleTools {
         }
         return countForDigital;
     }
+
+    /**
+     * build key to position map
+     *
+     * @param remaining
+     * @param positionList
+     * @return key is the digital,value is its positions
+     */
+    public static Map<String, List<Position>> buildDigPosiMap(Map<Position, List<String>> remaining,
+        List<Position> positionList) {
+        Map<String, List<Position>> candidatePosition = new HashMap<>();
+        for (Position onePosition : positionList) {
+            List<String> candidates = remaining.get(onePosition);
+            if (CollectionUtils.isEmpty(candidates)) {
+                continue;
+            }
+            candidates.forEach(oneDigital -> {
+                if (!candidatePosition.containsKey(oneDigital)) {
+                    candidatePosition.put(oneDigital, new ArrayList<>());
+                }
+                candidatePosition.get(oneDigital).add(onePosition);
+            });
+        }
+        return candidatePosition;
+    }
+
 }

@@ -35,7 +35,7 @@
 [唯一候选数](https://github.com/sesamegu/sudoku/blob/main/docs/last_possible_number_CN.md)      
 [隐性单一数](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_singles_CN.md)      
 [显性数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_pairs_CN.md)      
-[显性三数对](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_triples_CN.md)      
+[显性三数](https://github.com/sesamegu/sudoku/blob/main/docs/obvious_triples_CN.md)      
 [隐形数对](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_pairs_CN.md)      
 [隐形三数](https://github.com/sesamegu/sudoku/blob/main/docs/hidden_triples_CN.md)      
 [宫区块数对](https://github.com/sesamegu/sudoku/blob/main/docs/pointing_pairs_CN.md)    
