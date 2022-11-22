@@ -1,14 +1,20 @@
 package com.sesame.game.strategy;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.sesame.game.common.PuzzleTools;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.UnitModel;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -85,7 +91,22 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+
+        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        UnitModel unitModel = hintModel.getUnitModelList().get(0);
+        int number = PuzzleTools.getNumber(unitModel);
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+        List<Position> positions = new ArrayList<>(candidateModel.getCauseMap().keySet());
+        Collections.sort(positions);
+        Assert.isTrue(positions.size() == 2, "should be 2");
+        List<String> digitals = candidateModel.getCauseMap().values().iterator().next();
+        Collections.sort(digitals);
+        Assert.isTrue(digitals.size() == 2, "should be 2");
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
+            I18nProcessor.getValue(unitModel.getUnit().getDesc()), positions.get(0).getDesc(),
+            positions.get(1).getDesc(), digitals.get(0), digitals.get(1)
+        );
     }
 
 }
