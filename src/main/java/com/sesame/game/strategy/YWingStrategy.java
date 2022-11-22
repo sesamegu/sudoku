@@ -359,4 +359,9 @@ public class YWingStrategy implements FillStrategy {
         return Strategy.Y_WING;
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

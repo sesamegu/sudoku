@@ -110,4 +110,9 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
         return Strategy.OBVIOUS_TRIPLES;
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

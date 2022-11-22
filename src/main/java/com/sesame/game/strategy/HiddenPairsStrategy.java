@@ -83,4 +83,9 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
         return Optional.empty();
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

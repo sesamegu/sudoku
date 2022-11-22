@@ -234,4 +234,10 @@ public class SwordFishStrategy implements FillStrategy {
         return Strategy.SWORDFISH;
     }
 
+
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

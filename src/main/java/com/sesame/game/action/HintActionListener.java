@@ -39,7 +39,7 @@ public class HintActionListener implements ActionListener {
         if (result.isPresent()) {
             panel.isHintMode = true;
             panel.hintModel = result.get();
-            sudokuFrame.getButtonPanel().hintModel(panel.hintModel.getStrategy());
+            sudokuFrame.getButtonPanel().hintModel(panel.hintModel);
 
             panel.repaint();
         } else {

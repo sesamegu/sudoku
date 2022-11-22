@@ -204,4 +204,9 @@ public class XWingStrategy implements FillStrategy {
         return Strategy.X_WING;
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

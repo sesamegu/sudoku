@@ -83,4 +83,9 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
         return Strategy.OBVIOUS_PAIRS;
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

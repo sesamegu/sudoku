@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author sesame 2022/10/27
  */
 public enum Unit {
-    ROW("row "),
+    ROW("row"),
     COLUMN("column"),
     BOX("box");
 

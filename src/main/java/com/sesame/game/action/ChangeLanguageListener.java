@@ -41,7 +41,7 @@ public class ChangeLanguageListener implements ActionListener {
         //hint mode
         SquarePanel squarePanel = sudoku.getSquarePanel();
         if (squarePanel.isHintMode) {
-            buttonPanel.hintModel(squarePanel.hintModel.getStrategy());
+            buttonPanel.hintModel(squarePanel.hintModel);
         }
 
         sudoku.revalidate();

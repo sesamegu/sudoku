@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sesame.game.common.Const;
 import com.sesame.game.strategy.model.Position;
 import org.springframework.util.CollectionUtils;
 
@@ -31,7 +30,6 @@ public abstract class PuzzleTools {
         }
         return positionList;
     }
-
 
     public static List<Position> getPositionByBox(int row, int column) {
         int rowStart = row - row % Const.BOX_WIDTH;
@@ -95,6 +93,13 @@ public abstract class PuzzleTools {
             });
         }
         return candidatePosition;
+    }
+
+    public static int calcBoxNumber(int row, int column) {
+        int box;
+        box = (row / Const.BOX_WIDTH) * 3;
+        box += (column / Const.BOX_HEIGHT) + 1;
+        return box;
     }
 
 }

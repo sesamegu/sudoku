@@ -1,5 +1,6 @@
 package com.sesame.game.i18n;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -30,12 +31,16 @@ public class I18nProcessor {
     }
 
     public static String getValue(String key) {
-        //return rbEn.getString(key);
         if (isChinese) {
             return rbZh.getString(key);
         } else {
             return rbEn.getString(key);
         }
+    }
+
+    public static String getAppendValue(String key, Object... argu) {
+        MessageFormat messageFormat = new MessageFormat(getValue(key));
+        return messageFormat.format(argu);
     }
 
 }

@@ -19,6 +19,8 @@ import com.sesame.game.action.NumActionListener;
 import com.sesame.game.common.Const;
 import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.Strategy;
+import com.sesame.game.strategy.StrategyExecute;
+import com.sesame.game.strategy.model.HintModel;
 
 /**
  * Introduction: the button panel
@@ -103,7 +105,8 @@ public class ButtonPanel extends JPanel {
         bruteForce.setText(I18nProcessor.getValue("brute_force"));
     }
 
-    public void hintModel(Strategy strategy) {
+    public void hintModel(HintModel hintModel) {
+
         removeAll();
 
         setPreferredSize(new Dimension(110, 500));
@@ -116,6 +119,7 @@ public class ButtonPanel extends JPanel {
         jLabel.setPreferredSize(new Dimension(110, 15));
         add(jLabel);
 
+        Strategy strategy = hintModel.getStrategy();
         String value = I18nProcessor.getValue(strategy.getName());
         if (value.length() > 15) {
             value = "<html><body>" + value.substring(0, 14) + "<br>" + value.substring(14) + "<body></html>";
@@ -125,14 +129,23 @@ public class ButtonPanel extends JPanel {
         jLabel2.setForeground(Color.red);
         add(jLabel2);
 
-        //hint desc
-        JTextArea textArea = new JTextArea("");
-        textArea.setPreferredSize(new Dimension(110, 220));
-        textArea.setLineWrap(true);
-        textArea.setEnabled(false);
+        // strategy desc
+        JTextArea strategyDesc = new JTextArea("");
+        strategyDesc.setPreferredSize(new Dimension(110, 170));
+        strategyDesc.setLineWrap(true);
+        strategyDesc.setEnabled(false);
+        strategyDesc.setText(StrategyExecute.buildDesc(hintModel));
+        add(strategyDesc);
 
-        textArea.setText(I18nProcessor.getValue(strategy.getName() + "_desc"));
-        add(textArea);
+        //hint desc
+        //todo 删除desc
+        JTextArea hintArea = new JTextArea("");
+        hintArea.setPreferredSize(new Dimension(110, 170));
+        hintArea.setLineWrap(true);
+        hintArea.setEnabled(false);
+
+        hintArea.setText(I18nProcessor.getValue(strategy.getName() + "_desc"));
+        add(hintArea);
 
         //apply button
         JButton apply = new JButton(I18nProcessor.getValue("apply"));

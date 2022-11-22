@@ -63,4 +63,9 @@ public class LastPossibleNumberStrategy implements FillStrategy {
         return Strategy.LAST_POSSIBLE_NUMBER;
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

@@ -25,4 +25,11 @@ public interface FillStrategy {
      * @return
      */
     Strategy getStrategy();
+
+    /**
+     * the strategy desc
+     *
+     * @return
+     */
+    String getDesc(HintModel hintModel);
 }

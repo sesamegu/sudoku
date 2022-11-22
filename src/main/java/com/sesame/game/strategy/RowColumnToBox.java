@@ -160,4 +160,11 @@ public class RowColumnToBox implements FillStrategy {
     public Strategy getStrategy() {
         return Strategy.ROW_COLUMN_TO_BOX;
     }
+
+
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }

@@ -148,4 +148,9 @@ public class PointingStrategy implements FillStrategy {
         return Strategy.POINTING_PAIRS;
     }
 
+    @Override
+    public String getDesc(HintModel hintModel) {
+        return "";
+    }
+
 }
