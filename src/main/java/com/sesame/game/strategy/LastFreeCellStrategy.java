@@ -13,7 +13,6 @@ import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
-import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 
@@ -173,26 +172,15 @@ public class LastFreeCellStrategy implements FillStrategy {
         return Strategy.LAST_FREE_CELL;
     }
 
-
-
     @Override
     public String buildDesc(HintModel hintModel) {
         Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
-
-        int number;
-        if (Unit.ROW == unitModel.getUnit()) {
-            number = unitModel.getRow() + 1;
-        } else if (Unit.COLUMN == unitModel.getUnit()) {
-            number = unitModel.getColumn() + 1;
-        } else if (Unit.BOX == unitModel.getUnit()) {
-            number = PuzzleTools.calcBoxNumber(unitModel.getRow(), unitModel.getColumn());
-        } else {
-            throw new RuntimeException("should be here");
-        }
+        int number = PuzzleTools.getNumber(unitModel);
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
             I18nProcessor.getValue(unitModel.getUnit().getDesc()), hintModel.getSolutionModel().getSolutionDigital());
 
     }
+
 }

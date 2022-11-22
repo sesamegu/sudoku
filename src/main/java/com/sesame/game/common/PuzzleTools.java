@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -102,4 +104,18 @@ public abstract class PuzzleTools {
         return box;
     }
 
+
+    public static int getNumber(UnitModel unitModel) {
+        int number;
+        if (Unit.ROW == unitModel.getUnit()) {
+            number = unitModel.getRow() + 1;
+        } else if (Unit.COLUMN == unitModel.getUnit()) {
+            number = unitModel.getColumn() + 1;
+        } else if (Unit.BOX == unitModel.getUnit()) {
+            number = PuzzleTools.calcBoxNumber(unitModel.getRow(), unitModel.getColumn());
+        } else {
+            throw new RuntimeException("should be here");
+        }
+        return number;
+    }
 }

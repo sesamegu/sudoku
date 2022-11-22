@@ -2,7 +2,6 @@ package com.sesame.game.strategy;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +12,12 @@ import java.util.stream.Collectors;
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.UnitModel;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -157,20 +158,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     private List<String> findAppearOnce(Map<Position, List<String>> remaining, List<Position> positionList) {
         // key is the digital，value is the time
-        Map<String, Integer> countForNumber = new HashMap<>(9);
-        for (Position onePosition : positionList) {
-            if (remaining.containsKey(onePosition)) {
-                List<String> lefts = remaining.get(onePosition);
-                lefts.stream().forEach(one -> {
-                    if (countForNumber.containsKey(one)) {
-                        countForNumber.put(one, countForNumber.get(one) + 1);
-                    } else {
-                        countForNumber.put(one, 1);
-                    }
-                });
-            }
-        }
-
+        Map<String, Integer> countForNumber = PuzzleTools.buildDigitalCountMap(remaining, positionList);
         // filter the time is one
         List<String> collect = countForNumber.entrySet().stream().filter(one -> one.getValue() == 1)
             .map(one -> one.getKey()).collect(Collectors.toList());
@@ -272,7 +260,16 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+
+        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        UnitModel unitModel = hintModel.getUnitModelList().get(0);
+        Position position = hintModel.getSolutionModel().getPosition();
+        int number = PuzzleTools.getNumber(unitModel);
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
+            I18nProcessor.getValue(unitModel.getUnit().getDesc()), hintModel.getSolutionModel().getSolutionDigital(),
+            position.getDesc());
+
     }
 
 }
