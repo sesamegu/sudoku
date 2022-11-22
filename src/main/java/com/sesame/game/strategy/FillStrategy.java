@@ -31,5 +31,5 @@ public interface FillStrategy {
      *
      * @return
      */
-    String getDesc(HintModel hintModel);
+    String buildDesc(HintModel hintModel);
 }

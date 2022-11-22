@@ -10,6 +10,7 @@ import java.util.Set;
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
@@ -64,8 +65,12 @@ public class LastPossibleNumberStrategy implements FillStrategy {
     }
 
     @Override
-    public String getDesc(HintModel hintModel) {
-        return "";
+    public String buildDesc(HintModel hintModel) {
+        SolutionModel solutionModel = hintModel.getSolutionModel();
+        Position position = solutionModel.getPosition();
+        String solutionDigital = solutionModel.getSolutionDigital();
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", position.getDesc(), solutionDigital);
+
     }
 
 }

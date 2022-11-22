@@ -57,4 +57,8 @@ public class Position implements Comparable<Position> {
             }
         }
     }
+
+    public String getDesc() {
+        return "[" + (this.row + 1) + "," + (this.col + 1) + "]";
+    }
 }

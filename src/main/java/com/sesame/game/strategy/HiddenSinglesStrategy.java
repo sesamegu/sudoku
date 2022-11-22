@@ -271,7 +271,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
     }
 
     @Override
-    public String getDesc(HintModel hintModel) {
+    public String buildDesc(HintModel hintModel) {
         return "";
     }
 

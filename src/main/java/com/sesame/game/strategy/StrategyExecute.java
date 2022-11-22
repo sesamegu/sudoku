@@ -84,7 +84,7 @@ public abstract class StrategyExecute {
         Strategy strategy = hintModel.getStrategy();
         FillStrategy fillStrategy = strategyMap.get(strategy);
         Assert.notNull(fillStrategy, "not null");
-        return fillStrategy.getDesc(hintModel);
+        return fillStrategy.buildDesc(hintModel);
     }
 
 }

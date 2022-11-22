@@ -176,7 +176,7 @@ public class LastFreeCellStrategy implements FillStrategy {
 
 
     @Override
-    public String getDesc(HintModel hintModel) {
+    public String buildDesc(HintModel hintModel) {
         Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
 

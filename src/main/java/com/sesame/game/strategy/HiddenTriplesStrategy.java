@@ -117,7 +117,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
     }
 
     @Override
-    public String getDesc(HintModel hintModel) {
+    public String buildDesc(HintModel hintModel) {
         return "";
     }
 
