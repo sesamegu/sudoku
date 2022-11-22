@@ -3,14 +3,19 @@ package com.sesame.game.strategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.sesame.game.common.PuzzleTools;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -96,6 +101,22 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
                         );
                         CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                         HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
+                        // calc detail type
+                        DetailTypeEnum detailTypeEnum;
+                        int totalCount = causeMap.values().stream().mapToInt(List::size).sum();
+                        if (totalCount == 6) {
+                            detailTypeEnum = DetailTypeEnum.ONE;
+                        } else if (totalCount == 7) {
+                            detailTypeEnum = DetailTypeEnum.TWO;
+                        } else if (totalCount == 8) {
+                            detailTypeEnum = DetailTypeEnum.THREE;
+                        } else if (totalCount == 9) {
+                            detailTypeEnum = DetailTypeEnum.FOUR;
+                        } else {
+                            throw new RuntimeException("should not happen " + totalCount);
+                        }
+                        result.of(detailTypeEnum);
+
                         return Optional.of(result);
                     }
 
@@ -112,7 +133,29 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+        //第{0}{1}中，位置{2}、{3}、{4}的后续数都只有{5}、{6}、{7}，那么{5}、{6}、{7}必然属于这三个位置，删除其他格包含的{5}、{6}、{7}
+        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+
+        UnitModel unitModel = hintModel.getUnitModelList().get(0);
+        int number = PuzzleTools.getNumber(unitModel);
+
+        Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
+        List<Position> positions = new ArrayList<>(causeMap.keySet());
+        Collections.sort(positions);
+        Assert.isTrue(positions.size() == 3, "should be 3 ");
+
+        Set<String> digitalSet = new HashSet<>();
+        causeMap.values().forEach(one -> digitalSet.addAll(one));
+        List<String> threeDigital = new ArrayList<>(digitalSet);
+        Collections.sort(threeDigital);
+        Assert.isTrue(threeDigital.size() == 3, "should be 3 ");
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
+            I18nProcessor.getValue(unitModel.getUnit().getDesc()), positions.get(0).getDesc(),
+            positions.get(1).getDesc(), positions.get(2).getDesc(), threeDigital.get(0), threeDigital.get(1),
+            threeDigital.get(2)
+        );
+
     }
 
 }

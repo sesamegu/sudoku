@@ -2,6 +2,7 @@ package com.sesame.game.strategy.model;
 
 import java.util.List;
 
+import com.sesame.game.strategy.DetailTypeEnum;
 import com.sesame.game.strategy.Strategy;
 import lombok.Getter;
 
@@ -18,6 +19,7 @@ public class HintModel {
     private SolutionModel solutionModel;
     private CandidateModel candidateModel;
     private List<UnitModel> unitModelList;
+    private DetailTypeEnum detailTypeEnum;
 
     public static HintModel build() {
         return new HintModel();
@@ -42,6 +44,11 @@ public class HintModel {
 
     public HintModel of(List<UnitModel> unitModelList) {
         this.unitModelList = unitModelList;
+        return this;
+    }
+
+    public HintModel of(DetailTypeEnum detailTypeEnum) {
+        this.detailTypeEnum = detailTypeEnum;
         return this;
     }
 
