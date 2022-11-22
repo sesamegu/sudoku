@@ -569,7 +569,7 @@ public class YWingStrategyTest {
 
         Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
         Assert.assertEquals(1, deleteMap.size());
-        List<String> delDigital = deleteMap.get(new Position(3, 1));
+        List<String> delDigital = deleteMap.get(new Position(3, 0));
         Assert.assertEquals(1, delDigital.size());
         Assert.assertEquals("3", delDigital.get(0));
 

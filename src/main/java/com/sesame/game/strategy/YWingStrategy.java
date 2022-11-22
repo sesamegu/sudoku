@@ -22,7 +22,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * Introduction:Y Wing or XY Wing
  * "Y-Wing" technique is similar to "X-Wing", but it based on three corners instead of four.
- * two pattern: by row, by box
+ * two pattern: by row (2 types), by box(4 types)
  *
  * @author sesame 2022/10/23
  */
@@ -63,7 +63,7 @@ public class YWingStrategy implements FillStrategy {
     }
 
     private Optional<HintModel> processBoxHintModel(Map<Position, List<String>> remaining,
-        List<Position> filterList, int row, int column) {
+        List<Position> filterList, int rowStart, int columnStart) {
         int size = filterList.size();
         for (int i = 0; i < size - 1; i++) {
             for (int j = i + 1; j < size; j++) {
@@ -89,14 +89,14 @@ public class YWingStrategy implements FillStrategy {
                 Assert.isTrue(thirdDigital.size() == 2, "should be two");
                 Collections.sort(thirdDigital);
 
-                // find the first column, there are four patterns
+                // type 1: by the first column
                 List<String> tempDigital = new ArrayList<>(thirdDigital);
                 tempDigital.removeAll(remaining.get(first));
                 Assert.isTrue(tempDigital.size() == 1, "should be one");
                 String firstDeleteDigital = tempDigital.get(0);
 
                 List<Position> positionByColumn = PuzzleTools.getPositionByColumn(first.getCol());
-                Optional<HintModel> hintModel = boxBuildHintModel(remaining, row, column, first, second,
+                Optional<HintModel> hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByColumn, firstDeleteDigital, Direction.COLUMN, second.getCol(), -1);
                 if (hintModel.isPresent()) {
                     List<UnitModel> unitModelList = new ArrayList<>();
@@ -105,13 +105,13 @@ public class YWingStrategy implements FillStrategy {
                     return hintModel;
                 }
 
-                // find the second column, there are four patterns
+                //  type 2: by the second column
                 tempDigital = new ArrayList<>(thirdDigital);
                 tempDigital.removeAll(remaining.get(second));
                 Assert.isTrue(tempDigital.size() == 1, "should be one");
                 String secondDeleteDigital = tempDigital.get(0);
                 positionByColumn = PuzzleTools.getPositionByColumn(second.getCol());
-                hintModel = boxBuildHintModel(remaining, row, column, first, second,
+                hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByColumn, secondDeleteDigital, Direction.COLUMN, first.getCol(), -1);
                 if (hintModel.isPresent()) {
                     List<UnitModel> unitModelList = new ArrayList<>();
@@ -120,9 +120,9 @@ public class YWingStrategy implements FillStrategy {
                     return hintModel;
                 }
 
-                // find the first row, there are four patterns
+                //  type 3: by the first row
                 List<Position> positionByRow = PuzzleTools.getPositionByRow(first.getRow());
-                hintModel = boxBuildHintModel(remaining, row, column, first, second,
+                hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByRow, firstDeleteDigital, Direction.ROW, -1, second.getRow());
                 if (hintModel.isPresent()) {
                     List<UnitModel> unitModelList = new ArrayList<>();
@@ -131,9 +131,9 @@ public class YWingStrategy implements FillStrategy {
                     return hintModel;
                 }
 
-                // find the second row, there are four patterns
+                // type 3: by the second row
                 positionByRow = PuzzleTools.getPositionByRow(second.getRow());
-                hintModel = boxBuildHintModel(remaining, row, column, first, second,
+                hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByRow, secondDeleteDigital, Direction.ROW, -1, first.getRow());
                 if (hintModel.isPresent()) {
                     List<UnitModel> unitModelList = new ArrayList<>();
@@ -167,7 +167,6 @@ public class YWingStrategy implements FillStrategy {
             if (CollectionUtils.isEmpty(remaining.get(third))) {
                 continue;
             }
-
             List<String> thirdRemain = new ArrayList<>(remaining.get(third));
             if (!thirdRemain.equals(thirdDigital)) {
                 continue;
@@ -176,29 +175,34 @@ public class YWingStrategy implements FillStrategy {
             //build the Y wing positions
             List<Position> possiblePosition = new ArrayList<>();
             if (direction == Direction.COLUMN) {
-                // the forth cell potential positions
-                possiblePosition.add(new Position(third.getRow(), forthColumn));
+                // the forth cell potential five positions:
+                int thirdCellBoxRowStart = third.getRow() - third.getRow() % Const.BOX_HEIGHT;
+                possiblePosition.add(new Position(thirdCellBoxRowStart, forthColumn));
+                possiblePosition.add(new Position(thirdCellBoxRowStart + 1, forthColumn));
+                possiblePosition.add(new Position(thirdCellBoxRowStart + 2, forthColumn));
 
                 List<Position> threeColumnInBox = new ArrayList<>(3);
                 threeColumnInBox.add(new Position(row, third.getCol()));
                 threeColumnInBox.add(new Position(row + 1, third.getCol()));
                 threeColumnInBox.add(new Position(row + 2, third.getCol()));
-
                 //remove themselves
                 threeColumnInBox.remove(first);
                 threeColumnInBox.remove(second);
+
                 Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
                 possiblePosition.addAll(threeColumnInBox);
 
             } else {
-                // the forth cell potential positions
-                possiblePosition.add(new Position(forthRow, third.getCol()));
+                // the forth cell potential five positions
+                int thirdCellBoxColumnStart = third.getCol() - third.getCol() % Const.BOX_WIDTH;
+                possiblePosition.add(new Position(forthRow, thirdCellBoxColumnStart));
+                possiblePosition.add(new Position(forthRow, thirdCellBoxColumnStart + 1));
+                possiblePosition.add(new Position(forthRow, thirdCellBoxColumnStart + 2));
 
                 List<Position> threeColumnInBox = new ArrayList<>(3);
                 threeColumnInBox.add(new Position(third.getRow(), column));
                 threeColumnInBox.add(new Position(third.getRow(), column + 1));
                 threeColumnInBox.add(new Position(third.getRow(), column + 2));
-
                 //remove themselves
                 threeColumnInBox.remove(first);
                 threeColumnInBox.remove(second);
@@ -274,7 +278,7 @@ public class YWingStrategy implements FillStrategy {
                     if (causeDigital.size() != 1) {
                         continue;
                     }
-                    //define the candidates which arr the third cell needed
+                    //define the candidates which are the third cell needed
                     List<String> thirdDigital = new ArrayList<>();
                     thirdDigital.addAll(remaining.get(first));
                     thirdDigital.addAll(remaining.get(second));
@@ -282,7 +286,7 @@ public class YWingStrategy implements FillStrategy {
                     Assert.isTrue(thirdDigital.size() == 2, "should be two");
                     Collections.sort(thirdDigital);
 
-                    // find the right column
+                    // type 1: find the right column
                     List<String> tempDigital = new ArrayList<>(thirdDigital);
                     tempDigital.removeAll(remaining.get(first));
                     Assert.isTrue(tempDigital.size() == 1, "should be one");
@@ -298,7 +302,7 @@ public class YWingStrategy implements FillStrategy {
                         return result;
                     }
 
-                    // find the left column
+                    // type 2: find the left column
                     tempDigital = new ArrayList<>(thirdDigital);
                     tempDigital.removeAll(remaining.get(second));
                     Assert.isTrue(tempDigital.size() == 1, "should be one");
