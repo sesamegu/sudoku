@@ -17,7 +17,7 @@ import org.junit.Test;
  * @author mike
  * @date 2022/10/19
  */
-public class HiddenPairsTest {
+public class HiddenPairsStrategyTest {
 
     @Test
     public void column_test() {

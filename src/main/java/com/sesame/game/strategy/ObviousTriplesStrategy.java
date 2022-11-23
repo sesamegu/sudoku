@@ -133,7 +133,6 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        //第{0}{1}中，位置{2}、{3}、{4}的后续数都只有{5}、{6}、{7}，那么{5}、{6}、{7}必然属于这三个位置，删除其他格包含的{5}、{6}、{7}
         Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
 
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
