@@ -1,19 +1,24 @@
 package com.sesame.game.strategy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
+import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -145,19 +150,17 @@ public class SwordFishStrategy implements FillStrategy {
                                 CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                                 HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
 
+                                List<UnitModel> unitModelList = new ArrayList<>();
                                 if (direction == Direction.ROW) {
-                                    List<UnitModel> unitModelList = new ArrayList<>();
                                     unitModelList.add(UnitModel.buildFromRow(firstList.get(0).getRow()));
                                     unitModelList.add(UnitModel.buildFromRow(secondList.get(0).getRow()));
                                     unitModelList.add(UnitModel.buildFromRow(thirdList.get(0).getRow()));
-                                    result.of(unitModelList);
                                 } else {
-                                    List<UnitModel> unitModelList = new ArrayList<>();
                                     unitModelList.add(UnitModel.buildFromColumn(firstList.get(0).getCol()));
                                     unitModelList.add(UnitModel.buildFromColumn(secondList.get(0).getCol()));
                                     unitModelList.add(UnitModel.buildFromColumn(thirdList.get(0).getCol()));
-                                    result.of(unitModelList);
                                 }
+                                result.of(unitModelList);
 
                                 return Optional.of(result);
                             }
@@ -175,25 +178,8 @@ public class SwordFishStrategy implements FillStrategy {
      */
     private Map<String, List<Position>> buildDigitalCountMap(Map<Position, List<String>> remaining,
         List<Position> positionList) {
-        Map<String, List<Position>> countPerDigital = new HashMap<>();
-        for (Position onePosition : positionList) {
-            if (CollectionUtils.isEmpty(remaining.get(onePosition))) {
-                continue;
-            }
-            remaining.get(onePosition).forEach(
-                one -> {
-                    if (countPerDigital.containsKey(one)) {
-                        countPerDigital.get(one).add(onePosition);
-                    } else {
-                        List<Position> positions = new ArrayList<>();
-                        positions.add(onePosition);
-                        countPerDigital.put(one, positions);
-                    }
-                }
-            );
-        }
-        return countPerDigital.entrySet().stream().filter(
-            one -> one.getValue().size() == 2).collect(Collectors.toMap(
+        Map<String, List<Position>> countPerDigital = PuzzleTools.buildDigPosiMap(remaining, positionList);
+        return countPerDigital.entrySet().stream().filter(one -> one.getValue().size() == 2).collect(Collectors.toMap(
             one -> one.getKey(), one -> one.getValue()));
     }
 
@@ -234,10 +220,58 @@ public class SwordFishStrategy implements FillStrategy {
         return Strategy.SWORDFISH;
     }
 
-
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+        //在第{0}、{1}、{2}{3}中数字{4}都只出现了两次，且这三{3}的位置两两对齐，那么可以删除第{5}、{6}、{7}{8}的数字{4}
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+        String deleteDigital = deleteMap.values().iterator().next().get(0);
+
+        Assert.isTrue(hintModel.getUnitModelList().size() == 3, "should be 3");
+        UnitModel unitModelOne = hintModel.getUnitModelList().get(0);
+        UnitModel unitModelTwo = hintModel.getUnitModelList().get(1);
+        UnitModel unitModelThree = hintModel.getUnitModelList().get(2);
+
+        int firstNumber = PuzzleTools.getNumber(unitModelOne);
+        int secondNumber = PuzzleTools.getNumber(unitModelTwo);
+        int thirdNumber = PuzzleTools.getNumber(unitModelThree);
+
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.isTrue(causeMap.size() == 6, "should be 6");
+        List<Integer> rowOrColumns;
+
+        Unit currentUnit = unitModelOne.getUnit();
+        Unit oppositeUnit;
+        if (Unit.ROW == currentUnit) {
+            oppositeUnit = Unit.COLUMN;
+            Set<Integer> columns = new HashSet<>(
+                causeMap.keySet().stream().map(Position::getCol).collect(Collectors.toList()));
+            rowOrColumns = new ArrayList<>(columns);
+            Collections.sort(rowOrColumns);
+            Assert.isTrue(rowOrColumns.size() == 3, "should be 3");
+        } else if (Unit.COLUMN == currentUnit) {
+            oppositeUnit = Unit.ROW;
+            Set<Integer> rows = new HashSet<>(
+                causeMap.keySet().stream().map(Position::getRow).collect(Collectors.toList()));
+            rowOrColumns = new ArrayList<>(rows);
+            Collections.sort(rowOrColumns);
+            Assert.isTrue(rowOrColumns.size() == 3, "should be 3");
+        } else {
+            throw new RuntimeException("should not be here.");
+        }
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+            firstNumber,
+            secondNumber,
+            thirdNumber,
+            I18nProcessor.getValue(currentUnit.getDesc()),
+            deleteDigital,
+            rowOrColumns.get(0) + 1,
+            rowOrColumns.get(1) + 1,
+            rowOrColumns.get(2) + 1,
+            I18nProcessor.getValue(oppositeUnit.getDesc())
+        );
+
     }
 
 }
