@@ -1,6 +1,8 @@
 package com.sesame.game.strategy.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.sesame.game.strategy.DetailTypeEnum;
 import com.sesame.game.strategy.Strategy;
@@ -20,6 +22,10 @@ public class HintModel {
     private CandidateModel candidateModel;
     private List<UnitModel> unitModelList;
     private DetailTypeEnum detailTypeEnum;
+    /**
+     * for temp data passing
+     */
+    private Map<Object,Object> tempData = new HashMap<>();
 
     public static HintModel build() {
         return new HintModel();

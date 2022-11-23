@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
@@ -99,6 +100,7 @@ public class YWingStrategy implements FillStrategy {
                 Optional<HintModel> hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByColumn, firstDeleteDigital, Direction.COLUMN, second.getCol(), -1);
                 if (hintModel.isPresent()) {
+                    hintModel.get().of(DetailTypeEnum.THREE);
                     List<UnitModel> unitModelList = new ArrayList<>();
                     unitModelList.add(UnitModel.buildFromColumn(first.getCol()));
                     hintModel.get().of(unitModelList);
@@ -114,6 +116,7 @@ public class YWingStrategy implements FillStrategy {
                 hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByColumn, secondDeleteDigital, Direction.COLUMN, first.getCol(), -1);
                 if (hintModel.isPresent()) {
+                    hintModel.get().of(DetailTypeEnum.FOUR);
                     List<UnitModel> unitModelList = new ArrayList<>();
                     unitModelList.add(UnitModel.buildFromColumn(second.getCol()));
                     hintModel.get().of(unitModelList);
@@ -125,6 +128,7 @@ public class YWingStrategy implements FillStrategy {
                 hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByRow, firstDeleteDigital, Direction.ROW, -1, second.getRow());
                 if (hintModel.isPresent()) {
+                    hintModel.get().of(DetailTypeEnum.FIVE);
                     List<UnitModel> unitModelList = new ArrayList<>();
                     unitModelList.add(UnitModel.buildFromRow(first.getRow()));
                     hintModel.get().of(unitModelList);
@@ -136,6 +140,7 @@ public class YWingStrategy implements FillStrategy {
                 hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
                     thirdDigital, positionByRow, secondDeleteDigital, Direction.ROW, -1, first.getRow());
                 if (hintModel.isPresent()) {
+                    hintModel.get().of(DetailTypeEnum.SIX);
                     List<UnitModel> unitModelList = new ArrayList<>();
                     unitModelList.add(UnitModel.buildFromRow(second.getRow()));
                     hintModel.get().of(unitModelList);
@@ -217,6 +222,11 @@ public class YWingStrategy implements FillStrategy {
                     causeMap.put(first, new ArrayList<>(remaining.get(first)));
                     causeMap.put(second, new ArrayList<>(remaining.get(second)));
                     causeMap.put(third, new ArrayList<>(remaining.get(third)));
+                    // for display
+                    List<Position> threePosition = new ArrayList<>(3);
+                    threePosition.add(first);
+                    threePosition.add(second);
+                    threePosition.add(third);
 
                     Map<Position, List<String>> deleteMap = new HashMap<>();
                     List<String> forthDigital = new ArrayList<>();
@@ -224,6 +234,7 @@ public class YWingStrategy implements FillStrategy {
                     deleteMap.put(forth, forthDigital);
                     CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                     HintModel tt = HintModel.build().of(getStrategy()).of(candidateModel);
+                    tt.getTempData().put(getStrategy().name(), threePosition);
                     return Optional.of(tt);
                 }
             }
@@ -295,6 +306,7 @@ public class YWingStrategy implements FillStrategy {
                     Optional<HintModel> result = buildHintModel(remaining, first, second,
                         thirdDigital, deleteDigital, first.getCol(), second.getCol());
                     if (result.isPresent()) {
+                        result.get().of(DetailTypeEnum.ONE);
                         List<UnitModel> unitModelList = new ArrayList<>();
                         unitModelList.add(UnitModel.buildFromRow(first.getRow()));
                         unitModelList.add(UnitModel.buildFromColumn(first.getCol()));
@@ -311,6 +323,7 @@ public class YWingStrategy implements FillStrategy {
                     result = buildHintModel(remaining, first, second,
                         thirdDigital, deleteDigital, second.getCol(), first.getCol());
                     if (result.isPresent()) {
+                        result.get().of(DetailTypeEnum.TWO);
                         List<UnitModel> unitModelList = new ArrayList<>();
                         unitModelList.add(UnitModel.buildFromRow(second.getRow()));
                         unitModelList.add(UnitModel.buildFromColumn(second.getCol()));
@@ -341,12 +354,20 @@ public class YWingStrategy implements FillStrategy {
                     causeMap.put(behind, new ArrayList<>(remaining.get(behind)));
                     causeMap.put(third, new ArrayList<>(remaining.get(third)));
 
+                    // for display
+                    List<Position> threePosition = new ArrayList<>(3);
+                    threePosition.add(front);
+                    threePosition.add(behind);
+                    threePosition.add(third);
+
                     Map<Position, List<String>> deleteMap = new HashMap<>();
                     List<String> forthDigital = new ArrayList<>();
                     forthDigital.add(deleteDigital);
                     deleteMap.put(forth, forthDigital);
                     CandidateModel candidateModel = new CandidateModel(causeMap, deleteMap);
                     HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
+                    result.getTempData().put(getStrategy().name(), threePosition);
+
                     return Optional.of(result);
                 }
             }
@@ -361,7 +382,54 @@ public class YWingStrategy implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Assert.isTrue(causeMap.size() == 3, "should be 3");
+        Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
+        Assert.isTrue(deleteMap.size() == 1, "should be 1");
+        String deleteDigital = deleteMap.values().iterator().next().get(0);
+        Position deletePosition = deleteMap.keySet().iterator().next();
+
+        //determine the cross point
+        Map<Object, Object> tempData = hintModel.getTempData();
+        List<Position> threePosition = (List<Position>)tempData.get(getStrategy().name());
+
+        Position zeroPosition;
+        if (causeMap.get(threePosition.get(0)).contains(deleteDigital)) {
+            zeroPosition = threePosition.get(1);
+        } else if (causeMap.get(threePosition.get(1)).contains(deleteDigital)) {
+            zeroPosition = threePosition.get(0);
+        } else {
+            throw new RuntimeException("shouldn't be here");
+        }
+
+        List<String> twoCandidate = causeMap.get(zeroPosition);
+        Assert.isTrue(twoCandidate.size() == 2, "should be 2");
+
+        // determine the second point
+        List<Position> collectList = threePosition.stream().filter(one -> !one.equals(zeroPosition) && causeMap.get(one)
+            .contains(twoCandidate.get(0))).collect(Collectors.toList());
+        Assert.isTrue(collectList.size() == 1, "should be 1");
+        Position secondPosition = collectList.get(0);
+
+        // determine the third point
+        List<Position> collect = threePosition.stream().filter(one -> (!one.equals(zeroPosition) && !one.equals(
+            secondPosition))).collect(
+            Collectors.toList());
+        Assert.isTrue(collect.size() == 1, "should be 1");
+        Position thirdPosition = collect.get(0);
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+            zeroPosition.getDesc(),
+            twoCandidate.get(0),
+            secondPosition.getDesc(),
+            deleteDigital,
+            deletePosition.getDesc(),
+            twoCandidate.get(1),
+            thirdPosition.getDesc()
+        );
+
     }
 
 }
