@@ -1,6 +1,7 @@
 package com.sesame.game.strategy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,12 @@ import java.util.stream.Collectors;
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -150,7 +153,29 @@ public class PointingStrategy implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+        Assert.isTrue(hintModel.getUnitModelList().size() == 2, "should be 2");
+        UnitModel boxModel = hintModel.getUnitModelList().get(0);
+        UnitModel rowOrColumnModel = hintModel.getUnitModelList().get(1);
+        int boxNumber = PuzzleTools.getNumber(boxModel);
+        int rowOrColumnNumber = PuzzleTools.getNumber(rowOrColumnModel);
+
+        Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
+        List<Position> positions = new ArrayList<>(causeMap.keySet());
+        Collections.sort(positions);
+        String positionString = positions.stream().map(one -> one.getDesc()).collect(Collectors.joining(" "));
+
+        List<String> digitalList = causeMap.values().iterator().next();
+        Assert.isTrue(digitalList.size() == 1, "should be 1 ");
+        String digital = digitalList.get(0);
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+            digital,
+            boxNumber,
+            positionString,
+            positions.size(),
+            rowOrColumnNumber,
+            I18nProcessor.getValue(rowOrColumnModel.getUnit().getDesc())
+        );
     }
 
 }
