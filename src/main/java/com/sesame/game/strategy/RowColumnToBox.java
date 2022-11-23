@@ -10,11 +10,13 @@ import java.util.Optional;
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -161,10 +163,24 @@ public class RowColumnToBox implements FillStrategy {
         return Strategy.ROW_COLUMN_TO_BOX;
     }
 
-
     @Override
     public String buildDesc(HintModel hintModel) {
-        return "";
+        Assert.isTrue(hintModel.getUnitModelList().size() == 2, "should be 2");
+        UnitModel rowOrColumnModel = hintModel.getUnitModelList().get(0);
+        UnitModel boxModel = hintModel.getUnitModelList().get(1);
+        int rowOrColumnNumber = PuzzleTools.getNumber(rowOrColumnModel);
+        int boxNumber = PuzzleTools.getNumber(boxModel);
+        Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
+        List<String> digitalList = causeMap.values().iterator().next();
+        Assert.isTrue(digitalList.size() == 1, "should be 1 ");
+        String digital = digitalList.get(0);
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+            rowOrColumnNumber,
+            I18nProcessor.getValue(rowOrColumnModel.getUnit().getDesc()),
+            digital,
+            boxNumber
+        );
     }
 
 }
