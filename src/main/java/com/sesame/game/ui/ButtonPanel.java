@@ -131,7 +131,7 @@ public class ButtonPanel extends JPanel {
 
         // strategy desc
         JTextArea strategyDesc = new JTextArea("");
-        strategyDesc.setPreferredSize(new Dimension(110, 170));
+        strategyDesc.setPreferredSize(new Dimension(110, 180));
         strategyDesc.setLineWrap(true);
         strategyDesc.setEnabled(false);
         strategyDesc.setText(StrategyExecute.buildDesc(hintModel));
