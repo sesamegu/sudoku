@@ -137,16 +137,6 @@ public class ButtonPanel extends JPanel {
         strategyDesc.setText(StrategyExecute.buildDesc(hintModel));
         add(strategyDesc);
 
-        //hint desc
-        //todo 删除desc
-        JTextArea hintArea = new JTextArea("");
-        hintArea.setPreferredSize(new Dimension(110, 170));
-        hintArea.setLineWrap(true);
-        hintArea.setEnabled(false);
-
-        hintArea.setText(I18nProcessor.getValue(strategy.getName() + "_desc"));
-        add(hintArea);
-
         //apply button
         JButton apply = new JButton(I18nProcessor.getValue("apply"));
         apply.setPreferredSize(new Dimension(110, 40));
