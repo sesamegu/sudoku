@@ -28,15 +28,15 @@ public class PuzzleLibrary {
         };
 
         String[][] case2 = new String[][] {
-            {"","2","","1","","6","","",""},
-            {"","","8","2","5","","","","6"},
-            {"1","","","3","","","","4",""},
-            {"9","","","","","","","5",""},
-            {"","4","","","8","","9","",""},
-            {"","","6","","","2","","",""},
-            {"","","1","","","","8","","4"},
-            {"","","","9","","4","","",""},
-            {"7","","4","","","","2","3",""},
+            {"", "2", "", "1", "", "6", "", "", ""},
+            {"", "", "8", "2", "5", "", "", "", "6"},
+            {"1", "", "", "3", "", "", "", "4", ""},
+            {"9", "", "", "", "", "", "", "5", ""},
+            {"", "4", "", "", "8", "", "9", "", ""},
+            {"", "", "6", "", "", "2", "", "", ""},
+            {"", "", "1", "", "", "", "8", "", "4"},
+            {"", "", "", "9", "", "4", "", "", ""},
+            {"7", "", "4", "", "", "", "2", "3", ""},
         };
 
         SudokuPuzzle puzzle = new SudokuPuzzle();
@@ -51,19 +51,7 @@ public class PuzzleLibrary {
     }
 
     public static SudokuPuzzle getCase(GameLevel gameLevel, int number) {
-        String[][] array;
-        if (gameLevel == GameLevel.EASY) {
-            array = new EasyLibrary().caseArray(number);
-        } else if (gameLevel == GameLevel.NORMAL) {
-            array = new NormalLibrary().caseArray(number);
-        } else if (gameLevel == GameLevel.HARD) {
-            array = new HardLibrary().caseArray(number);
-        } else if (gameLevel == GameLevel.VIP) {
-            array = new VipLibrary().caseArray(number);
-        } else {
-            throw new RuntimeException("should n't be here");
-        }
-
+        String[][] array = FileLibrary.caseArray(number, gameLevel);
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(array);
         makeUnMutable(puzzle);

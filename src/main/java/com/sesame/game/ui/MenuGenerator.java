@@ -16,6 +16,7 @@ import com.sesame.game.action.UnStopHintListener;
 import com.sesame.game.common.GameLevel;
 import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.i18n.I18nProcessor;
+import com.sesame.game.library.FileLibrary;
 import com.sesame.game.tool.SudokuGenerator;
 
 /**
@@ -36,7 +37,7 @@ public class MenuGenerator {
 
         //add easy menu
         JMenu easyMenu = new JMenu(I18nProcessor.getValue("easy"));
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < FileLibrary.size(GameLevel.EASY); i++) {
             JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.EASY, (i + 1)));
             easyMenu.add(oneCase);
@@ -45,7 +46,7 @@ public class MenuGenerator {
 
         //add normal menu
         JMenu normalMenu = new JMenu(I18nProcessor.getValue("normal"));
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < FileLibrary.size(GameLevel.NORMAL); i++) {
             JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.NORMAL, (i + 1)));
             normalMenu.add(oneCase);
@@ -54,7 +55,7 @@ public class MenuGenerator {
 
         //add hard menu
         JMenu hardMenu = new JMenu(I18nProcessor.getValue("hard"));
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < FileLibrary.size(GameLevel.HARD); i++) {
             JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.HARD, (i + 1)));
             hardMenu.add(oneCase);
@@ -62,7 +63,7 @@ public class MenuGenerator {
         menuBar.add(hardMenu);
         //add vip menu
         JMenu vipMenu = new JMenu(I18nProcessor.getValue("vip"));
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < FileLibrary.size(GameLevel.VIP); i++) {
             JMenuItem oneCase = new JMenuItem(I18nProcessor.getValue("case") + " " + (i + 1));
             oneCase.addActionListener(new LevelGameListener(GameLevel.VIP, (i + 1)));
             vipMenu.add(oneCase);

@@ -212,7 +212,7 @@ public class GameGenerator {
         String filepath = "./puzzle.txt";
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath));
 
-        CountDownLatch count = new CountDownLatch(1000);
+        CountDownLatch count = new CountDownLatch(3000);
 
         for (int i = 0; i < 3; i++) {
             new Thread(new TaskThread(count, i, bufferedWriter)).start();
@@ -242,8 +242,8 @@ class TaskThread implements Runnable {
     public void run() {
 
         for (int i = 0; ; i++) {
-            SudokuPuzzle puzzle = GameGenerator.generateByLevel(GameGenerator.HARD_CELL_NUMBER);
-            boolean b = GameGenerator.resolve(puzzle, GameGenerator.HARD_STRATEGY, bufferedWrite);
+            SudokuPuzzle puzzle = GameGenerator.generateByLevel(GameGenerator.EASY_CELL_NUMBER);
+            boolean b = GameGenerator.resolve(puzzle, GameGenerator.EASY_STRATEGY, bufferedWrite);
             if (b) {
                 System.out.print("numberL " + number + "\t found one.");
                 count.countDown();
