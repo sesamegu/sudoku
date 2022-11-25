@@ -3,7 +3,7 @@
 项目部分代码基于  [sudoku](https://github.com/mattnenterprise/Sudoku)     
 
 <img src="docs/picture/index_cn.png" width="550" height="430" >
-<img src="docs/picture/hidden_singles_CN.png" width="550" height="430" >   
+<img src="docs/picture/hidden_singles_row_CN.png" width="550" height="430" >   
 
 ## 特点
 * 精良关卡   

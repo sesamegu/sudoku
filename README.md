@@ -10,7 +10,7 @@ Features:
 
 
 <img src="docs/picture/index_EN.png" width="550" height="430" >   
-<img src="docs/picture/hidden_singles_EN.png" width="550" height="430" >   
+<img src="docs/picture/hidden_singles_row_EN.png width="550" height="430" >   
 
 ## How to run
 * for the developer     

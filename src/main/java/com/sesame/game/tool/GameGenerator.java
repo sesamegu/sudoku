@@ -1,5 +1,8 @@
 package com.sesame.game.tool;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,18 +10,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
+import com.sesame.game.strategy.DetailTypeEnum;
 import com.sesame.game.strategy.Strategy;
 import com.sesame.game.strategy.StrategyExecute;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
+import com.sesame.game.strategy.model.Unit;
+import com.sesame.game.strategy.model.UnitModel;
+import lombok.SneakyThrows;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Introduction: smart game generator
@@ -95,7 +107,8 @@ public class GameGenerator {
         return puzzle;
     }
 
-    public static boolean resolve(SudokuPuzzle puzzle, List<Integer> interval) {
+    public static boolean resolve(SudokuPuzzle puzzle, List<Integer> interval, BufferedWriter bufferedWrite)
+        throws IOException {
         SudokuPuzzle temp = new SudokuPuzzle(puzzle);
 
         // try the strategy util the end
@@ -135,18 +148,44 @@ public class GameGenerator {
         }
 
         if (puzzle.boardFull()) {
-            Map<Strategy, Integer> strategySet = new HashMap<>();
+            Map<String, Integer> strategySet = new TreeMap<String, Integer>() {};
 
+            Map<Strategy, Integer> strategy = new HashMap<>();
             for (int i = 0; i < allHint.size(); i++) {
                 HintModel hintModel = allHint.get(i);
-                if (strategySet.containsKey(hintModel.getStrategy())) {
-                    strategySet.put(hintModel.getStrategy(), strategySet.get(hintModel.getStrategy()) + 1);
-                } else {
-                    strategySet.put(hintModel.getStrategy(), 1);
+
+                //build a detail strategy name
+                StringBuilder sb = new StringBuilder(
+                    I18nProcessor.getValue(hintModel.getStrategy().getName()));
+                sb.append("__");
+                List<UnitModel> unitModelList = hintModel.getUnitModelList();
+                if (!CollectionUtils.isEmpty(unitModelList)) {
+                    String collect = unitModelList.stream().map(UnitModel::getUnit).map(Unit::getDesc).map(
+                        I18nProcessor::getValue).collect(
+                        Collectors.joining("/"));
+                    sb.append(collect);
+                    sb.append("__");
                 }
+                DetailTypeEnum detailTypeEnum = hintModel.getDetailTypeEnum();
+                if (detailTypeEnum != null) {
+                    sb.append(detailTypeEnum.getType());
+                }
+                String detailName = sb.toString();
+                if (strategySet.containsKey(detailName)) {
+                    strategySet.put(detailName, strategySet.get(detailName) + 1);
+                } else {
+                    strategySet.put(detailName, 1);
+                }
+
+                if (strategy.containsKey(hintModel.getStrategy())) {
+                    strategy.put(hintModel.getStrategy(), strategy.get(hintModel.getStrategy()) + 1);
+                } else {
+                    strategy.put(hintModel.getStrategy(), 1);
+                }
+
             }
 
-            if (strategySet.size() < interval.get(0) || strategySet.size() > interval.get(1)) {
+            if (strategy.size() < interval.get(0) || strategy.size() > interval.get(1)) {
                 return false;
             }
 
@@ -155,11 +194,13 @@ public class GameGenerator {
             sb.append("puzzle is:\n ");
             sb.append(temp.printBoard() + "\n ");
             sb.append("used Strategy: \n");
-            for (Entry<Strategy, Integer> entry : strategySet.entrySet()) {
-                sb.append("strategy name:").append(entry.getKey().getName()).append("\t");
+
+            for (Entry<String, Integer> entry : strategySet.entrySet()) {
+                sb.append("strategy name:").append(entry.getKey()).append("\t");
                 sb.append("count:").append(entry.getValue()).append("\n");
             }
-            System.out.println(sb);
+            bufferedWrite.write(sb.toString());
+            bufferedWrite.flush();
             return true;
 
         }
@@ -167,14 +208,19 @@ public class GameGenerator {
         return false;
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        CountDownLatch count = new CountDownLatch(200);
+    public static void main(String[] args) throws InterruptedException, IOException {
+        String filepath = "./puzzle.txt";
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(filepath));
 
-        for (int i = 0; i < Runtime.getRuntime().availableProcessors() - 1; i++) {
-            new Thread(new TaskThread(count, i)).start();
+        CountDownLatch count = new CountDownLatch(1000);
+
+        for (int i = 0; i < 3; i++) {
+            new Thread(new TaskThread(count, i, bufferedWriter)).start();
         }
 
         count.await();
+        bufferedWriter.flush();
+        bufferedWriter.close();
     }
 
 }
@@ -183,23 +229,26 @@ class TaskThread implements Runnable {
 
     private final CountDownLatch count;
     private final int number;
+    private final BufferedWriter bufferedWrite;
 
-    public TaskThread(CountDownLatch count, int number) {
+    public TaskThread(CountDownLatch count, int number, BufferedWriter bufferedWrite) {
         this.count = count;
         this.number = number;
+        this.bufferedWrite = bufferedWrite;
     }
 
+    @SneakyThrows
     @Override
     public void run() {
 
         for (int i = 0; ; i++) {
-            SudokuPuzzle puzzle = GameGenerator.generateByLevel(GameGenerator.EASY_CELL_NUMBER);
-            boolean b = GameGenerator.resolve(puzzle, GameGenerator.EASY_STRATEGY);
+            SudokuPuzzle puzzle = GameGenerator.generateByLevel(GameGenerator.HARD_CELL_NUMBER);
+            boolean b = GameGenerator.resolve(puzzle, GameGenerator.HARD_STRATEGY, bufferedWrite);
             if (b) {
                 System.out.print("numberL " + number + "\t found one.");
                 count.countDown();
             } else {
-                if (i % 300 == 0) {
+                if (i % 1000 == 0) {
                     System.out.print("numberL " + number + " solving " + i);
                 }
             }
