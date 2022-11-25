@@ -1,3 +1,8 @@
 ## 隐形三数    
 ### 介绍：在一个宫、一行或一列中的三个单元格包含三条未出现在其他地方的笔记，这三个单元格还包含其他候选数，可以将它们删除。     
-<img src="picture/hidden_triples_CN.png" width="825" height="645" >
+12种类型：维度一3种：行、列、宫；维度二数量4种：222、223、233、333，组合后共12种，这里以行为例列举四种，其它列宫八种类似
+
+基于行的222类型    
+<img src="picture/hidden_triples_222_CN.png" width="825" height="645" >        
+基于行的233类型    
+<img src="picture/hidden_triples_233_CN.png" width="825" height="645" >          
