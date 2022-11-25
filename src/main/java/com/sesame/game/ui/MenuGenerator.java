@@ -10,6 +10,7 @@ import javax.swing.JMenuItem;
 import com.sesame.game.Sudoku;
 import com.sesame.game.action.ChangeLanguageListener;
 import com.sesame.game.action.CopyListener;
+import com.sesame.game.action.ShowAuthorInfo;
 import com.sesame.game.action.ShowCandidateListener;
 import com.sesame.game.action.UnStopHintListener;
 import com.sesame.game.common.GameLevel;
@@ -23,6 +24,7 @@ import com.sesame.game.tool.SudokuGenerator;
  * @author sesame 2022/11/15
  */
 public class MenuGenerator {
+    private static boolean devMode = false;
     private final Sudoku sudoku;
 
     public MenuGenerator(Sudoku sudoku) {
@@ -91,17 +93,23 @@ public class MenuGenerator {
         showCandidate.addActionListener(new ShowCandidateListener(sudoku.getSquarePanel()));
         loadGame.add(showCandidate);
 
-        JMenuItem Unstoppable = new JMenuItem(I18nProcessor.getValue("unstoppable"));
-        Unstoppable.addActionListener(new UnStopHintListener(sudoku, sudoku.getSquarePanel()));
-        loadGame.add(Unstoppable);
+        if (devMode) {
+            JMenuItem Unstoppable = new JMenuItem(I18nProcessor.getValue("unstoppable"));
+            Unstoppable.addActionListener(new UnStopHintListener(sudoku, sudoku.getSquarePanel()));
+            loadGame.add(Unstoppable);
 
-        JMenuItem caseTwo = new JMenuItem(I18nProcessor.getValue("test_game"));
-        caseTwo.addActionListener(new LoadGameListener(2));
-        loadGame.add(caseTwo);
+            JMenuItem caseTwo = new JMenuItem(I18nProcessor.getValue("test_game"));
+            caseTwo.addActionListener(new LoadGameListener(2));
+            loadGame.add(caseTwo);
 
-        JMenuItem copy = new JMenuItem(I18nProcessor.getValue("copy_2_clipboard"));
-        copy.addActionListener(new CopyListener(sudoku.getSquarePanel()));
-        loadGame.add(copy);
+            JMenuItem copy = new JMenuItem(I18nProcessor.getValue("copy_2_clipboard"));
+            copy.addActionListener(new CopyListener(sudoku.getSquarePanel()));
+            loadGame.add(copy);
+        }
+
+        JMenuItem connectToAuthor = new JMenuItem(I18nProcessor.getValue("connect_2_author"));
+        connectToAuthor.addActionListener(new ShowAuthorInfo(sudoku));
+        loadGame.add(connectToAuthor);
         return menuBar;
     }
 
