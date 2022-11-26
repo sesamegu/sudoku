@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: execute the all strategy in the order
@@ -83,7 +83,7 @@ public abstract class StrategyExecute {
     public static String buildDesc(HintModel hintModel) {
         Strategy strategy = hintModel.getStrategy();
         FillStrategy fillStrategy = strategyMap.get(strategy);
-        Assert.notNull(fillStrategy, "not null");
+        Validate.notNull(fillStrategy, "not null");
         return fillStrategy.buildDesc(hintModel);
     }
 

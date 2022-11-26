@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction:read game from file
@@ -31,7 +31,7 @@ public class ReadGameFromFile {
             nine[0] = oneArray;
             for (int i = 0; i < 8; i++) {
                 String tempLine = bufferedReader.readLine();
-                Assert.isTrue(oneLine.indexOf("{") != -1, "should contain {");
+                Validate.isTrue(oneLine.indexOf("{") != -1, "should contain {");
                 nine[i + 1] = buildOneArray(tempLine);
             }
 
@@ -46,9 +46,9 @@ public class ReadGameFromFile {
         int endPoint = oneLine.indexOf("}");
         String substring = oneLine.substring(startPoint + 1, endPoint);
         String[] array = substring.split(",");
-        Assert.isTrue(array.length == 9, "length is 9");
+        Validate.isTrue(array.length == 9, "length is 9");
         for (int i = 0; i < array.length; i++) {
-            array[i] =  array[i].replace("\"", "");
+            array[i] = array[i].replace("\"", "");
         }
 
         return array;

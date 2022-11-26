@@ -21,8 +21,8 @@ import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * square panel
@@ -173,7 +173,7 @@ public class SquarePanel extends JPanel {
                     continue;
                 }
 
-                Assert.isTrue(!puzzle.isSlotValid(row, col), "Must valid:row= " + row + "\tcol=" + col);
+                Validate.isTrue(!puzzle.isSlotValid(row, col), "Must valid:row= " + row + "\tcol=" + col);
                 Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.HINT_FONT_SIZE);
                 g2d.setFont(smallFont);
 
@@ -212,7 +212,7 @@ public class SquarePanel extends JPanel {
     }
 
     private void drawHint(Graphics2D g2d, int slotWidth, int slotHeight, Font f, FontRenderContext fContext) {
-        Assert.notNull(hintModel, "hintModel should not be null");
+        Validate.notNull(hintModel, "hintModel should not be null");
 
         if (!hintModel.isCandidateModel()) {
             Font smallFont = new Font("Times New Roman", Font.PLAIN, Const.NORMAL_FONT_SIZE);

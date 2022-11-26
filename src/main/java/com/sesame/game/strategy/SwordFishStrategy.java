@@ -20,8 +20,9 @@ import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: Sword Fish
@@ -39,7 +40,7 @@ public class SwordFishStrategy implements FillStrategy {
         for (int row = 0; row < Const.ROWS; row++) {
             List<Position> positionByRow = PuzzleTools.getPositionByRow(row);
             Map<String, List<Position>> collect = buildDigitalCountMap(remaining, positionByRow);
-            if (!CollectionUtils.isEmpty(collect)) {
+            if (!MapUtils.isEmpty(collect)) {
                 allList.add(collect);
             }
         }
@@ -57,7 +58,7 @@ public class SwordFishStrategy implements FillStrategy {
         for (int column = 0; column < Const.COLUMNS; column++) {
             List<Position> positionList = PuzzleTools.getPositionByColumn(column);
             Map<String, List<Position>> collect = buildDigitalCountMap(remaining, positionList);
-            if (!CollectionUtils.isEmpty(collect)) {
+            if (!MapUtils.isEmpty(collect)) {
                 allList.add(collect);
             }
         }
@@ -89,9 +90,9 @@ public class SwordFishStrategy implements FillStrategy {
                         List<Position> firstList = selectedList.get(n).get(digital);
                         List<Position> secondList = selectedList.get(m).get(digital);
                         List<Position> thirdList = selectedList.get(p).get(digital);
-                        Assert.isTrue(firstList.size() == 2, "should be two");
-                        Assert.isTrue(secondList.size() == 2, "should be two");
-                        Assert.isTrue(thirdList.size() == 2, "should be two");
+                        Validate.isTrue(firstList.size() == 2, "should be two");
+                        Validate.isTrue(secondList.size() == 2, "should be two");
+                        Validate.isTrue(thirdList.size() == 2, "should be two");
                         Map<Integer, Integer> countMap = checkSwordFish(firstList, secondList, thirdList, direction);
                         if (countMap.size() == 3) {
                             Map<Position, List<String>> deleteMap = new HashMap<>();
@@ -121,7 +122,7 @@ public class SwordFishStrategy implements FillStrategy {
                             }
 
                             // check if the candidate exists in the other cells
-                            if (!CollectionUtils.isEmpty(deleteMap)) {
+                            if (!MapUtils.isEmpty(deleteMap)) {
                                 Map<Position, List<String>> causeMap = new HashMap<>();
 
                                 List<String> deleteDigital = new ArrayList<>();
@@ -227,7 +228,7 @@ public class SwordFishStrategy implements FillStrategy {
         Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
         String deleteDigital = deleteMap.values().iterator().next().get(0);
 
-        Assert.isTrue(hintModel.getUnitModelList().size() == 3, "should be 3");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 3, "should be 3");
         UnitModel unitModelOne = hintModel.getUnitModelList().get(0);
         UnitModel unitModelTwo = hintModel.getUnitModelList().get(1);
         UnitModel unitModelThree = hintModel.getUnitModelList().get(2);
@@ -237,7 +238,7 @@ public class SwordFishStrategy implements FillStrategy {
         int thirdNumber = PuzzleTools.getNumber(unitModelThree);
 
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
-        Assert.isTrue(causeMap.size() == 6, "should be 6");
+        Validate.isTrue(causeMap.size() == 6, "should be 6");
         List<Integer> rowOrColumns;
 
         Unit currentUnit = unitModelOne.getUnit();
@@ -248,14 +249,14 @@ public class SwordFishStrategy implements FillStrategy {
                 causeMap.keySet().stream().map(Position::getCol).collect(Collectors.toList()));
             rowOrColumns = new ArrayList<>(columns);
             Collections.sort(rowOrColumns);
-            Assert.isTrue(rowOrColumns.size() == 3, "should be 3");
+            Validate.isTrue(rowOrColumns.size() == 3, "should be 3");
         } else if (Unit.COLUMN == currentUnit) {
             oppositeUnit = Unit.ROW;
             Set<Integer> rows = new HashSet<>(
                 causeMap.keySet().stream().map(Position::getRow).collect(Collectors.toList()));
             rowOrColumns = new ArrayList<>(rows);
             Collections.sort(rowOrColumns);
-            Assert.isTrue(rowOrColumns.size() == 3, "should be 3");
+            Validate.isTrue(rowOrColumns.size() == 3, "should be 3");
         } else {
             throw new RuntimeException("should not be here.");
         }

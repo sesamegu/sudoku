@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.Getter;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: candidate model
@@ -27,7 +27,7 @@ public class CandidateModel {
 
     public CandidateModel(List<Position> causeList, List<String> causeDigital,
         Map<Position, List<String>> deleteMap) {
-        Assert.notNull(causeDigital, "should not be null");
+        Validate.notNull(causeDigital, "should not be null");
         causeMap = new HashMap<>();
         causeList.forEach(
             one -> causeMap.put(one, new ArrayList<>(causeDigital))

@@ -7,7 +7,7 @@ import com.sesame.game.common.Const;
 import com.sesame.game.common.GameLevel;
 import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.library.PuzzleLibrary;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 
 public class SudokuGenerator {
 
@@ -47,7 +47,7 @@ public class SudokuGenerator {
 
     public static SudokuPuzzle useLevelGame(GameLevel gameLevel, int casNumber) {
         SudokuPuzzle aCase = PuzzleLibrary.getCase(gameLevel, casNumber);
-        Assert.isTrue(aCase != null, "should not be null");
+        Validate.isTrue(aCase != null, "should not be null");
         return aCase;
     }
 

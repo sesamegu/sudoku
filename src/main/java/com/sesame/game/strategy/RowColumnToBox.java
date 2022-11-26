@@ -16,8 +16,9 @@ import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction:RowColumnToBox A candidate in a row or column, and all the cell also in a box. Then we can delete the
@@ -33,7 +34,7 @@ public class RowColumnToBox implements FillStrategy {
         for (int row = 0; row < Const.ROWS; row++) {
             List<Position> positionByRow = PuzzleTools.getPositionByRow(row);
             Map<String, List<Position>> candidatePosition = PuzzleTools.buildDigPosiMap(remaining, positionByRow);
-            if (CollectionUtils.isEmpty(candidatePosition)) {
+            if (MapUtils.isEmpty(candidatePosition)) {
                 continue;
             }
 
@@ -59,7 +60,7 @@ public class RowColumnToBox implements FillStrategy {
         for (int column = 0; column < Const.COLUMNS; column++) {
             List<Position> positionByColumn = PuzzleTools.getPositionByColumn(column);
             Map<String, List<Position>> candidatePosition = PuzzleTools.buildDigPosiMap(remaining, positionByColumn);
-            if (CollectionUtils.isEmpty(candidatePosition)) {
+            if (MapUtils.isEmpty(candidatePosition)) {
                 continue;
             }
 
@@ -165,14 +166,14 @@ public class RowColumnToBox implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        Assert.isTrue(hintModel.getUnitModelList().size() == 2, "should be 2");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 2, "should be 2");
         UnitModel rowOrColumnModel = hintModel.getUnitModelList().get(0);
         UnitModel boxModel = hintModel.getUnitModelList().get(1);
         int rowOrColumnNumber = PuzzleTools.getNumber(rowOrColumnModel);
         int boxNumber = PuzzleTools.getNumber(boxModel);
         Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
         List<String> digitalList = causeMap.values().iterator().next();
-        Assert.isTrue(digitalList.size() == 1, "should be 1 ");
+        Validate.isTrue(digitalList.size() == 1, "should be 1 ");
         String digital = digitalList.get(0);
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",

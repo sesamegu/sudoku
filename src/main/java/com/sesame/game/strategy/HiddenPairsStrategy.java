@@ -15,8 +15,8 @@ import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: Hidden Pairs
@@ -89,7 +89,7 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
     @Override
     public String buildDesc(HintModel hintModel) {
         //第{0}{1}中，数字{2}、{3}只出现在位置{4}、{5}，这两个位置必然是数字{2}、{3}，删除其它候选数字
-        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
 
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
@@ -97,11 +97,11 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
         Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
         List<Position> positions = new ArrayList<>(causeMap.keySet());
         Collections.sort(positions);
-        Assert.isTrue(positions.size() == 2, "should be 2 ");
-        
+        Validate.isTrue(positions.size() == 2, "should be 2 ");
+
         List<String> twoDigital = new ArrayList<>(causeMap.values().iterator().next());
         Collections.sort(twoDigital);
-        Assert.isTrue(twoDigital.size() == 2, "should be 2 ");
+        Validate.isTrue(twoDigital.size() == 2, "should be 2 ");
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
             number,

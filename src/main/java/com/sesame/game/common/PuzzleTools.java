@@ -8,7 +8,7 @@ import java.util.Map;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Introduction: puzzle tools

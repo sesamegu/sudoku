@@ -17,8 +17,9 @@ import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: Hidden Triples
@@ -86,7 +87,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
 
     private Optional<HintModel> buildHintModel(Map<Position, List<String>> remaining, List<String> causeDigital,
         List<Position> causePosition, Map<String, List<Position>> digitalMap) {
-        Assert.isTrue(causePosition.size() == 3, "should be three");
+        Validate.isTrue(causePosition.size() == 3, "should be three");
         Map<Position, List<String>> causeMap = new HashMap<>();
         Map<Position, List<String>> deleteMap = new HashMap<>();
 
@@ -104,7 +105,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
             }
         }
 
-        if (CollectionUtils.isEmpty(deleteMap)) {
+        if (MapUtils.isEmpty(deleteMap)) {
             return Optional.empty();
         }
 
@@ -128,6 +129,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         return Optional.of(result);
 
     }
+
     @Override
     public Strategy getStrategy() {
         return Strategy.HIDDEN_TRIPLES;
@@ -137,7 +139,7 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
     public String buildDesc(HintModel hintModel) {
         //第{0}{1}中，数字{2}、{3}、{4}只出现在位置{5}、{6}、{7}，这三个位置必然是数字{2}、{3}、{4}，删除其它候选数字
 
-        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
 
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
@@ -145,13 +147,13 @@ public class HiddenTriplesStrategy extends AbstractUnitStrategy {
         Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
         List<Position> positions = new ArrayList<>(causeMap.keySet());
         Collections.sort(positions);
-        Assert.isTrue(positions.size() == 3, "should be 3 ");
+        Validate.isTrue(positions.size() == 3, "should be 3 ");
 
         Set<String> digitalSet = new HashSet<>();
         causeMap.values().forEach(one -> digitalSet.addAll(one));
         List<String> threeDigital = new ArrayList<>(digitalSet);
         Collections.sort(threeDigital);
-        Assert.isTrue(threeDigital.size() == 3, "should be 3 ");
+        Validate.isTrue(threeDigital.size() == 3, "should be 3 ");
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
             number,

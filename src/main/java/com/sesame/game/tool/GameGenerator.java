@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Random;
-import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +29,7 @@ import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
 import lombok.SneakyThrows;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Introduction: smart game generator

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import com.sesame.game.common.GameLevel;
-import org.springframework.util.Assert;
 
 /**
  * Introduction: file puzzles
@@ -51,7 +50,6 @@ public class FileLibrary {
         } else {
             throw new RuntimeException("should n't be here");
         }
-
 
     }
 

@@ -17,8 +17,8 @@ import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction:Hidden Singles
@@ -261,7 +261,7 @@ public class HiddenSinglesStrategy implements FillStrategy {
     @Override
     public String buildDesc(HintModel hintModel) {
 
-        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         Position position = hintModel.getSolutionModel().getPosition();
         int number = PuzzleTools.getNumber(unitModel);

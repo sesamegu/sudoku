@@ -19,8 +19,9 @@ import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: X Wing
@@ -39,7 +40,7 @@ public class XWingStrategy implements FillStrategy {
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> rowList = PuzzleTools.getPositionByRow(i);
             Map<String, List<Position>> collect = countDigital(rowList, remaining);
-            if (!CollectionUtils.isEmpty(collect)) {
+            if (!MapUtils.isEmpty(collect)) {
                 allList.add(collect);
             }
         }
@@ -56,7 +57,7 @@ public class XWingStrategy implements FillStrategy {
         for (int i = 0; i < Const.ROWS; i++) {
             List<Position> columnList = PuzzleTools.getPositionByColumn(i);
             Map<String, List<Position>> collect = countDigital(columnList, remaining);
-            if (!CollectionUtils.isEmpty(collect)) {
+            if (!MapUtils.isEmpty(collect)) {
                 allList.add(collect);
             }
         }
@@ -87,8 +88,8 @@ public class XWingStrategy implements FillStrategy {
                     Collections.sort(innerList);
                     List<Position> outList = oneEntry.getValue();
                     Collections.sort(outList);
-                    Assert.isTrue(innerList.size() == outList.size(), "should be same");
-                    Assert.isTrue(innerList.size() == 2, "should be two");
+                    Validate.isTrue(innerList.size() == outList.size(), "should be same");
+                    Validate.isTrue(innerList.size() == 2, "should be two");
 
                     //X Wing
                     boolean isXWing;
@@ -131,7 +132,7 @@ public class XWingStrategy implements FillStrategy {
                         }
 
                         //build the result
-                        if (!CollectionUtils.isEmpty(deleteMap)) {
+                        if (!MapUtils.isEmpty(deleteMap)) {
                             Map<Position, List<String>> causeMap = new HashMap<>();
                             List<String> digital = new ArrayList<>();
                             digital.add(outterDigital);
@@ -208,14 +209,14 @@ public class XWingStrategy implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        Assert.isTrue(hintModel.getUnitModelList().size() == 2, "should be 2");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 2, "should be 2");
         UnitModel unitModelOne = hintModel.getUnitModelList().get(0);
         UnitModel unitModelTwo = hintModel.getUnitModelList().get(1);
 
         int firstNumber = PuzzleTools.getNumber(unitModelOne);
         int secondNumber = PuzzleTools.getNumber(unitModelTwo);
         Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
-        Assert.isTrue(causeMap.size() == 4, "should be 4");
+        Validate.isTrue(causeMap.size() == 4, "should be 4");
 
         // split the data
         List<Position> firstPair = new ArrayList<>(2);
@@ -254,14 +255,14 @@ public class XWingStrategy implements FillStrategy {
             lines.add(firstPair.get(0).getRow() + 1);
             lines.add(secondPair.get(0).getRow() + 1);
         }
-        Assert.isTrue(firstPair.size() == 2, "should be 2");
-        Assert.isTrue(secondPair.size() == 2, "should be 2");
+        Validate.isTrue(firstPair.size() == 2, "should be 2");
+        Validate.isTrue(secondPair.size() == 2, "should be 2");
         String firstStr = firstPair.stream().map(Position::getDesc).collect(Collectors.joining(" "));
         String secondStr = secondPair.stream().map(Position::getDesc).collect(Collectors.joining(" "));
 
         // digital
         List<String> digitalList = causeMap.values().iterator().next();
-        Assert.isTrue(digitalList.size() == 1, "should be 1 ");
+        Validate.isTrue(digitalList.size() == 1, "should be 1 ");
         String digital = digitalList.get(0);
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",

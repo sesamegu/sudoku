@@ -11,7 +11,7 @@ import java.util.Set;
 
 import com.sesame.game.strategy.model.Position;
 import lombok.Getter;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * the core data struct

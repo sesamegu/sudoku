@@ -14,7 +14,7 @@ import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Introduction: Last Possible Number

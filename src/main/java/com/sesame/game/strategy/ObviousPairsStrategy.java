@@ -1,7 +1,6 @@
 package com.sesame.game.strategy;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -14,8 +13,9 @@ import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction:Obvious Pairs
@@ -70,7 +70,7 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
                     }
                 }
 
-                if (!CollectionUtils.isEmpty(deleteMap)) {
+                if (!MapUtils.isEmpty(deleteMap)) {
                     CandidateModel candidateModel = new CandidateModel(twoSamePosition, digital, deleteMap);
                     HintModel result = HintModel.build().of(getStrategy()).of(candidateModel);
                     return Optional.of(result);
@@ -92,16 +92,16 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
     @Override
     public String buildDesc(HintModel hintModel) {
 
-        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
         CandidateModel candidateModel = hintModel.getCandidateModel();
         List<Position> positions = new ArrayList<>(candidateModel.getCauseMap().keySet());
         Collections.sort(positions);
-        Assert.isTrue(positions.size() == 2, "should be 2");
+        Validate.isTrue(positions.size() == 2, "should be 2");
         List<String> digitals = candidateModel.getCauseMap().values().iterator().next();
         Collections.sort(digitals);
-        Assert.isTrue(digitals.size() == 2, "should be 2");
+        Validate.isTrue(digitals.size() == 2, "should be 2");
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
             I18nProcessor.getValue(unitModel.getUnit().getDesc()), positions.get(0).getDesc(),

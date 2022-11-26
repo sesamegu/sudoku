@@ -14,7 +14,7 @@ import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.SolutionModel;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction:Last Free Cell
@@ -58,8 +58,8 @@ public class LastFreeCellStrategy implements FillStrategy {
             }
 
             if (count == Const.ROWS - 1) {
-                Assert.isTrue(copy.size() == 1, "should be one");
-                Assert.isTrue(related.size() == 8, "should be eight");
+                Validate.isTrue(copy.size() == 1, "should be one");
+                Validate.isTrue(related.size() == 8, "should be eight");
 
                 //build the result
                 SolutionModel solutionModel = new SolutionModel(new Position(i, emptyColumnPosition),
@@ -93,8 +93,8 @@ public class LastFreeCellStrategy implements FillStrategy {
             }
 
             if (count == Const.COLUMNS - 1) {
-                Assert.isTrue(copy.size() == 1, "should be one");
-                Assert.isTrue(related.size() == 8, "should be eight");
+                Validate.isTrue(copy.size() == 1, "should be one");
+                Validate.isTrue(related.size() == 8, "should be eight");
 
                 //build the result
                 SolutionModel solutionModel = new SolutionModel(new Position(emptyRowPosition, i),
@@ -148,8 +148,8 @@ public class LastFreeCellStrategy implements FillStrategy {
         }
 
         if (count == Const.COLUMNS - 1) {
-            Assert.isTrue(copy.size() == 1, "should be one");
-            Assert.isTrue(related.size() == 8, "should be eight");
+            Validate.isTrue(copy.size() == 1, "should be one");
+            Validate.isTrue(related.size() == 8, "should be eight");
 
             //build the result
             SolutionModel solutionModel = new SolutionModel(new Position(rowPosition, columnPosition),
@@ -174,7 +174,7 @@ public class LastFreeCellStrategy implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        Assert.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
+        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
 

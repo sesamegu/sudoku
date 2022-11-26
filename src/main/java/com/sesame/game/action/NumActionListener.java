@@ -9,7 +9,7 @@ import javax.swing.JButton;
 
 import com.sesame.game.ui.SquarePanel;
 import com.sesame.game.common.SudokuPuzzle;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 
 /**
  * Introduction: put the number to the cell

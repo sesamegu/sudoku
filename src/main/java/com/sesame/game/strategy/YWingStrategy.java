@@ -17,8 +17,8 @@ import com.sesame.game.strategy.model.Direction;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
-import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction:Y Wing or XY Wing
@@ -52,7 +52,7 @@ public class YWingStrategy implements FillStrategy {
 
                 Optional<HintModel> hintModel = processBoxHintModel(remaining, filterList, row, column);
                 if (hintModel.isPresent()) {
-                    Assert.notNull(hintModel.get().getUnitModelList(), "should not be null");
+                    Validate.notNull(hintModel.get().getUnitModelList(), "should not be null");
                     hintModel.get().getUnitModelList().add(UnitModel.buildFromBox(row, column));
                     return hintModel;
                 }
@@ -87,13 +87,13 @@ public class YWingStrategy implements FillStrategy {
                 thirdDigital.addAll(remaining.get(first));
                 thirdDigital.addAll(remaining.get(second));
                 thirdDigital.removeAll(sameDigital);
-                Assert.isTrue(thirdDigital.size() == 2, "should be two");
+                Validate.isTrue(thirdDigital.size() == 2, "should be two");
                 Collections.sort(thirdDigital);
 
                 // type 1: by the first column
                 List<String> tempDigital = new ArrayList<>(thirdDigital);
                 tempDigital.removeAll(remaining.get(first));
-                Assert.isTrue(tempDigital.size() == 1, "should be one");
+                Validate.isTrue(tempDigital.size() == 1, "should be one");
                 String firstDeleteDigital = tempDigital.get(0);
 
                 List<Position> positionByColumn = PuzzleTools.getPositionByColumn(first.getCol());
@@ -110,7 +110,7 @@ public class YWingStrategy implements FillStrategy {
                 //  type 2: by the second column
                 tempDigital = new ArrayList<>(thirdDigital);
                 tempDigital.removeAll(remaining.get(second));
-                Assert.isTrue(tempDigital.size() == 1, "should be one");
+                Validate.isTrue(tempDigital.size() == 1, "should be one");
                 String secondDeleteDigital = tempDigital.get(0);
                 positionByColumn = PuzzleTools.getPositionByColumn(second.getCol());
                 hintModel = boxBuildHintModel(remaining, rowStart, columnStart, first, second,
@@ -194,7 +194,7 @@ public class YWingStrategy implements FillStrategy {
                 threeColumnInBox.remove(first);
                 threeColumnInBox.remove(second);
 
-                Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
+                Validate.isTrue(threeColumnInBox.size() == 2, "should be two");
                 possiblePosition.addAll(threeColumnInBox);
 
             } else {
@@ -211,7 +211,7 @@ public class YWingStrategy implements FillStrategy {
                 //remove themselves
                 threeColumnInBox.remove(first);
                 threeColumnInBox.remove(second);
-                Assert.isTrue(threeColumnInBox.size() == 2, "should be two");
+                Validate.isTrue(threeColumnInBox.size() == 2, "should be two");
                 possiblePosition.addAll(threeColumnInBox);
             }
 
@@ -294,13 +294,13 @@ public class YWingStrategy implements FillStrategy {
                     thirdDigital.addAll(remaining.get(first));
                     thirdDigital.addAll(remaining.get(second));
                     thirdDigital.removeAll(causeDigital);
-                    Assert.isTrue(thirdDigital.size() == 2, "should be two");
+                    Validate.isTrue(thirdDigital.size() == 2, "should be two");
                     Collections.sort(thirdDigital);
 
                     // type 1: find the right column
                     List<String> tempDigital = new ArrayList<>(thirdDigital);
                     tempDigital.removeAll(remaining.get(first));
-                    Assert.isTrue(tempDigital.size() == 1, "should be one");
+                    Validate.isTrue(tempDigital.size() == 1, "should be one");
                     String deleteDigital = tempDigital.get(0);
 
                     Optional<HintModel> result = buildHintModel(remaining, first, second,
@@ -317,7 +317,7 @@ public class YWingStrategy implements FillStrategy {
                     // type 2: find the left column
                     tempDigital = new ArrayList<>(thirdDigital);
                     tempDigital.removeAll(remaining.get(second));
-                    Assert.isTrue(tempDigital.size() == 1, "should be one");
+                    Validate.isTrue(tempDigital.size() == 1, "should be one");
                     deleteDigital = tempDigital.get(0);
 
                     result = buildHintModel(remaining, first, second,
@@ -385,9 +385,9 @@ public class YWingStrategy implements FillStrategy {
 
         CandidateModel candidateModel = hintModel.getCandidateModel();
         Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
-        Assert.isTrue(causeMap.size() == 3, "should be 3");
+        Validate.isTrue(causeMap.size() == 3, "should be 3");
         Map<Position, List<String>> deleteMap = candidateModel.getDeleteMap();
-        Assert.isTrue(deleteMap.size() == 1, "should be 1");
+        Validate.isTrue(deleteMap.size() == 1, "should be 1");
         String deleteDigital = deleteMap.values().iterator().next().get(0);
         Position deletePosition = deleteMap.keySet().iterator().next();
 
@@ -405,19 +405,19 @@ public class YWingStrategy implements FillStrategy {
         }
 
         List<String> twoCandidate = causeMap.get(zeroPosition);
-        Assert.isTrue(twoCandidate.size() == 2, "should be 2");
+        Validate.isTrue(twoCandidate.size() == 2, "should be 2");
 
         // determine the second point
         List<Position> collectList = threePosition.stream().filter(one -> !one.equals(zeroPosition) && causeMap.get(one)
             .contains(twoCandidate.get(0))).collect(Collectors.toList());
-        Assert.isTrue(collectList.size() == 1, "should be 1");
+        Validate.isTrue(collectList.size() == 1, "should be 1");
         Position secondPosition = collectList.get(0);
 
         // determine the third point
         List<Position> collect = threePosition.stream().filter(one -> (!one.equals(zeroPosition) && !one.equals(
             secondPosition))).collect(
             Collectors.toList());
-        Assert.isTrue(collect.size() == 1, "should be 1");
+        Validate.isTrue(collect.size() == 1, "should be 1");
         Position thirdPosition = collect.get(0);
 
         return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
