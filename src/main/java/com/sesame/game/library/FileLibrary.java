@@ -24,10 +24,10 @@ public class FileLibrary {
             return;
         }
         try {
-            easyLibrary = ReadGameFromFile.readFile("/data/easy.txt");
-            normalLibrary = ReadGameFromFile.readFile("/data/normal.txt");
-            hardLibrary = ReadGameFromFile.readFile("/data/hard.txt");
-            vipLibrary = ReadGameFromFile.readFile("/data/vip.txt");
+            easyLibrary = new ReadGameFromFile().readFile("/data/easy.txt");
+            normalLibrary = new ReadGameFromFile().readFile("/data/normal.txt");
+            hardLibrary = new ReadGameFromFile().readFile("/data/hard.txt");
+            vipLibrary = new ReadGameFromFile().readFile("/data/vip.txt");
             isInit = true;
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Introduction: I18N
@@ -26,7 +27,10 @@ public class I18nProcessor {
         rbEn = ResourceBundle.getBundle("i18n.content", localeEn);
         rbZh = ResourceBundle.getBundle("i18n.content", localeZh);
         String s = Locale.getDefault().toString();
-        isChinese = "zh_CN".equals(s) || "zh_TW".equals(s);
+
+        if (StringUtils.isNotEmpty(s)) {
+            isChinese = s.startsWith("zh_CN") || s.startsWith("zh_TW");
+        }
 
     }
 

@@ -1,8 +1,9 @@
 package com.sesame.game.library;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,23 @@ import org.apache.commons.lang3.Validate;
  */
 public class ReadGameFromFile {
 
-    public static List<String[][]> readFile(String path) throws IOException {
+    private static String[] buildOneArray(String oneLine) {
+        int startPoint = oneLine.indexOf("{");
+        int endPoint = oneLine.indexOf("}");
+        String substring = oneLine.substring(startPoint + 1, endPoint);
+        String[] array = substring.split(",");
+        Validate.isTrue(array.length == 9, "length is 9");
+        for (int i = 0; i < array.length; i++) {
+            array[i] = array[i].replace("\"", "");
+        }
+
+        return array;
+    }
+
+    public List<String[][]> readFile(String path) throws IOException {
         List<String[][]> library = new ArrayList<>();
-        String file = ReadGameFromFile.class.getResource(path).getFile();
-        BufferedReader bufferedReader = new BufferedReader(
-            new FileReader(file));
+
+        BufferedReader bufferedReader = buildBufferedReader(path);
 
         String oneLine;
         while ((oneLine = bufferedReader.readLine()) != null) {
@@ -41,16 +54,10 @@ public class ReadGameFromFile {
         return library;
     }
 
-    private static String[] buildOneArray(String oneLine) {
-        int startPoint = oneLine.indexOf("{");
-        int endPoint = oneLine.indexOf("}");
-        String substring = oneLine.substring(startPoint + 1, endPoint);
-        String[] array = substring.split(",");
-        Validate.isTrue(array.length == 9, "length is 9");
-        for (int i = 0; i < array.length; i++) {
-            array[i] = array[i].replace("\"", "");
-        }
-
-        return array;
+    private BufferedReader buildBufferedReader(String path) {
+        InputStream resourceAsStream = getClass().getResourceAsStream(path);
+        BufferedReader bufferedReader;
+        bufferedReader = new BufferedReader(new InputStreamReader(resourceAsStream));
+        return bufferedReader;
     }
 }
