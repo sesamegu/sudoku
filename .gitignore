@@ -2,3 +2,5 @@ src/.DS_Store
 sudoku.iml
 target/
 .idea/
+out/
+.DS_Store
