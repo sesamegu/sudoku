@@ -13,7 +13,11 @@ Features:
 <img src="docs/picture/hidden_singles_row_EN.png" width="550" height="430" >   
 
 ## How to run
-* for the developer     
+* Windows
+    Download [sudoku.zip](https://github.com/sesamegu/sudoku/releases/download/1.0.0/sudoku.zip), and click the "windows_run.bat" file       
+* Mac or Linux
+    Download [sudoku.zip](https://github.com/sesamegu/sudoku/releases/download/1.0.0/sudoku.zip), and run the "mac_linux_run.sh" in the shell      
+* For the developer in an IDEA    
    main class: com.sesame.game.Sudoku
 
 ## Strategy

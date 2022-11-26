@@ -24,12 +24,13 @@
    支持中文、英语
 
 ## 如何运行 
+* Windows
+    下载[sudoku.zip](https://github.com/sesamegu/sudoku/releases/download/1.0.0/sudoku.zip) 文件，点击运行"windows_run.bat"文件       
+* Mac or Linux
+    下载[sudoku.zip](https://github.com/sesamegu/sudoku/releases/download/1.0.0/sudoku.zip) 文件，在命令行运行"mac_linux_run.sh"文件 
 * 准对开发者     
    程序的入口类 com.sesame.game.Sudoku
-* Mac or Linux    
-   to do
-* Windows    
-   to do
+      
 ## 策略介绍
 [唯余空白格](https://github.com/sesamegu/sudoku/blob/main/docs/last_free_cell_CN.md)      
 [唯一候选数](https://github.com/sesamegu/sudoku/blob/main/docs/last_possible_number_CN.md)      
