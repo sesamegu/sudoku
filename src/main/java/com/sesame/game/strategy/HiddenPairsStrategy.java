@@ -3,7 +3,6 @@ package com.sesame.game.strategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,6 @@ import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
 import com.sesame.game.strategy.model.UnitModel;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Introduction: Hidden Pairs
