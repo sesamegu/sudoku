@@ -2,7 +2,6 @@ package com.sesame.game.service;
 
 import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.dto.*;
-import com.sesame.game.strategy.model.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
