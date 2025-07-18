@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -134,28 +136,26 @@ public class ObviousTriplesStrategy extends AbstractUnitStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
-
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Iterator<Entry<Position, List<String>>> iterator = causeMap.entrySet().iterator();
+        Entry<Position, List<String>> first = iterator.next();
+        Entry<Position, List<String>> second = iterator.next();
+        Entry<Position, List<String>> third = iterator.next();
 
-        Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
-        List<Position> positions = new ArrayList<>(causeMap.keySet());
-        Collections.sort(positions);
-        Validate.isTrue(positions.size() == 3, "should be 3 ");
+        List<String> digitalList = first.getValue();
 
-        Set<String> digitalSet = new HashSet<>();
-        causeMap.values().forEach(one -> digitalSet.addAll(one));
-        List<String> threeDigital = new ArrayList<>(digitalSet);
-        Collections.sort(threeDigital);
-        Validate.isTrue(threeDigital.size() == 3, "should be 3 ");
-
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
-            I18nProcessor.getValue(unitModel.getUnit().getDesc()), positions.get(0).getDesc(),
-            positions.get(1).getDesc(), positions.get(2).getDesc(), threeDigital.get(0), threeDigital.get(1),
-            threeDigital.get(2)
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
+            I18nProcessor.getValue(unitModel.getUnit().getDesc(), hintModel.getLocale()),
+            number,
+            first.getKey().getDesc(),
+            second.getKey().getDesc(),
+            third.getKey().getDesc(),
+            digitalList.get(0),
+            digitalList.get(1),
+            digitalList.get(2)
         );
-
     }
-
 }

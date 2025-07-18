@@ -261,16 +261,16 @@ public class SwordFishStrategy implements FillStrategy {
             throw new RuntimeException("should not be here.");
         }
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
             firstNumber,
             secondNumber,
             thirdNumber,
-            I18nProcessor.getValue(currentUnit.getDesc()),
+            I18nProcessor.getValue(currentUnit.getDesc(), hintModel.getLocale()),
             deleteDigital,
             rowOrColumns.get(0) + 1,
             rowOrColumns.get(1) + 1,
             rowOrColumns.get(2) + 1,
-            I18nProcessor.getValue(oppositeUnit.getDesc())
+            I18nProcessor.getValue(oppositeUnit.getDesc(), hintModel.getLocale())
         );
 
     }

@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.Locale;
 
 import com.sesame.game.common.Const;
 import com.sesame.game.common.PuzzleTools;
@@ -112,7 +113,7 @@ public class GameGenerator {
 
         // try the strategy util the end
         List<HintModel> allHint = new ArrayList<>(81);
-        Optional<HintModel> result = StrategyExecute.tryAllStrategy(puzzle);
+        Optional<HintModel> result = StrategyExecute.tryAllStrategy(puzzle, Locale.US);
         while (result.isPresent()) {
             HintModel hm = result.get();
             allHint.add(hm);
@@ -127,7 +128,7 @@ public class GameGenerator {
                 puzzle.makeMove(solutionModel.getPosition().getRow(), solutionModel.getPosition().getCol(),
                     solutionModel.getSolutionDigital(), true);
             }
-            result = StrategyExecute.tryAllStrategy(puzzle);
+            result = StrategyExecute.tryAllStrategy(puzzle, Locale.US);
 
             // this shouldn't happen only if there is a bug :-(
             if (allHint.size() > 81) {
@@ -155,12 +156,12 @@ public class GameGenerator {
 
                 //build a detail strategy name
                 StringBuilder sb = new StringBuilder(
-                    I18nProcessor.getValue(hintModel.getStrategy().getName()));
+                    I18nProcessor.getValue(hintModel.getStrategy().getName(), Locale.US));
                 sb.append("__");
                 List<UnitModel> unitModelList = hintModel.getUnitModelList();
                 if (!CollectionUtils.isEmpty(unitModelList)) {
                     String collect = unitModelList.stream().map(UnitModel::getUnit).map(Unit::getDesc).map(
-                        I18nProcessor::getValue).collect(
+                        d -> I18nProcessor.getValue(d, Locale.US)).collect(
                         Collectors.joining("/"));
                     sb.append(collect);
                     sb.append("__");

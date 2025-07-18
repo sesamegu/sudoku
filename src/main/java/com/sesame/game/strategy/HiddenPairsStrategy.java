@@ -3,6 +3,8 @@ package com.sesame.game.strategy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -88,30 +90,24 @@ public class HiddenPairsStrategy extends AbstractUnitStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        //第{0}{1}中，数字{2}、{3}只出现在位置{4}、{5}，这两个位置必然是数字{2}、{3}，删除其它候选数字
-        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
-
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
+        CandidateModel candidateModel = hintModel.getCandidateModel();
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Iterator<Entry<Position, List<String>>> iterator = causeMap.entrySet().iterator();
+        Entry<Position, List<String>> first = iterator.next();
+        Entry<Position, List<String>> second = iterator.next();
 
-        Map<Position, List<String>> causeMap = hintModel.getCandidateModel().getCauseMap();
-        List<Position> positions = new ArrayList<>(causeMap.keySet());
-        Collections.sort(positions);
-        Validate.isTrue(positions.size() == 2, "should be 2 ");
+        List<String> digitalList = first.getValue();
 
-        List<String> twoDigital = new ArrayList<>(causeMap.values().iterator().next());
-        Collections.sort(twoDigital);
-        Validate.isTrue(twoDigital.size() == 2, "should be 2 ");
-
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
+            I18nProcessor.getValue(unitModel.getUnit().getDesc(), hintModel.getLocale()),
             number,
-            I18nProcessor.getValue(unitModel.getUnit().getDesc()),
-            twoDigital.get(0),
-            twoDigital.get(1),
-            positions.get(0).getDesc(),
-            positions.get(1).getDesc()
+            digitalList.get(0),
+            digitalList.get(1),
+            first.getKey().getDesc(),
+            second.getKey().getDesc()
         );
-
     }
 
 }

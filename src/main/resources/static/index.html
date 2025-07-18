@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <a href="/solver.html" class="solver-link">Go to Solver</a>
+    <h1>Sudoku Game</h1>
+    <div class="game-container">
+        <div id="sudoku-board"></div>
+        <div class="controls">
+            <div id="number-panel"></div>
+            <div id="action-panel">
+                <button id="new-game-button">New Game</button>
+                <button id="level-select-button">Select Level</button>
+                <button id="hint-button">Hint</button>
+                <button id="erase-button">Erase</button>
+                <button id="notes-toggle-button">Notes</button>
+                <button id="candidate-button">Enter Candidate Mode</button>
+                <button id="lang-button">中文</button>
+            </div>
+        </div>
+    </div>
+    <div id="info-panel">Select a cell to start.</div>
+
+    <!-- Level Selection Modal -->
+    <div id="level-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Select a Puzzle</h2>
+            <div id="levels-container"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

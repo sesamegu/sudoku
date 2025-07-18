@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Locale;
 
 import com.sesame.game.common.SudokuPuzzle;
 import com.sesame.game.strategy.model.HintModel;
@@ -69,11 +70,13 @@ public abstract class StrategyExecute {
         strategyMap.put(Strategy.SWORDFISH, swordFishStrategy);
     }
 
-    public static Optional<HintModel> tryAllStrategy(SudokuPuzzle puzzle) {
+    public static Optional<HintModel> tryAllStrategy(SudokuPuzzle puzzle, Locale locale) {
         for (FillStrategy one : allStrategy) {
-            Optional<HintModel> hintModel = one.execute(puzzle);
-            if (hintModel.isPresent()) {
-                return hintModel;
+            Optional<HintModel> hintModelOptional = one.execute(puzzle);
+            if (hintModelOptional.isPresent()) {
+                HintModel hintModel = hintModelOptional.get();
+                hintModel.of(locale);
+                return Optional.of(hintModel);
             }
         }
 

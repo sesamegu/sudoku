@@ -34,6 +34,7 @@ public class RowColumnToBoxTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new RowColumnToBox().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -105,6 +106,7 @@ public class RowColumnToBoxTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new RowColumnToBox().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

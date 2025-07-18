@@ -265,16 +265,16 @@ public class XWingStrategy implements FillStrategy {
         Validate.isTrue(digitalList.size() == 1, "should be 1 ");
         String digital = digitalList.get(0);
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
             digital,
             firstNumber,
-            I18nProcessor.getValue(unitModelOne.getUnit().getDesc()),
+            I18nProcessor.getValue(unitModelOne.getUnit().getDesc(), hintModel.getLocale()),
             secondNumber,
-            I18nProcessor.getValue(unitModelTwo.getUnit().getDesc()),
+            I18nProcessor.getValue(unitModelTwo.getUnit().getDesc(), hintModel.getLocale()),
             firstStr,
             secondStr,
             lines.get(0),
-            I18nProcessor.getValue(direction.getDesc()),
+            I18nProcessor.getValue(direction.getDesc(), hintModel.getLocale()),
             lines.get(1)
         );
 

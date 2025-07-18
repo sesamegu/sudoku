@@ -34,6 +34,7 @@ public class HiddenTriplesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new HiddenTriplesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -108,7 +109,7 @@ public class HiddenTriplesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
-
+        puzzle.resetCandidate();
         Optional<HintModel> result = new HiddenTriplesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

@@ -34,6 +34,7 @@ public class XWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new XWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -118,6 +119,7 @@ public class XWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new XWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

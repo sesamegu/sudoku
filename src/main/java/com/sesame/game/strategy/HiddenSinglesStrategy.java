@@ -263,12 +263,12 @@ public class HiddenSinglesStrategy implements FillStrategy {
 
         Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
-        Position position = hintModel.getSolutionModel().getPosition();
         int number = PuzzleTools.getNumber(unitModel);
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
-            I18nProcessor.getValue(unitModel.getUnit().getDesc()), hintModel.getSolutionModel().getSolutionDigital(),
-            position.getDesc());
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(), number,
+            I18nProcessor.getValue(unitModel.getUnit().getDesc(), hintModel.getLocale()),
+            hintModel.getSolutionModel().getSolutionDigital(),
+            hintModel.getSolutionModel().getPosition().getDesc());
 
     }
 

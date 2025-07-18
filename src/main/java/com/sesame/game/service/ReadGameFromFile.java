@@ -1,4 +1,4 @@
-package com.sesame.game.library;
+package com.sesame.game.service;
 
 import java.io.BufferedReader;
 import java.io.IOException;

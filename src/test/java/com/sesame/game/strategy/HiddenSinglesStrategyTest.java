@@ -37,6 +37,7 @@ public class HiddenSinglesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new HiddenSinglesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -69,6 +70,7 @@ public class HiddenSinglesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new HiddenSinglesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -101,6 +103,7 @@ public class HiddenSinglesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new HiddenSinglesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

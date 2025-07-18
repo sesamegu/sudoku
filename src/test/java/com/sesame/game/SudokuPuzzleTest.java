@@ -129,6 +129,64 @@ public class SudokuPuzzleTest {
 
     }
 
+    @Test
+    public void testMakeSlotEmpty_ShouldClearValueAndRestoreCandidates() {
+        // 1. Setup
+        String[][] board = new String[][] {
+            {"", "2", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "", "", "", "1", "", "", "8", ""}, // Peer in same box
+            {"1", "", "", "", "5", "", "", "", "9"}, // Target row, with peers
+            {"", "", "", "", "2", "", "", "7", ""}, // Peer in same box
+            {"", "", "", "", "", "", "", "", ""},
+            {"", "4", "", "", "", "", "", "", ""}, // Peer in same column
+            {"", "", "", "", "", "", "", "", ""}
+        };
+        SudokuPuzzle puzzle = new SudokuPuzzleForTesting(board);
+        puzzle.resetCandidate();
+
+        // Pre-assertion: Check initial state
+        Assert.assertEquals("5", puzzle.getValue(4, 4));
+        Assert.assertFalse("Candidate '5' should not exist in peer cell before clearing",
+            puzzle.getCandidate(4, 1).contains("5")); // Peer in same row
+        Assert.assertFalse("Candidate '5' should not exist in peer cell before clearing",
+            puzzle.getCandidate(7, 4).contains("5")); // Peer in same column
+        Assert.assertFalse("Candidate '5' should not exist in peer cell before clearing",
+            puzzle.getCandidate(3, 3).contains("5")); // Peer in same box
+
+        // 2. Action
+        puzzle.makeSlotEmpty(4, 4);
+
+        // 3. Assertions
+        // Assert the target cell is now empty
+        Assert.assertEquals("The cell should be empty", "", puzzle.getValue(4, 4));
+
+        // Assert the target cell's candidates are restored
+        List<String> targetCandidates = puzzle.getCandidate(4, 4);
+        Assert.assertTrue("Candidates for the cleared cell should be recalculated and contain '5'",
+            targetCandidates.contains("5"));
+        Assert.assertTrue("Candidates should contain '3'", targetCandidates.contains("3"));
+        Assert.assertTrue("Candidates should contain '6'", targetCandidates.contains("6"));
+
+        // Assert peers' candidates are updated
+        Assert.assertTrue("Peer in the same row should now have '5' as a candidate",
+            puzzle.getCandidate(4, 1).contains("5"));
+        Assert.assertTrue("Peer in the same column should now have '5' as a candidate",
+            puzzle.getCandidate(7, 4).contains("5"));
+        Assert.assertTrue("Peer in the same box should now have '5' as a candidate",
+            puzzle.getCandidate(3, 3).contains("5"));
+
+        // Assert an unrelated cell's candidates are unchanged
+        List<String> unrelatedCandidatesBefore = puzzle.getCandidate(0, 0);
+        // Re-call makeSlotEmpty to ensure it doesn't change anything
+        puzzle.makeSlotEmpty(4, 4);
+        List<String> unrelatedCandidatesAfter = puzzle.getCandidate(0, 0);
+        Assert.assertEquals("Candidates of unrelated cells should not be affected",
+            unrelatedCandidatesBefore, unrelatedCandidatesAfter);
+
+    }
+
     private class SudokuPuzzleForTesting extends SudokuPuzzle {
         public SudokuPuzzleForTesting(String[][] board) {
             super();

@@ -35,6 +35,7 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -89,6 +90,7 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -143,6 +145,7 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -197,6 +200,7 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -251,6 +255,7 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -307,6 +312,7 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -362,10 +368,11 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
+
         List<String> digital = new ArrayList<>();
         digital.add("4");
         digital.add("6");
-
         puzzle.setCandidate(5, 4, digital);
         puzzle.setCandidate(5, 5, new ArrayList<>(digital));
 
@@ -425,10 +432,11 @@ public class YWingStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
+
         List<String> digital = new ArrayList<>();
         digital.add("4");
         digital.add("6");
-
         puzzle.setCandidate(5, 4, digital);
         puzzle.setCandidate(5, 5, new ArrayList<>(digital));
 
@@ -488,6 +496,7 @@ public class YWingStrategyTest {
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
 
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -544,6 +553,7 @@ public class YWingStrategyTest {
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
 
+        puzzle.resetCandidate();
         Optional<HintModel> result = new YWingStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

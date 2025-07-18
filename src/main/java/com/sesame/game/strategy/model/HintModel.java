@@ -3,6 +3,7 @@ package com.sesame.game.strategy.model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Locale;
 
 import com.sesame.game.strategy.DetailTypeEnum;
 import com.sesame.game.strategy.Strategy;
@@ -22,6 +23,7 @@ public class HintModel {
     private CandidateModel candidateModel;
     private List<UnitModel> unitModelList;
     private DetailTypeEnum detailTypeEnum;
+    private Locale locale;
     /**
      * for temp data passing
      */
@@ -58,5 +60,9 @@ public class HintModel {
         return this;
     }
 
+    public HintModel of(Locale locale) {
+        this.locale = locale;
+        return this;
+    }
 }
 

@@ -35,6 +35,7 @@ public class ObviousPairsStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new ObviousPairsStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -83,6 +84,7 @@ public class ObviousPairsStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new ObviousPairsStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -130,6 +132,7 @@ public class ObviousPairsStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new ObviousPairsStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

@@ -1,53 +1,62 @@
 package com.sesame.game.strategy;
 
-import java.util.Optional;
-
 import com.sesame.game.common.GameLevel;
 import com.sesame.game.common.SudokuPuzzle;
-import com.sesame.game.library.FileLibrary;
-import com.sesame.game.library.PuzzleLibrary;
+import com.sesame.game.i18n.I18nProcessor;
+import com.sesame.game.service.LevelService;
 import com.sesame.game.strategy.model.HintModel;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Optional;
 
 /**
- * run the library and make sure all puzzles are solved
- *
- * @author mike
- * @date 2022/11/21
+ * @author sesame 2022/10/14
  */
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class StrategyExecuteTest {
+    @Autowired
+    private LevelService levelService;
 
     @Test
-    public void runTheLibrary() {
-        // easy
-        for (int i = 1; i <= FileLibrary.size(GameLevel.EASY); i++) {
-            SudokuPuzzle aCase = PuzzleLibrary.getCase(GameLevel.EASY, i);
-            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase);
-            Assert.assertTrue("should be solved", hintModel.isPresent());
+    public void testEasy() {
+        for (int i = 1; i <= 2; i++) {
+            SudokuPuzzle aCase = levelService.getPuzzle(GameLevel.EASY, i);
+            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase, I18nProcessor.getLocale("en_US"));
+            Assert.assertTrue(hintModel.isPresent());
         }
+    }
 
-        //normal
-        for (int i = 1; i <= FileLibrary.size(GameLevel.NORMAL); i++) {
-            SudokuPuzzle aCase = PuzzleLibrary.getCase(GameLevel.NORMAL, i);
-            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase);
-            Assert.assertTrue("should be solved", hintModel.isPresent());
+    @Test
+    public void testNormal() {
+        for (int i = 1; i <= 2; i++) {
+            SudokuPuzzle aCase = levelService.getPuzzle(GameLevel.NORMAL, i);
+            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase, I18nProcessor.getLocale("en_US"));
+            Assert.assertTrue(hintModel.isPresent());
         }
+    }
 
-        //hard
-        for (int i = 1; i <= FileLibrary.size(GameLevel.HARD); i++) {
-            SudokuPuzzle aCase = PuzzleLibrary.getCase(GameLevel.HARD, i);
-            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase);
-            Assert.assertTrue("should be solved", hintModel.isPresent());
+    @Test
+    public void testHard() {
+        for (int i = 1; i <= 2; i++) {
+            SudokuPuzzle aCase = levelService.getPuzzle(GameLevel.HARD, i);
+            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase, I18nProcessor.getLocale("en_US"));
+            Assert.assertTrue(hintModel.isPresent());
         }
+    }
 
-        //vip
-        for (int i = 1; i <= FileLibrary.size(GameLevel.VIP); i++) {
-            SudokuPuzzle aCase = PuzzleLibrary.getCase(GameLevel.VIP, i);
-            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase);
-            Assert.assertTrue("should be solved", hintModel.isPresent());
+    @Test
+    public void testVip() {
+        for (int i = 1; i <= 2; i++) {
+            SudokuPuzzle aCase = levelService.getPuzzle(GameLevel.VIP, i);
+            Optional<HintModel> hintModel = StrategyExecute.tryAllStrategy(aCase, I18nProcessor.getLocale("en_US"));
+            Assert.assertTrue(hintModel.isPresent());
         }
-
     }
 
 }

@@ -178,8 +178,8 @@ public class LastFreeCellStrategy implements FillStrategy {
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
-            I18nProcessor.getValue(unitModel.getUnit().getDesc()), hintModel.getSolutionModel().getSolutionDigital());
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(), number,
+            I18nProcessor.getValue(unitModel.getUnit().getDesc(), hintModel.getLocale()), hintModel.getSolutionModel().getSolutionDigital());
 
     }
 

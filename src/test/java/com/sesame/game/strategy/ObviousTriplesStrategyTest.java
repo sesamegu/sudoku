@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.sesame.game.common.SudokuPuzzle;
+import com.sesame.game.i18n.I18nProcessor;
 import com.sesame.game.strategy.model.CandidateModel;
 import com.sesame.game.strategy.model.HintModel;
 import com.sesame.game.strategy.model.Position;
@@ -12,6 +13,11 @@ import com.sesame.game.strategy.model.Unit;
 import com.sesame.game.strategy.model.UnitModel;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author mike
@@ -26,8 +32,8 @@ public class ObviousTriplesStrategyTest {
             {"", "", "3", "4", "5", "", "", "8", ""},
             {"4", "5", "6", "", "", "", "", "", ""},
             {"", "9", "8", "", "", "", "", "", ""},
-            {"", "", "", "", "", "", "", "", ""},
             {"", "", "", "", "", "", "", "", "2"},
+            {"", "", "", "", "", "", "", "", ""},
             {"", "", "", "", "", "", "", "", ""},
             {"7", "", "", "", "", "", "", "", "6"},
             {"", "1", "", "", "", "", "", "", ""},
@@ -35,6 +41,7 @@ public class ObviousTriplesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new ObviousTriplesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -98,6 +105,7 @@ public class ObviousTriplesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new ObviousTriplesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -170,6 +178,7 @@ public class ObviousTriplesStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new ObviousTriplesStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();

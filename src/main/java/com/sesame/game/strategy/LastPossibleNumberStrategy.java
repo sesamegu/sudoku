@@ -66,11 +66,8 @@ public class LastPossibleNumberStrategy implements FillStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-        SolutionModel solutionModel = hintModel.getSolutionModel();
-        Position position = solutionModel.getPosition();
-        String solutionDigital = solutionModel.getSolutionDigital();
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", position.getDesc(), solutionDigital);
-
+        Position position = hintModel.getSolutionModel().getPosition();
+        String solutionDigital = hintModel.getSolutionModel().getSolutionDigital();
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(), position.getDesc(), solutionDigital);
     }
-
 }

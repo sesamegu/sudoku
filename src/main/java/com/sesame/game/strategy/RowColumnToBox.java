@@ -176,9 +176,9 @@ public class RowColumnToBox implements FillStrategy {
         Validate.isTrue(digitalList.size() == 1, "should be 1 ");
         String digital = digitalList.get(0);
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
             rowOrColumnNumber,
-            I18nProcessor.getValue(rowOrColumnModel.getUnit().getDesc()),
+            I18nProcessor.getValue(rowOrColumnModel.getUnit().getDesc(), hintModel.getLocale()),
             digital,
             boxNumber
         );

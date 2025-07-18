@@ -32,6 +32,7 @@ public class LastPossibleNumberStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         Optional<HintModel> result = new LastPossibleNumberStrategy().execute(puzzle);
         Assert.assertTrue(result.isPresent());
         HintModel hintModel = result.get();
@@ -58,6 +59,7 @@ public class LastPossibleNumberStrategyTest {
         };
         SudokuPuzzle puzzle = new SudokuPuzzle();
         puzzle.setBoard(board);
+        puzzle.resetCandidate();
         List<String> digital = new ArrayList<>();
         digital.add("9");
         puzzle.setCandidate(7, 7, digital);

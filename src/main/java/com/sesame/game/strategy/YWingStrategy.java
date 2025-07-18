@@ -420,7 +420,7 @@ public class YWingStrategy implements FillStrategy {
         Validate.isTrue(collect.size() == 1, "should be 1");
         Position thirdPosition = collect.get(0);
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint",
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
             zeroPosition.getDesc(),
             twoCandidate.get(0),
             secondPosition.getDesc(),
@@ -431,5 +431,4 @@ public class YWingStrategy implements FillStrategy {
         );
 
     }
-
 }

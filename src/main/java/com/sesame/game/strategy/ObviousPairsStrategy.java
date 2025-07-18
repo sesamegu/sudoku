@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import com.sesame.game.common.PuzzleTools;
 import com.sesame.game.i18n.I18nProcessor;
@@ -91,22 +93,23 @@ public class ObviousPairsStrategy extends AbstractUnitStrategy {
 
     @Override
     public String buildDesc(HintModel hintModel) {
-
-        Validate.isTrue(hintModel.getUnitModelList().size() == 1, "should be 1");
         UnitModel unitModel = hintModel.getUnitModelList().get(0);
         int number = PuzzleTools.getNumber(unitModel);
         CandidateModel candidateModel = hintModel.getCandidateModel();
-        List<Position> positions = new ArrayList<>(candidateModel.getCauseMap().keySet());
-        Collections.sort(positions);
-        Validate.isTrue(positions.size() == 2, "should be 2");
-        List<String> digitals = candidateModel.getCauseMap().values().iterator().next();
-        Collections.sort(digitals);
-        Validate.isTrue(digitals.size() == 2, "should be 2");
+        Map<Position, List<String>> causeMap = candidateModel.getCauseMap();
+        Iterator<Entry<Position, List<String>>> iterator = causeMap.entrySet().iterator();
+        Entry<Position, List<String>> first = iterator.next();
+        Entry<Position, List<String>> second = iterator.next();
 
-        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", number,
-            I18nProcessor.getValue(unitModel.getUnit().getDesc()), positions.get(0).getDesc(),
-            positions.get(1).getDesc(), digitals.get(0), digitals.get(1)
+        List<String> digitalList = first.getValue();
+
+        return I18nProcessor.getAppendValue(getStrategy().getName() + "_hint", hintModel.getLocale(),
+            I18nProcessor.getValue(unitModel.getUnit().getDesc(), hintModel.getLocale()),
+            number,
+            first.getKey().getDesc(),
+            second.getKey().getDesc(),
+            digitalList.get(0),
+            digitalList.get(1)
         );
     }
-
 }
